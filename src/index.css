@@ -1,5 +1,39 @@
 .login{
-    max-width: 350px;
-    margin: 50px auto;
+    max-width: 400px;
+    margin: 0px auto;
     text-align: center;
+    padding:30px;
+    background-color:#464646;
+}
+.login-page{
+    padding-top:50px;
+}
+
+.login-page, a, a:hover{
+    color:white;
+}
+
+.m-subheader{
+    padding-top:10px;
+}
+
+.m-body .m-content {
+    padding: 10px 30px !important;
+    min-height: 479px !important;
+}
+
+.m-brand, .m-header{
+    background: #333333
+}
+.m-page{
+    min-height: 440px;
+}
+.pointer{
+    cursor:pointer;
+}
+
+@media (max-width: 1024px){
+    .m-topbar__username{
+        color:#333 !important;
+    }
 }

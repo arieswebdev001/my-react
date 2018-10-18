@@ -7,20 +7,27 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Reservations from './components/Reservations';
 import Guests from './components/Guests';
+import Booking from './components/Booking';
 import Rooms from './components/Rooms';
+import Reports from './components/Reports';
+import Settings from './components/Settings';
 import Login from './components/auth/Login';
 import Axios from './wrappers/Axios';
 import { connect } from 'react-redux';
 
 class App extends Component { 
   componentDidMount(){
-    window.initTheme();
+    setTimeout(()=>{
+      window.initTheme();
+    },1000);
     this.getUser();
   }
 
   logout = ()=>{
-    window.localStorage.setItem("access_token", undefined);    
-    window.location.href = '/login';
+    window.mySweetAlert("Are you sure you want to log out?", function(){
+      window.localStorage.setItem("access_token", undefined);    
+      window.location.href = '/login';
+    });
   }
 
   getUser = () =>{
@@ -46,15 +53,15 @@ class App extends Component {
     return (
         <BrowserRouter>
           { 
-            this.props.user === null ? (
+            (this.props.user === null && window.location.href.search("booking") === -1) ? (
                 this.props.loaded ? (<Login/>):(<div>Please wait...</div>)
             ):(
               <div className="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
-                <Header user={this.props.user} logout={this.logout}/>
+                <Header logout={this.logout}/>
                 <button className="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn"><i className="la la-close"></i></button>
-                <Sidebar user={this.props.user} logout={this.logout}/>
+                <Sidebar logout={this.logout}/>
                 <div className="m-grid__item m-grid__item--fluid m-wrapper">
-                  <PageHeader/>
+                  { this.props.user !== null ? <PageHeader/> : ""}
                   <div className="m-content">
                     <Route exact path="/" component={Home}/>
                     <Route path="/dashboard" component={Home}/>
@@ -62,6 +69,9 @@ class App extends Component {
                     <Route path="/reservations" component={Reservations}/>
                     <Route path="/guests" component={Guests}/>
                     <Route path="/profile" component={Profile}/>
+                    <Route path="/reports" component={Reports}/>
+                    <Route path="/settings" component={Settings}/>
+                    <Route path="/booking" component={Booking}/>
                   </div>
                 </div>
               </div>
@@ -75,7 +85,8 @@ class App extends Component {
 const mapStateToProps = (state)=>{
   return {
     user:state.user,
-    loaded:state.loaded
+    loaded:state.loaded,
+    pageTitle:state.pageTitle
   }
 }
 

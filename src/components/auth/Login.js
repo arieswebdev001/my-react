@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import Axios from '../../wrappers/Axios';
+import FormAlert from '../ui/alerts/FormAlert';
+import { Link } from 'react-router-dom';
 
 class Login extends Component {
     state = {
         user:{
             email:'',
             password:''
-        }
+        },
+        errors:null
     };
 
     handleChange = (event) => {
@@ -18,7 +21,14 @@ class Login extends Component {
         });
     }
 
-    login = (event) =>{
+    refresh = () =>{
+        window.location.reload();
+    }
+
+    login = () =>{
+        let u = this;
+        this.setState({errors:null});
+        window.spinButton(document.getElementById('login-button'));
         Axios.post('../../api/user/login', this.state.user)
             .then((response) => {
                 window.localStorage.setItem("access_token", response.data.access_token);
@@ -27,21 +37,21 @@ class Login extends Component {
             }).catch(function (error) {
                 if(error.response.data !== undefined)
                     if(error.response.data.message !== undefined)
-                        window.toastr.error(error.response.data.message, "Login attempt failed");
-            })
-            .then(function () {
+                        u.setState({errors:error.response.data.message});
+
+                window.stopButton(document.getElementById('login-button'));
             });
     }
 
     render() {
         return (
-            <div className="container">
+            <div className="container login-page">
                 <div className="login">
-                    <img alt="" src="images/app/logo.png" />  	
-                    <br/>
-                    <h3>Login To Your Account</h3>
-                    <br/>
+                    <img alt="" src="images/app/logo.png" height="80"/>  	
+                    <br/><br/>
+                    <h4>Login To Your Account</h4>
                     <div>
+                        { this.state.errors !== null ? (<FormAlert errors={this.state.errors} />):"" }
                         <div className="form-group">
                             <input className="form-control" type="email" placeholder="Email" id="email" onChange={this.handleChange} autoComplete="off"/>
                         </div>
@@ -49,15 +59,22 @@ class Login extends Component {
                             <input className="form-control" type="password" placeholder="Password" onChange={this.handleChange} id="password"/>
                         </div>
                         <div>
-                            <div>
-                                <a href="#/forgot-password">Forgot Password ?</a>
+                            <div className="text-right">
+                                <Link to="forgot-password" onClick={this.refresh}>Forgot Password ?</Link>
                                 <br/><br/>
                             </div>
                         </div>
                         <div>
-                            <button className="btn btn-success" type="button" onClick={this.login}>Login</button>
+                            <button className="btn btn-warning btn-block" type="button" onClick={this.login} id="login-button">Login</button>
                         </div>
                     </div>	
+                    <div className="text-left">
+                        <br/>
+                        <Link onClick={this.refresh} to="booking">Go to Booking Form</Link>
+                    </div>
+                    <div className="text-left">
+                        <Link onClick={this.refresh} to="register">Create an Account</Link>
+                    </div>
                 </div>
             </div>
         );
