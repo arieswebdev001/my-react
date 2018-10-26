@@ -15,6 +15,9 @@ import Login from './components/auth/Login';
 import Axios from './wrappers/Axios';
 import { connect } from 'react-redux';
 
+import 'react-table/react-table.css';
+import "react-image-gallery/styles/css/image-gallery.css";
+
 class App extends Component { 
   componentDidMount(){
     setTimeout(()=>{
@@ -37,9 +40,13 @@ class App extends Component {
       .then(function (response) {
         u.props.updateLoaded(true);
         u.props.updateUser(response.data.user);
-      }).catch(function () {
-        window.localStorage.setItem("access_token", undefined);
-        window.location.href = '/login';
+      }).catch(function (error) {
+        if(!error.response)
+          window.toastr.error("Please check internet connectivity", "Network Error");
+        else{
+          window.localStorage.setItem("access_token", undefined);
+          window.location.href = '/login';
+        }
       }).then(function(){
         u.props.updateLoaded(true);
       });

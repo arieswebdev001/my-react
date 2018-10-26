@@ -12,7 +12,7 @@ class Login extends Component {
         errors:null
     };
 
-    handleChange = (event) => {
+    handleChange = () => {
         this.setState({
             user:{
                 email:window.$("#email").val(),
@@ -35,17 +35,20 @@ class Login extends Component {
                 window.localStorage.setItem("refresh_token", response.data.refresh_token);
                 window.location.href="/dashboard";
             }).catch(function (error) {
-                if(error.response.data !== undefined)
-                    if(error.response.data.message !== undefined)
-                        u.setState({errors:error.response.data.message});
-
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
+                else{
+                    if(error.response.data !== undefined)
+                        if(error.response.data.message !== undefined)
+                            u.setState({errors:error.response.data.message});
+                }
                 window.stopButton(document.getElementById('login-button'));
             });
     }
 
     render() {
         return (
-            <div className="container login-page">
+            <form className="container login-page">
                 <div className="login">
                     <img alt="" src="images/app/logo.png" height="80"/>  	
                     <br/><br/>
@@ -56,7 +59,7 @@ class Login extends Component {
                             <input className="form-control" type="email" placeholder="Email" id="email" onChange={this.handleChange} autoComplete="off"/>
                         </div>
                         <div className="form-group">
-                            <input className="form-control" type="password" placeholder="Password" onChange={this.handleChange} id="password"/>
+                            <input className="form-control" type="password" autoComplete="off" placeholder="Password" onChange={this.handleChange} id="password"/>
                         </div>
                         <div>
                             <div className="text-right">
@@ -65,7 +68,7 @@ class Login extends Component {
                             </div>
                         </div>
                         <div>
-                            <button className="btn btn-warning btn-block" type="button" onClick={this.login} id="login-button">Login</button>
+                            <button className="btn btn-warning btn-block" type="button" onClick={()=>this.login()} id="login-button">Login</button>
                         </div>
                     </div>	
                     <div className="text-left">
@@ -76,7 +79,7 @@ class Login extends Component {
                         <Link onClick={this.refresh} to="register">Create an Account</Link>
                     </div>
                 </div>
-            </div>
+            </form>
         );
     }
 }

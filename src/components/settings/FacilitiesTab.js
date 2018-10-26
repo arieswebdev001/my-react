@@ -1,72 +1,72 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Axios from '../../wrappers/Axios';
 import ReactTable from 'react-table';
-import PropertyDetails from '../ui/containers/PropertyDetails';
-import PropertyForm from '../ui/forms/PropertyForm';
+import Axios from '../../wrappers/Axios';
+import FacilityDetails from '../ui/containers/FacilityDetails';
+import FacilityForm from '../ui/forms/FacilityForm';
 
-class PropertiesTab extends Component {
+class FacilitiesTab extends Component {
+    state = {
+        facilities:[],
+        modalVisible:false,
+        modalMode:'form',
+        modalTitle:'',
+        facility:null
+    }
+
     showModal(title, data) {
         this.setState({ modalTitle:title, modalVisible:true });
 
         this.setState({
-            property: data===undefined ?
+            facility: data===undefined ?
                 {
                     id:0
                 }: data,
-            modalMode: title==="Update Property" || title=== "Add Property"?"form":"view"
+            modalMode: title==="Update Facility" || title=== "Add Facility"?"form":"view"
         });
-        window.$("#property-modal").modal("show");
+        window.$("#facility-modal").modal("show");
     }
 
     hideModal() {
-        window.$("#property-modal").modal("hide");
+        window.$("#facility-modal").modal("hide");
         this.setState({ modalVisible:false });
     }
 
-    state = {
-        properties:[],
-        modalVisible:false,
-        modalTitle:'Add Property',
-        modalMode:"form",
-        property:null
-    };
-
-    getProperties = () =>{
+    getFacilities = () =>{
         let u = this;
-        Axios.get('api/properties')
+        Axios.get('api/facilities')
             .then(function (response) {
-                u.setState({properties:response.data});
+                u.setState({facilities:response.data});
             });
     }
 
-    savedProperty = (response)=>{
+    savedFacility = (response)=>{
         window.toastr.success(response.data.message, "Saving Success");
         this.hideModal();
-        this.getProperties();
+        this.getFacilities();
     }
 
     componentDidMount(){
-        this.getProperties();
+        this.getFacilities();
     }
 
     render() {
         const columns = [
             {
-                Header: "Property Name",
-                accessor: "property_name",
+                Header: "Facility Name",
+                accessor: "facility_name",
                 width: 240
             },
             {
-                Header: "Address",
-                accessor: "property_address"
+                Header: "Description",
+                accessor: "facility_description"
             },
             {
                 Header: '',
                 Cell: row =>(
                     <div>
-                        <button className="btn btn-sm btn-info" onClick={ ()=> this.showModal(row.original.property_name, row.original) }>View</button>
-                        <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update Property", row.original) }>Edit</button>
+                        <button className="btn btn-sm btn-info" onClick={ ()=> this.showModal(row.original.facility_name, row.original) }>View</button>
+                        <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update Facility", row.original) }>Edit</button>
                     </div>
                 ),
                 width: 120
@@ -74,10 +74,10 @@ class PropertiesTab extends Component {
         ];
 
         return (
-            <div className="PropertiesTab">
-                <button className="btn btn-info" onClick={ () => this.showModal("Add Property") }>Add Property</button><br/><br/>
+            <div className="FacilitiesTab">
+                <button className="btn btn-info" onClick={ () => this.showModal("Add Facility") }>Add Facility</button><br/><br/>
 
-                <div className="modal fade" id="property-modal" tabIndex="-1" role="dialog">
+                <div className="modal fade" id="facility-modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -86,12 +86,12 @@ class PropertiesTab extends Component {
                             { 
                                 this.state.modalVisible ? (
                                     <div className="modal-body">
-                                        { this.state.modalMode === 'view' ? <PropertyDetails property={this.state.property} /> : <PropertyForm defaultProperty={this.state.property} savedProperty={this.savedProperty} onRef={ref => (this.child = ref)} /> }
+                                    { this.state.modalMode === 'view' ? <FacilityDetails facility={this.state.facility} /> : <FacilityForm defaultFacility={this.state.facility} savedFacility={this.savedFacility} onRef={ref => (this.child = ref)} /> }
                                     </div>
                                 ):''
                             }
                             <div className="modal-footer">
-                                {this.state.modalMode === 'form'?<button className="btn btn-sm btn-success" id="save-property-button" onClick={()=>this.child.saveProperty()}> Save </button>:''}
+                                {this.state.modalMode === 'form'?<button className="btn btn-sm btn-success" id="save-facility-button" onClick={()=>this.child.saveFacility()}> Save </button>:''}
                                 <button className="btn btn-sm" onClick={ () => this.hideModal() } >Close</button>
                             </div>
                         </div>
@@ -99,7 +99,7 @@ class PropertiesTab extends Component {
                 </div>
 
                 <ReactTable
-                    data={this.state.properties}
+                    data={this.state.facilities}
                     columns={ columns }
                     defaultPageSize={5}
                     className="-striped -highlight -bordered"
@@ -115,4 +115,4 @@ const mapStateToProps = (state)=>{
     }
 };
 
-export default connect(mapStateToProps)(PropertiesTab);
+export default connect(mapStateToProps)(FacilitiesTab);

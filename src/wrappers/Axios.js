@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {ApiUrl} from '../config';
 
 export default axios.create({
-    baseURL: 'https://takara.exactiv.com/',
+    baseURL: ApiUrl,
     headers:{
         common:{
             Authorization:'Bearer ' + window.localStorage.access_token

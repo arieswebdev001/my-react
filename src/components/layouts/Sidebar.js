@@ -41,7 +41,7 @@ class Sidebar extends Component {
                 </span>
             </li>
             <li className="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
-                <a href="https://google.com" className="m-menu__link">
+                <a href="https://hotel.exactiv.com" className="m-menu__link">
                     <span className="m-menu__item-here"></span><i className="m-menu__link-icon fa fa-globe"></i>
                     <span className="m-menu__link-text">Back To Website</span>
                 </a>

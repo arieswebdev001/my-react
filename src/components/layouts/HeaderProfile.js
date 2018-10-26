@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ResourcesPath } from '../../config';
 
 class HeaderProfile extends Component {
     logout = ()=>{
@@ -11,7 +12,7 @@ class HeaderProfile extends Component {
             <li className="m-nav__item m-topbar__user-profile  pointer m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
                 <span className="m-nav__link m-dropdown__toggle">
                     <span className="m-topbar__userpic">
-                    <img src={"images/users/" + this.props.user.picture} className="m--img-rounded m--marginless m--img-centered" alt=""/>
+                    <img src={ ResourcesPath + "/images/users/" + this.props.user.picture} className="m--img-rounded m--marginless m--img-centered" alt=""/>
                     </span>
                     <span className="m-nav__link-icon m-topbar__usericon  m--hide">
                     <span className="m-nav__link-icon-wrapper"><i className="flaticon-user-ok"></i></span>
@@ -24,7 +25,7 @@ class HeaderProfile extends Component {
                         <div className="m-dropdown__header m--align-center">
                             <div className="m-card-user m-card-user--skin-light">
                                 <div className="m-card-user__pic">
-                                    <img src={"images/users/" + this.props.user.picture} className="m--img-rounded m--marginless" alt=""/>
+                                    <img src={ResourcesPath + "/images/users/" + this.props.user.picture} className="m--img-rounded m--marginless" alt=""/>
                                 </div>
                                 <div className="m-card-user__details">
                                     <span className="m-card-user__name m--font-weight-500"> { this.props.user.first_name } { this.props.user.last_name } </span>
