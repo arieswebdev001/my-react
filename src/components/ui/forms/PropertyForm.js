@@ -27,7 +27,8 @@ class PropertyForm extends Component {
                     property_email: '',
                     currency: '',
                     map_coordinates:{ lat:14.366575, lng:121.041958}
-                }
+                },
+                files:[]
             }
         );
     }

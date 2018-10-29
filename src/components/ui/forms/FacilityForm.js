@@ -19,7 +19,8 @@ class FacilityForm extends Component {
                     id:0,
                     facility_name: '',
                     facility_description: '',
-                }
+                },
+                files:[]
             }
         );
     }

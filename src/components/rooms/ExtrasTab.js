@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-class SettingsTab extends Component {
+class ExtrasTab extends Component {
     render() {
         return (
-            <div className="SettingsTab">
-                Settings
+            <div className="ExtrasTab">
+                Extras
             </div>
         );
     }
@@ -17,4 +17,4 @@ const mapStateToProps = (state)=>{
     }
 };
 
-export default connect(mapStateToProps)(SettingsTab);
+export default connect(mapStateToProps)(ExtrasTab);

@@ -1,7 +1,9 @@
 const initState = {
     user:null,
     loaded:false,
-    pageTitle:'Dashboard'
+    pageTitle:'Dashboard',
+    levels:[],
+    properties:[]
 };
 
 const rootReducer = (state = initState, action) =>{
@@ -19,6 +21,17 @@ const rootReducer = (state = initState, action) =>{
         return {
             ...state,
             pageTitle:action.pageTitle
+        };
+    else if(action.type === 'UPDATE_LEVELS')
+        return {
+            ...state,
+            levels:action.levels
+        };
+        
+    else if(action.type === 'UPDATE_PROPERTIES')
+        return {
+            ...state,
+            properties:action.properties
         };
 
     return state;

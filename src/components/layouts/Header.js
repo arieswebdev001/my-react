@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import HeaderNotifications from './HeaderNotifications';
 import HeaderProfile from './HeaderProfile';
 import { Link } from 'react-router-dom';
+import { ResourcesPath } from '../../config';
 
 class Header extends Component {
     render() {
@@ -16,12 +17,12 @@ class Header extends Component {
                                         {
                                             this.props.user !== null ? 
                                                     (   <Link to="/dashboard" className="m-brand__logo-wrapper">
-                                                            <img alt="" src="images/app/logo.png" height="60"/>
+                                                            <img alt="" src={ ResourcesPath +"/images/app/logo.png"} height="60"/>
                                                         </Link>  
                                                     ):
                                                     (
                                                         <span className="m-brand__logo-wrapper">
-                                                            <img alt="" src="images/app/logo.png" height="60"/>
+                                                            <img alt="" src={ ResourcesPath +"/images/app/logo.png"} height="60"/>
                                                         </span>  
                                                     )
                                         }

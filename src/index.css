@@ -57,3 +57,10 @@
 .m-form .m-form__group {
     padding-top: 0px; 
 }
+
+.m-widget13 .m-widget13__item .m-widget13__desc {
+    width: 30%;
+}
+.m-widget13 .m-widget13__item .m-widget13__text {
+    width: 70%;
+}

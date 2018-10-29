@@ -72,7 +72,12 @@ class Profile extends Component {
                                         <h5 className="modal-title">Update Profile</h5>
                                     </div>
                                     <div className="modal-body">
-                                        <ProfileForm profile={this.props.user} savedProfile={this.savedProfile.bind(this)} onRef={ref => (this.child = ref)} />
+                                        <ProfileForm endpointUrl="../../api/profile" 
+                                            profile={this.props.user} 
+                                            savedProfile={this.savedProfile.bind(this)} 
+                                            onRef={ref => (this.child = ref)} 
+                                            method="put"
+                                        />
                                     </div>
                                     <div className="modal-footer">
                                         <button className="btn btn-sm btn-success" id="save-profile-button" onClick={()=>this.child.saveProfile()}> Save </button>

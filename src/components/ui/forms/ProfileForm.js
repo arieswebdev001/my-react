@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Input from '../../ui/controls/Input';
 import Select from '../../ui/controls/Select';
 import TextArea from '../controls/TextArea';
@@ -10,7 +11,8 @@ import ImageGallery from 'react-image-gallery';
 class ProfileForm extends Component {
     state = {
         profile:null,
-        files:[]
+        files:[],
+        new_password:'',
     }
 
     onDrop(files) {
@@ -44,11 +46,11 @@ class ProfileForm extends Component {
 
     componentDidMount(){ 
         this.props.onRef(this)
-        this.setState({ profile: this.props.profile, files: this.convertFile(this.props.profile.picture) });
+        this.setState({ profile: this.props.profile, files: this.convertFile(this.props.profile.picture), new_password:'' });
     }
 
     componentWillReceiveProps = (nextProps) =>{
-        this.setState({ profile: nextProps.profile, files: this.convertFile(nextProps.profile.picture) });
+        this.setState({ profile: nextProps.profile, files: this.convertFile(nextProps.profile.picture), new_password:'' });
     }
 
     handleChange = () => {
@@ -62,8 +64,23 @@ class ProfileForm extends Component {
                 mobile: window.$("#mobile").val(),
                 address: window.$("#address").val(),
                 email: window.$("#email").val(),
-                birth_date: window.$("#birth_date").val(),
+                birth_date: window.$("#birth_date").val()
             }
+        });
+    }
+
+    handleChangeLevel = ()=>{
+        this.setState({
+            profile:{
+                ...this.state.profile,
+                level: window.$("#level").val(),
+            }
+        });
+    }
+
+    handleChangePassword = () =>{
+        this.setState({
+            new_password:window.$("#new_password").val()
         });
     }
 
@@ -73,10 +90,11 @@ class ProfileForm extends Component {
         this.setState({
             profile:{
                 ...this.state.profile,
-                profile_images: this.state.files
-            }
+                profile_images: this.state.files,
+                new_password:this.state.new_password
+            },
         }, ()=>{
-            Axios.put('../../api/profile', this.state.profile)
+            Axios[this.props.method](this.props.endpointUrl, this.state.profile)
             .then((response) => {
                 u.props.savedProfile(response);
             }).catch(function (error) {
@@ -100,6 +118,20 @@ class ProfileForm extends Component {
                                 zIndex: 4,
                                 opacity: 0.5}}>Delete </button>
         };
+
+        const levels = this.props.levels.map((level)=>{
+            return {
+                value:level.id,
+                label:level.level_name
+            }
+        });
+
+        const properties = this.props.properties.map((property)=>{
+            return {
+                value:property.id,
+                label:property.property_name
+            }
+        });
 
         return (
             this.state.profile !== null ? 
@@ -131,13 +163,41 @@ class ProfileForm extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                     <Select selection={[{label:"Male", value:"male"}, {label:"Female", value:"female"}]} 
                                         label="Gender" _id="gender" _value={ this.state.profile.gender }  onChange={ ()=> this.handleChange() } />
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-5">
                                     <Input label="Birth Date" type="date" _id="birth_date" _value={ this.state.profile.birth_date }  onChange={ ()=> this.handleChange() } />
                                 </div>
+                                {
+                                    this.props.showLevelOption?
+                                        <div className="col-md-4">
+                                            <Select selection={ levels } 
+                                                label="Level" _id="level" _value={ this.state.profile.level }  onChange={ ()=> this.handleChangeLevel() } />
+                                        </div>:''
+                                }
+                            </div>
+                            <div className="row">
+                                {
+                                    this.props.showPasswordChanger?
+                                    <div className="col-md-6">
+                                        <Input label="New Password" _id="new_password" _value={ this.state.new_password }  onChange={ ()=> this.handleChangePassword() } />
+                                        {
+                                            (this.state.new_password!=='' && this.props.profile.id !==0)?
+                                                <small>Note: You're about to change this user's password.</small>:''
+                                        }{
+                                            (this.props.profile.id ===0)?
+                                                <small>Note: Password is required for new User.</small>:''
+                                        }
+                                    </div>:''
+                                }{
+                                    this.props.showPropertyOption?
+                                    <div className="col-md-6">
+                                        <Select selection={ properties } 
+                                                label="Default Property" _id="property_id" _value={ this.state.profile.property_id }  onChange={ ()=> this.handleChangeProperty() } />
+                                    </div>:''
+                                }
                             </div>
                         </div>
                         <div className="col-md-4">
@@ -154,4 +214,11 @@ class ProfileForm extends Component {
     }
 }
 
-export default ProfileForm;
+const mapStateToProps = (state)=>{
+    return {
+        levels:state.levels,
+        properties:state.properties
+    }
+};
+
+export default connect(mapStateToProps)(ProfileForm);

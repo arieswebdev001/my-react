@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SettingsTab from './settings/SettingsTab';
+import UsersTab from './settings/UsersTab';
 import PropertiesTab from './settings/PropertiesTab';
 import FacilitiesTab from './settings/FacilitiesTab';
+import SystemTab from './settings/SystemTab';
+import LevelsTab from './settings/LevelsTab';
 import TabbedPortlet from './ui/portlets/TabbedPortlet';
 
 class Settings extends Component {
@@ -15,9 +18,9 @@ class Settings extends Component {
             {id:"settings", label:"Settings", component:<SettingsTab/>},
             {id:"properties", label:"Properties", component:<PropertiesTab/>},
             {id:"facilities", label:"Facilities", component:<FacilitiesTab/>},
-            {id:"users", label:"Users", component:null},
-            {id:"levels", label:"Levels", component:null},
-            {id:"system", label:"System", component:null}
+            {id:"users", label:"Users", component:<UsersTab/>},
+            {id:"levels", label:"Levels", component:<LevelsTab/>},
+            {id:"system", label:"System", component:<SystemTab/>}
         ]
     }
 
