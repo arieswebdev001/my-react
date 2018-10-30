@@ -124,19 +124,14 @@ class FacilityForm extends Component {
                     this.state.facility !== null ? (
                         <div>
                             <div className="row">
-                                <div className="col-md-12">
+                                <div className="col-md-7">
                                     <Input label="Facility Name" _id="facility_name" _value={ this.state.facility.facility_name } onChange={ ()=> this.handleChange() } />
                                     <TextArea label="Description" _id="facility_description" _value={ this.state.facility.facility_description } onChange={ ()=> this.handleChange() } />
                                 </div>
-                            </div>
-                            <br/>
-                            <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-5">
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} multiple={false} style={ DropZoneStyle }>
                                         <p>Try dropping some file here, or click to select a file to upload.</p>
                                     </Dropzone>
-                                </div>
-                                <div className="col-md-6">
                                     { this.state.files.length>0 ? <ImageGallery  renderCustomControls={ deleteButton } items={this.state.files} showPlayButton={false} showThumbnails={false} />:''}
                                 </div>
                             </div>

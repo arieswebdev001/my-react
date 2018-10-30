@@ -3,7 +3,8 @@ const initState = {
     loaded:false,
     pageTitle:'Dashboard',
     levels:[],
-    properties:[]
+    properties:[],
+    extras:[]
 };
 
 const rootReducer = (state = initState, action) =>{
@@ -27,13 +28,16 @@ const rootReducer = (state = initState, action) =>{
             ...state,
             levels:action.levels
         };
-        
     else if(action.type === 'UPDATE_PROPERTIES')
         return {
             ...state,
             properties:action.properties
         };
-
+    else if(action.type === 'UPDATE_EXTRAS')
+        return {
+            ...state,
+            extras:action.extras
+        };
     return state;
 }
 

@@ -160,17 +160,17 @@ class PropertyForm extends Component {
                     this.state.property !== null ? (
                         <div>
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-7">
                                     <Input label="Property Name" _id="property_name" _value={ this.state.property.property_name } onChange={ ()=> this.handleChange() } />
                                     <TextArea label="Property Address" _id="property_address" _value={ this.state.property.property_address } onChange={ ()=> this.handleChange() } />
                                     <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />
                                     <Input label="Contact No." _id="property_contact_number" _value={ this.state.property.property_contact_number } onChange={ ()=> this.handleChange() } />
                                     <Input label="Contact Person" _id="property_contact_person" _value={ this.state.property.property_contact_person } onChange={ ()=> this.handleChange() } />
-                                </div>
-                                <div className="col-md-6">
                                     <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
-                                            _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
-                                    <div style={{ height: '300px', width: '100%' }}>
+                                        _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
+                                </div>
+                                <div className="col-md-5">
+                                    <div style={{ height: '250px', width: '100%' }}>
                                         <GoogleMapReact
                                                 bootstrapURLKeys={{ key: GoogleApiKey }}
                                                 defaultCenter={ this.state.property.map_coordinates }
@@ -180,19 +180,13 @@ class PropertyForm extends Component {
                                                 onChildMouseUp={ this.onCircleInteraction3.bind(this) }
                                                 onChildMouseMove={ this.onCircleInteraction.bind(this) }  
                                             >
-                                            <img src="../../images/app/marker.png" alt="marker" style={{transform: 'translate(-50%, -100%)'}} lat={this.state.property.map_coordinates.lat} lng={this.state.property.map_coordinates.lng}/>
+                                            <img src={ ResourcesPath + "/images/app/marker.png"} alt="marker" style={{transform: 'translate(-50%, -100%)'}} lat={this.state.property.map_coordinates.lat} lng={this.state.property.map_coordinates.lng}/>
                                         </GoogleMapReact>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6">
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} style={ DropZoneStyle }>
                                         <p>Try dropping some files here, or click to select files to upload.</p>
                                     </Dropzone>
-                                </div>
-                                <div className="col-md-6">
-                                    { this.state.files.length>0?<ImageGallery ref="child" renderCustomControls={ deleteButton } items={this.state.files} slideInterval={5000}/>:''}
+                                    { this.state.files.length>0?<ImageGallery ref="child" renderCustomControls={ deleteButton } items={this.state.files} showThumbnails={false} showBullets={true} slideInterval={5000}/>:''}
                                 </div>
                             </div>
                         </div>

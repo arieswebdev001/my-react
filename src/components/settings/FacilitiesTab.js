@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import Axios from '../../wrappers/Axios';
 import FacilityDetails from '../ui/containers/FacilityDetails';
 import FacilityForm from '../ui/forms/FacilityForm';
+import { ResourcesPath } from '../../config';
 
 class FacilitiesTab extends Component {
     state = {
@@ -18,10 +19,7 @@ class FacilitiesTab extends Component {
         this.setState({ modalTitle:title, modalVisible:true });
 
         this.setState({
-            facility: data===undefined ?
-                {
-                    id:0
-                }: data,
+            facility: data===undefined ? { id:0 }: data,
             modalMode: title==="Update Facility" || title=== "Add Facility"?"form":"view"
         });
         window.$("#facility-modal").modal("show");
@@ -53,6 +51,13 @@ class FacilitiesTab extends Component {
     render() {
         const columns = [
             {
+                Header: "",
+                Cell: row =>(
+                    <img src={ ResourcesPath + "/images/facilities/" + (row.original.facility_image===''?'no-photo.jpg':row.original.facility_image)} width="70" alt="Extra" />
+                ),
+                width: 80
+            },
+            {
                 Header: "Facility Name",
                 accessor: "facility_name",
                 width: 240
@@ -78,7 +83,7 @@ class FacilitiesTab extends Component {
                 <button className="btn btn-info" onClick={ () => this.showModal("Add Facility") }>Add Facility</button><br/><br/>
 
                 <div className="modal fade" id="facility-modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-lg" role="document">
+                    <div className={"modal-dialog " + (this.state.modalMode==='form'? 'modal-lg':'')} role="document">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">{ this.state.modalTitle }</h5>

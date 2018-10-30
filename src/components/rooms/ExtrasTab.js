@@ -1,10 +1,108 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactTable from 'react-table';
+import Axios from '../../wrappers/Axios';
+import { ResourcesPath } from '../../config';
+import ExtraDetails from '../ui/containers/ExtraDetails';
+import ExtraForm from '../ui/forms/ExtraForm';
+
 class ExtrasTab extends Component {
+    state = {
+        extras:[],
+        modalTitle:'',
+        extra:null,
+        modalMode:'form',
+        modalVisible:false
+    };
+
+    showModal(title, data) {
+        this.setState({ modalTitle:title, modalVisible:true });
+
+        this.setState({
+            extra: data===undefined ? { id:0 }: data,
+            modalMode: title==="Update Extra" || title=== "Add Extra"?"form":"view"
+        });
+        window.$("#extras-modal").modal("show");
+    }
+
+    hideModal() {
+        window.$("#extras-modal").modal("hide");
+        this.setState({ modalVisible:false });
+    }
+
+    componentDidMount(){
+        this.getExtras();
+    }
+
+    getExtras(){
+        let u = this;
+        Axios.get('api/extras')
+            .then(function (response) {
+                u.setState({ extras:response.data });
+            });
+    }
+
     render() {
+        const columns = [
+            {
+                Header: "",
+                Cell: row =>(
+                    <img src={ ResourcesPath + "/images/extras/" + (row.original.extra_image===''?'no-photo.jpg':row.original.extra_image)} width="70" alt="Extra" />
+                ),
+                width: 80
+            },
+            {
+                Header: "Name",
+                accessor: "extra_name",
+                width: 180
+            },
+            {
+                Header: "Description",
+                accessor: "extra_description"
+            },
+            {
+                Header: "",
+                Cell: row =>(
+                    <div>
+                        <button className="btn btn-sm btn-info" onClick={ ()=> this.showModal(row.original.extra_name, row.original) }>View</button>
+                        <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update Extra", row.original) }>Edit</button>
+                    </div>
+                ),
+                width: 120
+            },
+        ];
+
         return (
             <div className="ExtrasTab">
-                Extras
+                <button className="btn btn-info" onClick={ () => this.showModal("Add Extra") }>Add Extra</button><br/><br/>
+
+                <div className="modal fade" id="extras-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{ this.state.modalTitle }</h5>
+                            </div>
+                            { 
+                                this.state.modalVisible ? (
+                                    <div className="modal-body">
+                                        { this.state.modalMode === 'view' ? <ExtraDetails extra={this.state.extra} /> : <ExtraForm defaultExtra={this.state.extra} savedExtra={this.savedExtra} onRef={ref => (this.child = ref)} /> }
+                                    </div>
+                                ):''
+                            }
+                            <div className="modal-footer">
+                                {this.state.modalMode === 'form'?<button className="btn btn-sm btn-success" id="save-room-type-button" onClick={()=>this.child.saveExtra()}> Save </button>:''}
+                                <button className="btn btn-sm" onClick={ () => this.hideModal() } >Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ReactTable
+                    data={this.state.extras}
+                    columns={ columns }
+                    defaultPageSize={5}
+                    className="-striped -highlight -bordered"
+                />
             </div>
         );
     }

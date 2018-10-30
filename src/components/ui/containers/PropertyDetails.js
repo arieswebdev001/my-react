@@ -37,21 +37,20 @@ class PropertyDetails extends Component {
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <div style={{ height: '400px', width: '100%' }}>
+                        <div style={{ height: '200px', width: '100%' }}>
                             <GoogleMapReact
                                 bootstrapURLKeys={{ key: GoogleApiKey }}
                                 defaultCenter={ this.props.property.map_coordinates }
                                 defaultZoom={16}>
-                                    <img src="../../images/app/marker.png" alt="marker" style={{transform: 'translate(-50%, -100%)'}} lat={this.props.property.map_coordinates.lat} lng={this.props.property.map_coordinates.lng}/>
+                                    <img src={ ResourcesPath + "/images/app/marker.png"} alt="marker" style={{transform: 'translate(-50%, -100%)'}} lat={this.props.property.map_coordinates.lat} lng={this.props.property.map_coordinates.lng}/>
                             </GoogleMapReact>
                         </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12">
+
+                        <br/>
                         <ImageGallery items={images} autoPlay={true} showThumbnails={false} showBullets={true} slideInterval={5000}/>
                     </div>
                 </div>
+                <br/>
             </div>
         );
     }

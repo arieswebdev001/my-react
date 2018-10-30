@@ -4,16 +4,14 @@ import Axios from '../../wrappers/Axios';
 import ReactTable from 'react-table';
 import PropertyDetails from '../ui/containers/PropertyDetails';
 import PropertyForm from '../ui/forms/PropertyForm';
+import { ResourcesPath } from '../../config';
 
 class PropertiesTab extends Component {
     showModal(title, data) {
         this.setState({ modalTitle:title, modalVisible:true });
 
         this.setState({
-            property: data===undefined ?
-                {
-                    id:0
-                }: data,
+            property: data===undefined ? { id:0 }: data,
             modalMode: title==="Update Property" || title=== "Add Property"?"form":"view"
         });
         window.$("#property-modal").modal("show");
@@ -52,6 +50,13 @@ class PropertiesTab extends Component {
 
     render() {
         const columns = [
+            {
+                Header: "",
+                Cell: row =>(
+                    <img src={ ResourcesPath + "/images/properties/" + (row.original.property_images[0]===undefined?'no-photo.jpg':row.original.property_images[0])} width="70" alt="Extra" />
+                ),
+                width: 80
+            },
             {
                 Header: "Property Name",
                 accessor: "property_name",

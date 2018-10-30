@@ -13,8 +13,8 @@ module.exports = {
     GoogleApiKey:"AIzaSyDmPrbBOD0PuleW3DuILWpMwExxoKXeF8k",
     DropZoneStyle:{
         width: '90%',
-        height: 80,
-        margin: 20,
+        height: 60,
+        margin: 10,
         padding: 5,
         border: '2px dashed #ccc'
     }

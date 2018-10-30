@@ -13,7 +13,6 @@ class PropertyDetails extends Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="m-widget13">
-                            <h3>{ this.props.facility.facility_name }</h3> 
                             <p>{ this.props.facility.facility_description }</p>
                         </div>
                     </div>
