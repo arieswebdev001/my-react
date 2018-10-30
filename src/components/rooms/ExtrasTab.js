@@ -41,6 +41,12 @@ class ExtrasTab extends Component {
                 u.setState({ extras:response.data });
             });
     }
+    
+    savedExtra(response){
+        window.toastr.success(response.data.message, "Saving Success");
+        this.hideModal();
+        this.getExtras();
+    }
 
     render() {
         const columns = [
@@ -85,12 +91,12 @@ class ExtrasTab extends Component {
                             { 
                                 this.state.modalVisible ? (
                                     <div className="modal-body">
-                                        { this.state.modalMode === 'view' ? <ExtraDetails extra={this.state.extra} /> : <ExtraForm defaultExtra={this.state.extra} savedExtra={this.savedExtra} onRef={ref => (this.child = ref)} /> }
+                                        { this.state.modalMode === 'view' ? <ExtraDetails extra={this.state.extra} /> : <ExtraForm defaultExtra={this.state.extra} savedExtra={this.savedExtra.bind(this)} onRef={ref => (this.child = ref)} /> }
                                     </div>
                                 ):''
                             }
                             <div className="modal-footer">
-                                {this.state.modalMode === 'form'?<button className="btn btn-sm btn-success" id="save-room-type-button" onClick={()=>this.child.saveExtra()}> Save </button>:''}
+                                {this.state.modalMode === 'form'?<button className="btn btn-sm btn-success" id="save-extra-button" onClick={()=>this.child.saveExtra()}> Save </button>:''}
                                 <button className="btn btn-sm" onClick={ () => this.hideModal() } >Close</button>
                             </div>
                         </div>

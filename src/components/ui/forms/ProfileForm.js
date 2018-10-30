@@ -69,21 +69,6 @@ class ProfileForm extends Component {
         });
     }
 
-    handleChangeLevel = ()=>{
-        this.setState({
-            profile:{
-                ...this.state.profile,
-                level: window.$("#level").val(),
-            }
-        });
-    }
-
-    handleChangePassword = () =>{
-        this.setState({
-            new_password:window.$("#new_password").val()
-        });
-    }
-
     saveProfile  = ()=>{
         let u = this;
         window.spinButton(document.getElementById('save-profile-button'));
@@ -173,8 +158,8 @@ class ProfileForm extends Component {
                                 {
                                     this.props.showLevelOption?
                                         <div className="col-md-4">
-                                            <Select selection={ levels } 
-                                                label="Level" _id="level" _value={ this.state.profile.level }  onChange={ ()=> this.handleChangeLevel() } />
+                                            <Select selection={ levels } label="Level" _id="level" _value={ this.state.profile.level }  
+                                                onChange={ ()=> this.setState({ profile:{ ...this.state.profile, level: window.$("#level").val() } }) } />
                                         </div>:''
                                 }
                             </div>
@@ -182,7 +167,8 @@ class ProfileForm extends Component {
                                 {
                                     this.props.showPasswordChanger?
                                     <div className="col-md-6">
-                                        <Input label="New Password" _id="new_password" _value={ this.state.new_password }  onChange={ ()=> this.handleChangePassword() } />
+                                        <Input label="New Password" _id="new_password" _value={ this.state.new_password } 
+                                            onChange={ ()=> this.setState({ new_password:window.$("#new_password").val()}) } />
                                         {
                                             (this.state.new_password!=='' && this.props.profile.id !==0)?
                                                 <small>Note: You're about to change this user's password.</small>:''
@@ -194,8 +180,8 @@ class ProfileForm extends Component {
                                 }{
                                     this.props.showPropertyOption?
                                     <div className="col-md-6">
-                                        <Select selection={ properties } 
-                                                label="Default Property" _id="property_id" _value={ this.state.profile.property_id }  onChange={ ()=> this.handleChangeProperty() } />
+                                        <Select selection={ properties } label="Default Property" _id="property_id" _value={ this.state.profile.property_id }  
+                                            onChange={ ()=> this.setState({ profile:{ ...this.state.profile, property_id: window.$("#property_id").val() }}) } />
                                     </div>:''
                                 }
                             </div>
