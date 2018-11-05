@@ -41,8 +41,10 @@ class RoomsTab extends Component {
             });
     }
 
-    savedRoomType(){
-
+    savedRoomType(response){
+        window.toastr.success(response.data.message, "Saving Success");
+        this.hideModal();
+        this.getRoomTypes();
     }
 
     render() {
@@ -80,7 +82,7 @@ class RoomsTab extends Component {
                             { 
                                 this.state.modalVisible ? (
                                     <div className="modal-body">
-                                        { this.state.modalMode === 'view' ? <RoomTypeDetails room_type={this.state.room_type} /> : <RoomTypeForm defaultRoomType={this.state.room_type} savedRoomType={this.savedRoomType} onRef={ref => (this.child = ref)} /> }
+                                        { this.state.modalMode === 'view' ? <RoomTypeDetails room_type={this.state.room_type} /> : <RoomTypeForm defaultRoomType={this.state.room_type} savedRoomType={this.savedRoomType.bind(this)} onRef={ref => (this.child = ref)} /> }
                                     </div>
                                 ):''
                             }

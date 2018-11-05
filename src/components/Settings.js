@@ -15,12 +15,12 @@ class Settings extends Component {
 
     state = {
         portletTabs:[
-            {id:"settings", label:"Settings", component:<SettingsTab/>},
+            //{id:"settings", label:"Settings", component:<SettingsTab/>},
             {id:"properties", label:"Properties", component:<PropertiesTab/>},
             {id:"facilities", label:"Facilities", component:<FacilitiesTab/>},
             {id:"users", label:"Users", component:<UsersTab/>},
-            {id:"levels", label:"Levels", component:<LevelsTab/>},
-            {id:"system", label:"System", component:<SystemTab/>}
+            //{id:"levels", label:"Levels", component:<LevelsTab/>},
+            //{id:"system", label:"System", component:<SystemTab/>}
         ]
     }
 

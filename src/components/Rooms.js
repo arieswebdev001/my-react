@@ -9,7 +9,7 @@ class Rooms extends Component {
         portletTabs:[
             {id:"rooms", label:"Rooms", component:<RoomsTab/>},
             {id:"extras", label:"Extras", component:<ExtrasTab/>},
-            {id:"roompromos", label:"Promos", component:null}
+            //{id:"roompromos", label:"Promos", component:null}
         ]
     }
 
