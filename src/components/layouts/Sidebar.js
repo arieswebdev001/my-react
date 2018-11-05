@@ -55,12 +55,9 @@ class Sidebar extends Component {
             { name:"Reservations",  url:"/reservations", icon:"flaticon-list-2", submenus:null  },
             { name:"Guests",  url:"/guests", icon:"flaticon-users", submenus:null  },
             { name:"Rooms",  url:"/rooms", icon:"la la-bed", submenus:null  },
+            { name:"Events Place",  url:"/events-place", icon:"la la-folder", submenus:null  },
             { name:"Reports",  url:"/reports", icon:"fa fa-folder", submenus:null  },
-            { name:"Settings",  
-                url:"/settings", 
-                icon:"la la-cog", 
-                submenus:[]
-            }
+            { name:"Settings", url:"/settings", icon:"la la-cog", submenus:null }
         ],
         clientMenus:[]
     }

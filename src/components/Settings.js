@@ -13,21 +13,19 @@ class Settings extends Component {
         this.props.updatePageTitle('Settings');
     }
 
-    state = {
-        portletTabs:[
+    render() {
+        const tabs = [
             //{id:"settings", label:"Settings", component:<SettingsTab/>},
             {id:"properties", label:"Properties", component:<PropertiesTab/>},
             {id:"facilities", label:"Facilities", component:<FacilitiesTab/>},
             {id:"users", label:"Users", component:<UsersTab/>},
             //{id:"levels", label:"Levels", component:<LevelsTab/>},
             //{id:"system", label:"System", component:<SystemTab/>}
-        ]
-    }
+        ];
 
-    render() {
         return (
             <div className="Settings">
-                <TabbedPortlet colorClass="m-portlet--info" tabs={this.state.portletTabs} />
+                <TabbedPortlet colorClass="m-portlet--info" tabs={ tabs } />
             </div>
         );
     }

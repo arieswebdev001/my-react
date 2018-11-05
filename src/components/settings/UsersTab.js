@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
+import { ResourcesPath } from '../../config';
 import Axios from '../../wrappers/Axios';
 import ProfileForm from '../ui/forms/ProfileForm';
 import ProfileDetails from '../ui/containers/ProfileDetails';
@@ -63,8 +64,17 @@ class UsersTab extends Component {
     render() {
         const columns = [
             {
+                Header: "",
+                Cell: row =>(
+                    <img onClick={ ()=> this.showModal(row.original.name, row.original) } className="clickable" src={ ResourcesPath + "/images/users/" + row.original.picture } width="70" alt="User" />
+                ),
+                width: 80
+            },
+            {
                 Header: "Name",
-                accessor: "name",
+                Cell: row =>(
+                    <span onClick={ ()=> this.showModal(row.original.name, row.original) } className="clickable">{ row.original.name }</span>
+                ),
                 width: 280
             },
             {

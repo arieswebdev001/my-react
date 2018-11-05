@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TabbedPortlet from './ui/portlets/TabbedPortlet';
 
-class Reports extends Component {
+class Guests extends Component {
     componentDidMount(){
-        this.props.updatePageTitle('Reports');
+        this.props.updatePageTitle('Events Place');
     }
     render() {
         const tabs = [
             {id:"bookings", label:"Bookings", component:null},
-            {id:"reviews", label:"Reviews", component:null},
-            {id:"logs", label:"Logs", component:null}
+            {id:"inquiries", label:"Inquiries", component:null},
         ];
+
         return (
-            <div className="Reports">
-                <TabbedPortlet colorClass="m-portlet--danger" tabs={ tabs } />
+            <div className="EventsPlace">
+                <TabbedPortlet colorClass="m-portlet--warning" tabs={ tabs } />
             </div>
         );
     }
@@ -27,4 +27,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Reports);
+export default connect(null, mapDispatchToProps)(Guests);

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Input from '../../ui/controls/Input';
 import TextArea from '../controls/TextArea';
-import Select from '../controls/Select';
 import RoomFeaturesList from './RoomFeaturesList';
+import BedRoomsList from './BedRoomsList';
 import Axios from '../../../wrappers/Axios';
 import { ResourcesPath, DropZoneStyle } from '../../../config';
 import Dropzone from 'react-dropzone';
@@ -14,7 +14,8 @@ class RoomTypeForm extends Component {
     state = {
         room_type:null,
         files:[],
-        room_type_features:[]
+        room_type_features:[],
+        bed_rooms:[]
     }
 
     initState(){
@@ -24,12 +25,12 @@ class RoomTypeForm extends Component {
                     id:0,
                     room_type_name: '',
                     room_type_description: '',
-                    bed_type:'King Bed',
                     max_adult:2,
                     max_child:2
                 },
                 files:[],
-                room_type_features:[]
+                room_type_features:[],
+                bed_rooms:[]
             }
         );
     }
@@ -71,7 +72,6 @@ class RoomTypeForm extends Component {
                 ...this.state.room_type,
                 room_type_name: window.$("#room_type_name").val(),
                 room_type_description: window.$("#room_type_description").val(),
-                bed_type: window.$("#bed_type").val(),
                 max_adult: window.$("#max_adult").val(),
                 max_child: window.$("#max_child").val(),
             }
@@ -122,15 +122,47 @@ class RoomTypeForm extends Component {
             files:newList
         });
     }
+    
+    validateArrays(){
+        for(var x=0;x<this.state.room_type_features.length;x++){
+            if(this.state.room_type_features[x].group_name.length === 0)
+                return "Group name cannot be empty";
+
+            if(this.state.room_type_features[x].items.length === 0)
+                return "Items cannot be empty";
+
+            for(var y=0;y<this.state.room_type_features[x].items.length;y++){
+                if(this.state.room_type_features[x].items[y].length === 0)
+                    return "Item name cannot be empty";
+            }
+        }
+
+        for(var z=0;z<this.state.bed_rooms.length;z++){
+            if(this.state.bed_rooms[z].length === 0)
+                return "Bedroom name cannot be empty";
+        }
+
+        if(this.state.bed_rooms.length ===0)
+            return "Bedrooms cannot be empty";
+    }
 
     saveRoomType(){
+
+        var errors = this.validateArrays();
+        if(errors){
+            window.toastr.error(errors)
+            return false;
+        }
+
         let u = this;
         window.spinButton(document.getElementById('save-room-type-button'));
+
         this.setState({
             room_type:{
                 ...this.state.room_type,
                 room_type_images: this.state.files,
-                room_type_features: this.state.room_type_features
+                room_type_features: this.state.room_type_features,
+                bed_rooms: this.state.bed_rooms
             }
         }, ()=>{
             Axios[this.state.room_type.id===0?'post':'put']('../../api/roomType', this.state.room_type)
@@ -170,38 +202,30 @@ class RoomTypeForm extends Component {
                                         right:0}}>Mark as Primary </button>
                     </span>);
         };
-
-        const bedTypes = [{ label:"Queen Bed", value:"Queen Bed" },{  label:"King Bed", value:"King Bed" },{  label:"Solo Bed", value:"Solo Bed" }]
         return (
             <form className="m-form">
                 {
                     this.state.room_type !== null ? (
                         <div>
                             <div className="row">
-                                <div className="col-lg-8">
+                                <div className="col-lg-7">
                                     <div className="row">
-                                        <div className="col-md-5">
+                                        <div className="col-md-6">
                                             <Input label="Room Type" _id="room_type_name" _value={ this.state.room_type.room_type_name } onChange={ ()=> this.handleChange() } />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <Select label="Bed Type" _id="bed_type" selection={ bedTypes } 
-                                                _value={ this.state.room_type.bed_type } onChange={ ()=> this.handleChange() } />
                                         </div>
                                         <div className="col-md-3">
                                             <Input label="Max Adult" type="number" _id="max_adult" _value={ this.state.room_type.max_adult } onChange={ ()=> this.handleChange() } />
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-md-9">
-                                            <TextArea label="Description" rows={2} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
                                         </div>
                                         <div className="col-md-3">
                                             <Input label="Max Child" type="number" _id="max_child" _value={ this.state.room_type.max_child } onChange={ ()=> this.handleChange() } />
                                         </div>
                                     </div>
+                                    <BedRoomsList onChange={(value)=> this.setState({ bed_rooms:value }) } id={this.state.room_type.id} defaultBedRooms={this.state.bed_rooms} />
+                                    <hr/>
                                     <RoomFeaturesList onChange={(value)=> this.setState({ room_type_features:value }) } id={this.state.room_type.id} defaultFeatures={this.state.room_type_features} />
                                 </div>
-                                <div className="col-lg-4">
+                                <div className="col-lg-5">
+                                    <TextArea label="Description" rows={2} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} style={ DropZoneStyle }>
                                         <p>Try dropping some files here, or click to select a files to upload.</p>
                                     </Dropzone>

@@ -9,6 +9,8 @@ import Reservations from './components/Reservations';
 import Guests from './components/Guests';
 import Booking from './components/Booking';
 import Rooms from './components/Rooms';
+import RoomType from './components/rooms/RoomType';
+import EventsPlace from './components/EventsPlace';
 import Reports from './components/Reports';
 import Settings from './components/Settings';
 import Login from './components/auth/Login';
@@ -76,8 +78,10 @@ class App extends Component {
                     <Route exact path="/" component={Home}/>
                     <Route path="/dashboard" component={Home}/>
                     <Route path="/rooms" component={Rooms}/>
+                    <Route path="/room-type/:id" component={RoomType}/>
                     <Route path="/reservations" component={Reservations}/>
                     <Route path="/guests" component={Guests}/>
+                    <Route path="/events-place" component={EventsPlace}/>
                     <Route path="/profile" component={Profile}/>
                     <Route path="/reports" component={Reports}/>
                     <Route path="/settings" component={Settings}/>

@@ -53,13 +53,15 @@ class PropertiesTab extends Component {
             {
                 Header: "",
                 Cell: row =>(
-                    <img src={ ResourcesPath + "/images/properties/" + (row.original.property_images[0]===undefined?'no-photo.jpg':row.original.property_images[0])} width="70" alt="Extra" />
+                    <img className="clickable" onClick={ ()=> this.showModal(row.original.property_name, row.original) } src={ ResourcesPath + "/images/properties/" + (row.original.property_images[0]===undefined?'no-photo.jpg':row.original.property_images[0])} width="70" alt="Property" />
                 ),
                 width: 80
             },
             {
                 Header: "Property Name",
-                accessor: "property_name",
+                Cell: row =>(
+                    <span className="clickable" onClick={ ()=> this.showModal(row.original.property_name, row.original) }> { row.original.property_name } </span>
+                ),
                 width: 240
             },
             {

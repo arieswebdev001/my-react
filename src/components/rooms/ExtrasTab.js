@@ -15,6 +15,15 @@ class ExtrasTab extends Component {
         modalVisible:false
     };
 
+    getPricingType(pricing_type){
+        if(pricing_type === 'per_head_per_day')
+            return 'Per Head/Per Day';
+        else if(pricing_type === 'per_head')
+            return 'Per Head';
+        else if(pricing_type === 'per_day')
+            return 'Per Day';
+    }
+
     showModal(title, data) {
         this.setState({ modalTitle:title, modalVisible:true });
 
@@ -53,18 +62,30 @@ class ExtrasTab extends Component {
             {
                 Header: "",
                 Cell: row =>(
-                    <img src={ ResourcesPath + "/images/extras/" + (row.original.extra_image===''?'no-photo.jpg':row.original.extra_image)} width="70" alt="Extra" />
+                    <img onClick={ ()=> this.showModal(row.original.extra_name, row.original) } className="clickable" src={ ResourcesPath + "/images/extras/" + (row.original.extra_image===''?'no-photo.jpg':row.original.extra_image)} width="70" alt="Extra" />
                 ),
                 width: 80
             },
             {
                 Header: "Name",
-                accessor: "extra_name",
+                Cell: row =>(
+                    <span onClick={ ()=> this.showModal(row.original.extra_name, row.original) } className="clickable">{ row.original.extra_name }</span>
+                ),
                 width: 180
             },
             {
                 Header: "Description",
                 accessor: "extra_description"
+            },
+            {
+                Header: "Type",
+                accessor: "extra_type"
+            },
+            {
+                Header: "Price",
+                Cell: row =>(
+                    row.original.selling_price + " (" + this.getPricingType(row.original.pricing_type) + ")"
+                )
             },
             {
                 Header: "",

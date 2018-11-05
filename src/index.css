@@ -64,3 +64,7 @@
 .m-widget13 .m-widget13__item .m-widget13__text {
     width: 70%;
 }
+
+.clickable{
+    cursor:pointer;
+}

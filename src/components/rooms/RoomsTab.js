@@ -4,6 +4,8 @@ import ReactTable from 'react-table';
 import Axios from '../../wrappers/Axios';
 import RoomTypeDetails from '../ui/containers/RoomTypeDetails';
 import RoomTypeForm from '../ui/forms/RoomTypeForm';
+import { ResourcesPath } from '../../config';
+import { Link } from 'react-router-dom';
 
 class RoomsTab extends Component {
     state = {
@@ -50,9 +52,22 @@ class RoomsTab extends Component {
     render() {
         const columns = [
             {
+                Header: "",
+                Cell: row =>(
+                    <Link to={"/room-type/" + row.original.id}>
+                        <img src={ ResourcesPath + "/images/rooms/" + (row.original.room_type_images.length===0?'no-photo.jpg':row.original.room_type_images[0])} width="70" alt="Room" />
+                    </Link> 
+                ),
+                width: 80
+            },
+            {
                 Header: "Room Type",
-                accessor: "room_type_name",
-                width: 280
+                Cell: row =>(
+                    <Link to={"/room-type/" + row.original.id} style={{color:"#617284"}}>
+                        <span>{ row.original.room_type_name }</span>
+                    </Link>  
+                ),
+                width: 180
             },
             {
                 Header: "Description",
@@ -60,12 +75,31 @@ class RoomsTab extends Component {
             },
             {
                 Header: "Room Count",
-                accessor: "room_count",
-                width: 120
+                Cell: row =>(
+                    row.original.rooms.length
+                ),
+                width: 100
+            },
+            {
+                Header: "Max. Adult",
+                accessor: "max_adult",
+                width: 100
+            },
+            {
+                Header: "Max. Child",
+                accessor: "max_child",
+                width: 100
             },
             {
                 Header: "",
-                width: 120
+                Cell: row =>(
+                    <div>
+                        <Link to={"/room-type/" + row.original.id}>
+                            <button className="btn btn-sm btn-info" type="button">View</button>
+                        </Link>  
+                    </div>
+                ),
+                width: 60
             },
         ];
 

@@ -53,13 +53,15 @@ class FacilitiesTab extends Component {
             {
                 Header: "",
                 Cell: row =>(
-                    <img src={ ResourcesPath + "/images/facilities/" + (row.original.facility_image===''?'no-photo.jpg':row.original.facility_image)} width="70" alt="Extra" />
+                    <img onClick={ ()=> this.showModal(row.original.facility_name, row.original) } className="clickable" src={ ResourcesPath + "/images/facilities/" + (row.original.facility_image===''?'no-photo.jpg':row.original.facility_image)} width="70" alt="Facility" />
                 ),
                 width: 80
             },
             {
                 Header: "Facility Name",
-                accessor: "facility_name",
+                Cell: row =>(
+                    <span onClick={ ()=> this.showModal(row.original.facility_name, row.original) } className="clickable">{ row.original.facility_name }</span>
+                ),
                 width: 240
             },
             {

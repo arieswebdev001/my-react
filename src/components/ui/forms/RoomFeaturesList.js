@@ -6,13 +6,14 @@ class RoomFeaturesList extends Component {
     };
     
     addGroup(){
-        this.setState({ features: [...this.state.features, 
-                        {
-                            group_name:"",
-                            items:[],
-                            collapsed:true
-                        }] 
-                    }, this.props.onChange(this.state.features));
+        var newData = [...this.state.features, 
+            {
+                group_name:"",
+                items:[],
+                collapsed:true
+            }] ;
+        this.setState({ features: newData
+                    }, this.props.onChange(newData));
     }
 
     addItem(key){
@@ -24,7 +25,7 @@ class RoomFeaturesList extends Component {
             return f;
         }); 
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     componentWillReceiveProps = (nextProps) =>{
@@ -45,7 +46,7 @@ class RoomFeaturesList extends Component {
             return key !== i;
         });
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     removeItem(key, k){
@@ -57,7 +58,7 @@ class RoomFeaturesList extends Component {
             return f;
         });
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     toggleCollapse(key){
@@ -67,7 +68,7 @@ class RoomFeaturesList extends Component {
             return f;
         }); 
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     changeItem(event, key, k){
@@ -82,7 +83,7 @@ class RoomFeaturesList extends Component {
             return f;
         }); 
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     changeGroupName(event, key){
@@ -92,13 +93,13 @@ class RoomFeaturesList extends Component {
             return f;
         }); 
 
-        this.setState({features:newArray}, this.props.onChange(this.state.features));
+        this.setState({features:newArray}, this.props.onChange(newArray));
     }
 
     render() {
         return (
             <div>
-                <h4> Features </h4>
+                <h4> Features ({ this.state.features.length }) </h4>
                 {
                 this.state.features.map((group, key)=>{
                     return ( 
