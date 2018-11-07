@@ -4,7 +4,7 @@ import UserCard from './ui/misc/UserCard';
 import Axios from '../wrappers/Axios';
 import ProfileForm from './ui/forms/ProfileForm';
 import PasswordForm from './ui/forms/PasswordForm';
-
+import TabbedPortlet from './ui/portlets/TabbedPortlet';
 class Profile extends Component {
     componentDidMount(){
         this.props.updatePageTitle('Profile');
@@ -54,6 +54,14 @@ class Profile extends Component {
     }
 
     render() {
+
+        const tabs = [
+            {id:"details", label:"Details", component:null},
+            {id:"notifications", label:"Notifications", component:null},
+            {id:"logs", label:"Logs", component:null},
+            {id:"notes", label:"Notes", component:null}
+        ];
+
         return (
             <div className="Profile">
                 <div className="row">
@@ -106,7 +114,7 @@ class Profile extends Component {
 
                     </div>
                     <div className="col-md-9">
-                    
+                        <TabbedPortlet tabs={ tabs } colorClass="m-portlet--warning" title=""/>
                     </div>
                 </div>
             </div>
@@ -116,8 +124,8 @@ class Profile extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', pageTitle:pageTitle })},
-        updateUser: (user)=>{dispatch({ type: 'UPDATE_USER', user:user })}
+        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', payload:pageTitle })},
+        updateUser: (user)=>{dispatch({ type: 'UPDATE_USER', payload:user })}
     }
 }
 const mapStateToProps = (state)=>{

@@ -23,7 +23,6 @@ class PropertiesTab extends Component {
     }
 
     state = {
-        properties:[],
         modalVisible:false,
         modalTitle:'Add Property',
         modalMode:"form",
@@ -34,7 +33,10 @@ class PropertiesTab extends Component {
         let u = this;
         Axios.get('api/properties')
             .then(function (response) {
-                u.setState({properties:response.data});
+                u.props.updateProperties(response.data);
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
             });
     }
 
@@ -106,7 +108,7 @@ class PropertiesTab extends Component {
                 </div>
 
                 <ReactTable
-                    data={this.state.properties}
+                    data={this.props.properties}
                     columns={ columns }
                     defaultPageSize={5}
                     className="-striped -highlight -bordered"
@@ -118,8 +120,13 @@ class PropertiesTab extends Component {
 
 const mapStateToProps = (state)=>{
     return {
-        user:state.user
+        user:state.user,
+        properties:state.properties
     }
 };
-
-export default connect(mapStateToProps)(PropertiesTab);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateProperties: (properties)=>{dispatch({ type: 'UPDATE_PROPERTIES', payload:properties })},
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(PropertiesTab);

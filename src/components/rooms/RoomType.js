@@ -2,39 +2,41 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TabbedPortlet from '../ui/portlets/TabbedPortlet';
 import Axios from '../../wrappers/Axios';
+import Details from './room_type/Details'
+import Rooms from './room_type/Rooms';
 
 class RoomType extends Component {
-    state = {
-        room_type:{
-            room_type_name:''
-        }
-    }
-
     getRoomType(){
         let u = this;
         Axios.get('api/roomType/' + this.props.match.params.id)
             .then(function (response) {
-                u.setState({room_type:response.data});
-                u.props.updatePageTitle("Room Types - " + response.data.room_type_name);
+                u.props.updateRoomType(response.data);
+                u.props.updatePageTitle([{name:"Rooms", url:"/rooms"}, u.props.room_type.room_type_name]);
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
             });
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.getRoomType();
+        if(this.props.room_type !== null)
+            this.props.updatePageTitle([{name:"Rooms", url:"/rooms"}, this.props.room_type.room_type_name]);
     }
 
     render() {
         const tabs = [
-            {id:"details", label:"Details", component:null},
-            {id:"rooms", label:"Rooms", component:null},
+            {id:"details", label:"Details", component:<Details onUpdate={ this.getRoomType.bind(this) } />},
+            {id:"rooms", label:"Individual Rooms", component:<Rooms />},
             {id:"pricing", label:"Pricing", component:null},
-            {id:"promos", label:"Promos", component:null},
-            {id:"availability", label:"Availability", component:null},
+            {id:"promos", label:"Promos", component:null}
         ];
 
         return (
             <div className="RoomType">
-                <TabbedPortlet tabs={ tabs } colorClass="m-portlet--warning" title={this.state.room_type.room_type_name}/>
+            {
+                this.props.room_type !== null  ? <TabbedPortlet tabs={ tabs } colorClass="m-portlet--warning" title={this.props.room_type.room_type_name}/> :'Loading...'
+            }
             </div>
         );
     }
@@ -43,13 +45,15 @@ class RoomType extends Component {
 
 const mapStateToProps = (state)=>{
     return {
-        user:state.user
+        user:state.user,
+        room_type:state.room_type
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', pageTitle:pageTitle })},
+        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', payload:pageTitle })},
+        updateRoomType: (room_type)=>{dispatch({ type: 'UPDATE_ROOM_TYPE', payload:room_type })},
     }
 }
 

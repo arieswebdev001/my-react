@@ -106,10 +106,10 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUser: (user)=>{dispatch({ type: 'UPDATE_USER', user:user })},
-    updateLoaded: (loaded)=>{dispatch({ type: 'UPDATE_LOADED', loaded:loaded })},
-    updateLevels: (levels)=>{dispatch({ type: 'UPDATE_LEVELS', levels:levels })},
-    updateProperties: (properties)=>{dispatch({ type: 'UPDATE_PROPERTIES', properties:properties })}
+    updateUser: (user)=>{dispatch({ type: 'UPDATE_USER', payload:user })},
+    updateLoaded: (loaded)=>{dispatch({ type: 'UPDATE_LOADED', payload:loaded })},
+    updateLevels: (levels)=>{dispatch({ type: 'UPDATE_LEVELS', payload:levels })},
+    updateProperties: (properties)=>{dispatch({ type: 'UPDATE_PROPERTIES', payload:properties })}
   }
 }
 

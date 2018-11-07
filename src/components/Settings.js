@@ -34,7 +34,7 @@ class Settings extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', pageTitle:pageTitle })},
+        updatePageTitle: (pageTitle)=>{dispatch({ type: 'UPDATE_PAGE_TITLE', payload:pageTitle })},
     }
 }
 

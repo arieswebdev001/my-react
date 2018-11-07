@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class PageHeader extends Component {
     render() {
@@ -7,14 +8,14 @@ class PageHeader extends Component {
             <div className="m-subheader">
                 <div className="d-flex align-items-center">
                     <div className="mr-auto">
-                        <h3 className="m-subheader__title m-subheader__title--separator">{ this.props.pageTitle }</h3>
-                        <ul className="m-subheader__breadcrumbs m-nav m-nav--inline">
-                            <li className="m-nav__item m-nav__item--home">
-                                <span className="m-nav__link m-nav__link--icon">
-                                    <i className="m-nav__link-icon la la-home"></i>
-                                </span>
-                            </li>
-                        </ul>
+                        {
+                            typeof(this.props.pageTitle) !== 'object'? 
+                                <h3 className="m-subheader__title">{ this.props.pageTitle }</h3>:
+                                this.props.pageTitle.map((title, key)=>{
+                                    return typeof(title) !== 'object' ? <h3 className="m-subheader__title" key={key}>{ title }</h3> : 
+                                        <Link className="m-subheader__title m-subheader__title--separator" to={title.url} key={key}>{ title.name }</Link>
+                                })
+                        }
                     </div>
                 </div>
             </div>

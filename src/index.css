@@ -68,3 +68,10 @@
 .clickable{
     cursor:pointer;
 }
+
+.room-card{
+    padding:15px;
+    color:white;
+    cursor:pointer;
+    text-align:center
+}

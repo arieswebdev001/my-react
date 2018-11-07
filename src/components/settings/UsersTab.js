@@ -47,6 +47,9 @@ class UsersTab extends Component {
         Axios.get('api/users')
             .then(function (response) {
                 u.setState({users:response.data});
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
             });
     }
 
@@ -66,16 +69,18 @@ class UsersTab extends Component {
             {
                 Header: "",
                 Cell: row =>(
-                    <img onClick={ ()=> this.showModal(row.original.name, row.original) } className="clickable" src={ ResourcesPath + "/images/users/" + row.original.picture } width="70" alt="User" />
+                    <img onClick={ ()=> this.showModal(row.original.name, row.original) } className="clickable" src={ ResourcesPath + "/images/users/" + row.original.picture } width="40" alt="User" />
                 ),
-                width: 80
+                width: 50,
+                filterable:false
             },
             {
                 Header: "Name",
                 Cell: row =>(
                     <span onClick={ ()=> this.showModal(row.original.name, row.original) } className="clickable">{ row.original.name }</span>
                 ),
-                width: 280
+                width: 280,
+                accessor:"name"
             },
             {
                 Header: "Level",
@@ -98,7 +103,8 @@ class UsersTab extends Component {
                         <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update User", row.original) }>Edit</button>
                     </div>
                 ),
-                width: 120
+                width: 120,
+                filterable:false
             }
         ];
         return (
@@ -139,6 +145,10 @@ class UsersTab extends Component {
                     </div>
                 </div>
                 <ReactTable
+                    filterable
+                    defaultFilterMethod={(filter, row) => {
+                        return row[filter.id].toLowerCase().search(filter.value.toLowerCase()) !== -1;
+                    }}
                     data={this.state.users}
                     columns={ columns }
                     defaultPageSize={5}

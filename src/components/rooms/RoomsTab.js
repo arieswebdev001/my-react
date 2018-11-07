@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 
 class RoomsTab extends Component {
     state = {
-        room_types:[],
         modalTitle:'',
         room_type:null,
         modalMode:'form',
@@ -33,13 +32,17 @@ class RoomsTab extends Component {
 
     componentDidMount(){
         this.getRoomTypes();
+        this.props.updateRoomType(null);
     }
 
     getRoomTypes(){
         let u = this;
         Axios.get('api/roomTypes')
             .then(function (response) {
-                u.setState({room_types:response.data});
+                u.props.updateRoomTypes(response.data);
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
             });
     }
 
@@ -128,7 +131,7 @@ class RoomsTab extends Component {
                     </div>
                 </div>
                 <ReactTable
-                    data={this.state.room_types}
+                    data={this.props.room_types}
                     columns={ columns }
                     defaultPageSize={5}
                     className="-striped -highlight -bordered"
@@ -141,8 +144,16 @@ class RoomsTab extends Component {
 
 const mapStateToProps = (state)=>{
     return {
-        user:state.user
+        user:state.user,
+        room_types:state.room_types
     }
 };
 
-export default connect(mapStateToProps)(RoomsTab);
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateRoomTypes: (room_types)=>{dispatch({ type: 'UPDATE_ROOM_TYPES', payload:room_types })},
+        updateRoomType: (room_type)=>{dispatch({ type: 'UPDATE_ROOM_TYPE', payload:room_type })},
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(RoomsTab);

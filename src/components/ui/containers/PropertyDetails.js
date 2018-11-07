@@ -34,6 +34,7 @@ class PropertyDetails extends Component {
                                             } 
                                 label="Status" />
                             <ItemRow value={ this.props.property.currency } label="Currency"/>
+                            <ItemRow value={ this.props.property.floor_count } label="Floor Count"/>
                         </div>
                     </div>
                     <div className="col-md-6">
@@ -47,7 +48,7 @@ class PropertyDetails extends Component {
                         </div>
 
                         <br/>
-                        <ImageGallery items={images} autoPlay={true} showThumbnails={false} showBullets={true} slideInterval={5000}/>
+                        <ImageGallery items={images} showThumbnails={false} showBullets={true} slideInterval={5000}/>
                     </div>
                 </div>
                 <br/>

@@ -48,6 +48,9 @@ class ExtrasTab extends Component {
         Axios.get('api/extras')
             .then(function (response) {
                 u.setState({ extras:response.data });
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
             });
     }
     

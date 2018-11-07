@@ -15,7 +15,7 @@ class Sidebar extends Component {
         <ul className="m-menu__nav ">
             {
                 this.state[this.props.user.level !== 0? 'adminMenus':'clientMenus'].map((menu,key)=>{
-                    return (<li className={"m-menu__item " + (this.props.pageTitle === menu.name?'m-menu__item--active':'')} aria-haspopup="true" key={key}>
+                    return (<li className={"m-menu__item " + ((this.props.pageTitle === menu.name || (this.props.pageTitle[0].name !== undefined ? this.props.pageTitle[0].name === menu.name : false) )?'m-menu__item--active':'')} aria-haspopup="true" key={key}>
                                 <Link to={menu.url} className="m-menu__link ">
                                     <span className="m-menu__item-here"></span><i className={"m-menu__link-icon " + menu.icon }></i>
                                     <span className="m-menu__link-text">{ menu.name }</span>

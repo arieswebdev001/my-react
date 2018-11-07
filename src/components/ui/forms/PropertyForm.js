@@ -26,6 +26,7 @@ class PropertyForm extends Component {
                     property_contact_person: '',
                     property_email: '',
                     currency: '',
+                    floor_count:2,
                     map_coordinates:{ lat:14.366575, lng:121.041958}
                 },
                 files:[]
@@ -100,7 +101,8 @@ class PropertyForm extends Component {
                 property_contact_number: window.$("#property_contact_number").val(),
                 property_contact_person: window.$("#property_contact_person").val(),
                 property_email: window.$("#property_email").val(),
-                currency: window.$("#currency").val()
+                currency: window.$("#currency").val(),
+                floor_count:window.$("#floor_count").val()
             }
         });
     }
@@ -166,8 +168,16 @@ class PropertyForm extends Component {
                                     <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />
                                     <Input label="Contact No." _id="property_contact_number" _value={ this.state.property.property_contact_number } onChange={ ()=> this.handleChange() } />
                                     <Input label="Contact Person" _id="property_contact_person" _value={ this.state.property.property_contact_person } onChange={ ()=> this.handleChange() } />
-                                    <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
-                                        _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
+                                                _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <Input label="Floor Count" _id="floor_count" type="number" _value={ this.state.property.floor_count } onChange={ ()=> this.handleChange() } />
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <div className="col-md-5">
                                     <div style={{ height: '250px', width: '100%' }}>

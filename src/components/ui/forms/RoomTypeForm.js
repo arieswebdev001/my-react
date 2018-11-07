@@ -38,8 +38,8 @@ class RoomTypeForm extends Component {
     convertFile(files){
         return files.map((file,key)=>{
             return {
-                original: ResourcesPath + '/images/properties/' + file,
-                thumbnail: ResourcesPath + '/images/properties/' + file,
+                original: ResourcesPath + '/images/rooms/' + file,
+                thumbnail: ResourcesPath + '/images/rooms/' + file,
                 type:'path',
                 filename:file,
             }
@@ -53,7 +53,11 @@ class RoomTypeForm extends Component {
             if(this.props.defaultRoomType.id===0)
                 this.initState()
             else{
-                this.setState({ room_type: this.props.defaultRoomType, files: this.convertFile(this.props.defaultRoomType.room_type_images) });
+                this.setState({ room_type: this.props.defaultRoomType, 
+                                files: this.convertFile(this.props.defaultRoomType.room_type_images),
+                                room_type_features:this.props.defaultRoomType.room_type_features,
+                                bed_rooms:this.props.defaultRoomType.bed_rooms
+                            });
             }
     }
 
@@ -62,7 +66,11 @@ class RoomTypeForm extends Component {
             if(nextProps.defaultRoomType.id===0)
                 this.initState();
             else
-                this.setState({ room_type: nextProps.defaultRoomType, files: this.convertFile(nextProps.defaultRoomType.room_type_images) });
+                this.setState({ room_type: nextProps.defaultRoomType, 
+                                files: this.convertFile(nextProps.defaultRoomType.room_type_images),
+                                room_type_features:nextProps.defaultRoomType.room_type_features,
+                                bed_rooms:nextProps.defaultRoomType.bed_rooms
+                            });
         }
     }
 
@@ -225,7 +233,7 @@ class RoomTypeForm extends Component {
                                     <RoomFeaturesList onChange={(value)=> this.setState({ room_type_features:value }) } id={this.state.room_type.id} defaultFeatures={this.state.room_type_features} />
                                 </div>
                                 <div className="col-lg-5">
-                                    <TextArea label="Description" rows={2} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
+                                    <TextArea label="Description" rows={4} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} style={ DropZoneStyle }>
                                         <p>Try dropping some files here, or click to select a files to upload.</p>
                                     </Dropzone>
