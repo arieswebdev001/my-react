@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import Axios from '../../wrappers/Axios';
-import RoomTypeDetails from '../ui/containers/RoomTypeDetails';
 import RoomTypeForm from '../ui/forms/RoomTypeForm';
 import { ResourcesPath } from '../../config';
 import { Link } from 'react-router-dom';
@@ -119,7 +118,7 @@ class RoomsTab extends Component {
                             { 
                                 this.state.modalVisible ? (
                                     <div className="modal-body">
-                                        { this.state.modalMode === 'view' ? <RoomTypeDetails room_type={this.state.room_type} /> : <RoomTypeForm defaultRoomType={this.state.room_type} savedRoomType={this.savedRoomType.bind(this)} onRef={ref => (this.child = ref)} /> }
+                                        <RoomTypeForm defaultRoomType={this.state.room_type} savedRoomType={this.savedRoomType.bind(this)} onRef={ref => (this.child = ref)} /> 
                                     </div>
                                 ):''
                             }

@@ -6,7 +6,8 @@ const initState = {
     properties:[],
     extras:[],
     room_type:null,
-    room_types:[]
+    room_types:[],
+    rooms_list_view: window.localStorage.getItem("UPDATE_ROOMS_LIST_VIEW") === null?'grid':window.localStorage.getItem("UPDATE_ROOMS_LIST_VIEW")
 };
 
 const rootReducer = (state = initState, action) =>{
@@ -55,6 +56,14 @@ const rootReducer = (state = initState, action) =>{
                 ...state,
                 room_types:action.payload
             };
+    else if(action.type === 'UPDATE_ROOMS_LIST_VIEW'){
+        window.localStorage.setItem('UPDATE_ROOMS_LIST_VIEW', action.payload);
+        return {
+            ...state,
+            rooms_list_view:action.payload
+        };
+    }
+            
     return state;
 }
 

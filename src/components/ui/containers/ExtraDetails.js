@@ -11,6 +11,8 @@ class ExtraDetails extends Component {
             return 'Per Head';
         else if(this.props.extra.pricing_type === 'per_day')
             return 'Per Day';
+        else if(this.props.extra.pricing_type === 'per_booking')
+            return 'Per Booking';
     }
 
     render() {

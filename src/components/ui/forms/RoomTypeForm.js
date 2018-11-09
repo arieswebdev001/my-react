@@ -9,7 +9,6 @@ import { ResourcesPath, DropZoneStyle } from '../../../config';
 import Dropzone from 'react-dropzone';
 import ImageGallery from 'react-image-gallery';
 
-
 class RoomTypeForm extends Component {
     state = {
         room_type:null,
@@ -233,7 +232,7 @@ class RoomTypeForm extends Component {
                                     <RoomFeaturesList onChange={(value)=> this.setState({ room_type_features:value }) } id={this.state.room_type.id} defaultFeatures={this.state.room_type_features} />
                                 </div>
                                 <div className="col-lg-5">
-                                    <TextArea label="Description" rows={4} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
+                                    <TextArea label="Description" rows={7} _id="room_type_description" _value={ this.state.room_type.room_type_description } onChange={ ()=> this.handleChange() } />
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} style={ DropZoneStyle }>
                                         <p>Try dropping some files here, or click to select a files to upload.</p>
                                     </Dropzone>

@@ -34,7 +34,7 @@ class PropertyDetails extends Component {
                                             } 
                                 label="Status" />
                             <ItemRow value={ this.props.property.currency } label="Currency"/>
-                            <ItemRow value={ this.props.property.floor_count } label="Floor Count"/>
+                            <ItemRow value={ this.props.property.floors.join(", ") } label="Floors"/>
                         </div>
                     </div>
                     <div className="col-md-6">

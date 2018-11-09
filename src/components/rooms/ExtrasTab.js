@@ -22,6 +22,8 @@ class ExtrasTab extends Component {
             return 'Per Head';
         else if(pricing_type === 'per_day')
             return 'Per Day';
+        else if(pricing_type === 'per_booking')
+            return 'Per Booking';
     }
 
     showModal(title, data) {

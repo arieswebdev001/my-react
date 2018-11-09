@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Input from '../../ui/controls/Input';
+import Input from '../controls/Input';
 import TextArea from '../controls/TextArea';
 import Select from '../controls/Select';
 import Axios from '../../../wrappers/Axios';
@@ -7,6 +7,7 @@ import GoogleMapReact from 'google-map-react';
 import { GoogleApiKey, ResourcesPath, DropZoneStyle } from '../../../config';
 import Dropzone from 'react-dropzone';
 import ImageGallery from 'react-image-gallery';
+import TagsInput from 'react-tagsinput';
 
 class PropertyForm extends Component {
     state = {
@@ -26,7 +27,7 @@ class PropertyForm extends Component {
                     property_contact_person: '',
                     property_email: '',
                     currency: '',
-                    floor_count:2,
+                    floors:[],
                     map_coordinates:{ lat:14.366575, lng:121.041958}
                 },
                 files:[]
@@ -102,7 +103,6 @@ class PropertyForm extends Component {
                 property_contact_person: window.$("#property_contact_person").val(),
                 property_email: window.$("#property_email").val(),
                 currency: window.$("#currency").val(),
-                floor_count:window.$("#floor_count").val()
             }
         });
     }
@@ -165,19 +165,47 @@ class PropertyForm extends Component {
                                 <div className="col-md-7">
                                     <Input label="Property Name" _id="property_name" _value={ this.state.property.property_name } onChange={ ()=> this.handleChange() } />
                                     <TextArea label="Property Address" _id="property_address" _value={ this.state.property.property_address } onChange={ ()=> this.handleChange() } />
-                                    <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />
-                                    <Input label="Contact No." _id="property_contact_number" _value={ this.state.property.property_contact_number } onChange={ ()=> this.handleChange() } />
-                                    <Input label="Contact Person" _id="property_contact_person" _value={ this.state.property.property_contact_person } onChange={ ()=> this.handleChange() } />
                                     <div className="row">
                                         <div className="col-md-6">
                                             <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
                                                 _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
                                         </div>
                                         <div className="col-md-6">
-                                            <Input label="Floor Count" _id="floor_count" type="number" _value={ this.state.property.floor_count } onChange={ ()=> this.handleChange() } />
+                                            <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />
                                         </div>
                                     </div>
-                                    
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <Input label="Contact No." _id="property_contact_number" _value={ this.state.property.property_contact_number } onChange={ ()=> this.handleChange() } />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <Input label="Contact Person" _id="property_contact_person" _value={ this.state.property.property_contact_person } onChange={ ()=> this.handleChange() } />
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label>Floors</label>
+                                            <TagsInput inputProps={{
+                                                        placeholder: 'Add a floor'
+                                                    }} 
+                                                onlyUnique={true}
+                                                value={ this.state.property.floors } 
+                                                onChange={ (e)=> this.setState({ property: { ...this.state.property, floors:e }}) } 
+                                            />
+                                        </div>   
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label>House Keepers</label>
+                                            <TagsInput inputProps={{
+                                                        placeholder: 'Add a floor'
+                                                    }} 
+                                                onlyUnique={true}
+                                                value={ this.state.property.floors } 
+                                                onChange={ (e)=> this.setState({ property: { ...this.state.property, floors:e }}) } 
+                                            />
+                                        </div>   
+                                    </div>
                                 </div>
                                 <div className="col-md-5">
                                     <div style={{ height: '250px', width: '100%' }}>

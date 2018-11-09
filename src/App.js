@@ -20,6 +20,7 @@ import { connect } from 'react-redux';
 import 'react-table/react-table.css';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-toggle/style.css";
+import 'react-tagsinput/react-tagsinput.css'
 
 class App extends Component { 
   componentDidMount(){

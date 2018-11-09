@@ -100,57 +100,56 @@ class RoomFeaturesList extends Component {
         return (
             <div>
                 <h4> Features ({ this.state.features.length }) </h4>
+                <div style={{maxHeight:240, overflowY:"scroll", padding:15}}>
                 {
-                this.state.features.map((group, key)=>{
-                    return ( 
-                    <div key={key}>
-                        <div className="row" style={{marginBottom:5}}>
-                            <div className="col-sm-12">
-                                <div className="btn-group btn-block">
-                                    {
-                                        group.collapsed? 
-                                            <button className="btn btn-sm btn-info" type="button" onClick={ ()=> this.toggleCollapse(key) }> > </button> : 
-                                            <button className="btn btn-sm btn-info" type="button" onClick={ ()=> this.toggleCollapse(key) }> .. </button>
-                                    }
-                                    
-                                    <input type="text" className="form-control input-sm" placeholder="Group Name" onChange={(event)=>this.changeGroupName(event, key)} value={group.group_name}/>
-                                    <button className="btn btn-sm btn-danger" type="button" onClick={()=>this.removeGroup(key)}>X</button>
+                    this.state.features.map((group, key)=>{
+                        return ( 
+                        <div key={key}>
+                            <div className="row" style={{marginBottom:5}}>
+                                <div className="col-sm-12">
+                                    <div className="btn-group btn-block">
+                                        {
+                                            group.collapsed? 
+                                                <button className="btn btn-sm btn-info" type="button" onClick={ ()=> this.toggleCollapse(key) }> <i className="fa fa-caret-right"></i> </button> : 
+                                                <button className="btn btn-sm btn-info" type="button" onClick={ ()=> this.toggleCollapse(key) }>  <i className="fa fa-caret-down"></i> </button>
+                                        }
+                                        
+                                        <input type="text" className="form-control input-sm" placeholder="Group Name" onChange={(event)=>this.changeGroupName(event, key)} value={group.group_name}/>
+                                        <button className="btn btn-sm btn-danger" type="button" onClick={()=>this.removeGroup(key)}>X</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        {
-                            !group.collapsed?
-                            group.items.map((item, k)=>{
-                                return ( 
-                                    <div className="row" style={{marginBottom:5}} key={k}>
-                                        <div className="col-sm-2"></div>
-                                        <div className="col-sm-10">
-                                            <div className="btn-group btn-block">
-                                                <input type="text" placeholder="Item" className="form-control input-sm" onChange={(event)=>this.changeItem(event, key, k)} value={item}/>
-                                                {
-                                                    group.items.length === (k+1) ? <button className="btn btn-sm btn-info" type="button" onClick={ ()=>this.addItem(key) }>+</button> : ''
-                                                }  
-                                                <button className="btn btn-sm btn-danger" onClick={()=>this.removeItem(key,k)} type="button">X</button>
+                            {
+                                !group.collapsed?
+                                group.items.map((item, k)=>{
+                                    return ( 
+                                        <div className="row" style={{marginBottom:5}} key={k}>
+                                            <div className="col-sm-2"></div>
+                                            <div className="col-sm-10">
+                                                <div className="btn-group btn-block">
+                                                    <input type="text" placeholder="Item" className="form-control input-sm" onChange={(event)=>this.changeItem(event, key, k)} value={item}/>
+                                                    {
+                                                        group.items.length === (k+1) ? <button className="btn btn-sm btn-info" type="button" onClick={ ()=>this.addItem(key) }>+</button> : ''
+                                                    }  
+                                                    <button className="btn btn-sm btn-danger" onClick={()=>this.removeItem(key,k)} type="button">X</button>
+                                                </div>
                                             </div>
                                         </div>
+                                        )
+                                    }):''
+                            }
+                            {
+                                (group.items.length ===0) ? 
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <button style={{marginBottom:5}} className="btn btn-sm btn-info pull-right" type="button" onClick={ ()=>this.addItem(key) }>Add Item</button>
                                     </div>
-                                    )
-                                }):''
-                        }
-
-                        {
-                            (group.items.length ===0) ? 
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <button style={{marginBottom:5}} className="btn btn-sm btn-info pull-right" type="button" onClick={ ()=>this.addItem(key) }>Add Item</button>
-                                </div>
-                            </div>:''
-                        }
-                        
-                    </div>)
+                                </div>:''
+                            }
+                        </div>)
                     })
                 }
-                
+                </div>
                 <button className="btn-info btn btn-sm" type="button" onClick={()=>this.addGroup()}>Add Group</button>
             </div>
         );

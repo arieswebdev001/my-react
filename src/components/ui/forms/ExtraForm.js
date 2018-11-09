@@ -136,6 +136,7 @@ class ExtraForm extends Component {
             { label:"Per Head", value:"per_head" },
             { label:"Per Day", value:"per_day" },
             { label:"Per Head/Day", value:"per_head_per_day" },
+            { label:"Per Booking", value:"per_booking" },
         ];
         return ( 
             <form className="m-form">
