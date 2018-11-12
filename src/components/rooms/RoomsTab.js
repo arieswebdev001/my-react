@@ -5,6 +5,7 @@ import Axios from '../../wrappers/Axios';
 import RoomTypeForm from '../ui/forms/RoomTypeForm';
 import { ResourcesPath } from '../../config';
 import { Link } from 'react-router-dom';
+import HouseKeeping from './room_type/HouseKeeping';
 
 class RoomsTab extends Component {
     state = {
@@ -52,6 +53,11 @@ class RoomsTab extends Component {
     }
 
     render() {
+        var rooms = [];
+        this.props.room_types.forEach(room_type => {
+            rooms.push(...room_type.rooms);
+        });
+
         const columns = [
             {
                 Header: "",
@@ -107,8 +113,9 @@ class RoomsTab extends Component {
 
         return (
             <div className="RoomsTab">
-                <button className="btn btn-info" onClick={ () => this.showModal("Add Room Type") }>Add Room Type</button><br/><br/>
-
+                <button className="btn btn-info" onClick={ () => this.showModal("Add Room Type") }>Add Room Type</button>
+                <button className="btn btn-primary" onClick={ () => window.$("#house-keeping-modal").modal("show") }>House Keeping</button>
+                <br/><br/>
                 <div className="modal fade" id="room-type-modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
@@ -129,6 +136,26 @@ class RoomsTab extends Component {
                         </div>
                     </div>
                 </div>
+
+                <div className="modal fade" id="house-keeping-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title"> House Keeping </h5>
+                            </div>
+                            <div className="modal-body">
+                                {
+                                    this.props.default_property !== null ?
+                                        <HouseKeeping rooms={rooms} houseKeepers={ this.props.default_property.property_data.house_keepers } onSave={ this.getRoomTypes.bind(this) } />:''
+                                }
+                            </div>
+                            <div className="modal-footer">
+                                <button className="btn btn-sm" onClick={ ()=> window.$("#house-keeping-modal").modal("hide") }>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <ReactTable
                     data={this.props.room_types}
                     columns={ columns }
@@ -144,7 +171,8 @@ class RoomsTab extends Component {
 const mapStateToProps = (state)=>{
     return {
         user:state.user,
-        room_types:state.room_types
+        room_types:state.room_types,
+        default_property:state.default_property
     }
 };
 

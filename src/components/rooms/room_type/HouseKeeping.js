@@ -3,6 +3,7 @@ import ToolTipAlert from '../../ui/alerts/ToolTipAlert';
 import ReactTable from 'react-table';
 import Select from '../../ui/controls/Select';
 import Input from '../../ui/controls/Input';
+import Axios from '../../../wrappers/Axios';
 
 class HouseKeeping extends Component {
     
@@ -13,17 +14,20 @@ class HouseKeeping extends Component {
         selectedRooms:[],
         selectAll:false
     }
-
-    constructor() {
-        super();
-        this.getHouseKeepingLogs = this.getHouseKeepingLogs.bind(this);
-    }
     
     getHouseKeepingLogs(state){
         this.setState({ loading: true });
-        setTimeout( () =>{
-            this.setState({ loading: false, logs:[], pages:2 });
-        }, 200);
+        let u = this;
+        let {pageSize,page,sorted} = state;
+        Axios.post('api/houseKeeping/logs', {pageSize,page,sorted, rooms: this.props.rooms.map((room)=>room.id) })
+            .then(function (response) {
+                u.setState({ logs: response.data.rows, pages:response.data.pages, });
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
+            }).then(()=>{
+                u.setState({ loading: false });
+            });
     }
 
     handleSelectAll(all){
@@ -41,6 +45,26 @@ class HouseKeeping extends Component {
                     return {...room, cleaner_name:"", notes:""};
                 })
             });
+    }
+
+    markRoomsAsClean(){
+        let u = this;
+        window.spinButton(document.getElementById('clean-button'));
+        Axios.post('../../api/houseKeeping', { rooms : this.state.selectedRooms })
+        .then(() => {
+            window.toastr.success("Successfully marked as clean.");
+            u.props.onSave();
+        }).catch(function (error) {console.log(error)
+            if(!error.response)
+                window.toastr.error("Please check internet connectivity", "Network Error");
+            else{
+                if(error.response.data !== undefined)
+                    if(error.response.data.message !== undefined)
+                        window.toastr.error(error.response.data.message);
+            }
+        }).then(()=>{
+            window.stopButton(document.getElementById('clean-button'));
+        });
     }
 
     isSelected(id){
@@ -75,6 +99,8 @@ class HouseKeeping extends Component {
         const newArray = this.state.selectedRooms.map((room)=>{
             if(id === room.id)
                 room[field] = value;
+
+            return room;
         });
 
         this.setState({ selectedRooms:newArray });
@@ -131,21 +157,29 @@ class HouseKeeping extends Component {
                                                 {
                                                     Header: "Cleaner Name",
                                                     Cell: (row)=>
-                                                        (<Select selection={ house_keepers } _value={ row.original.cleaner_name }
-                                                            onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "cleaner_name") } 
-                                                        />)
+                                                        (
+                                                            this.isSelected(row.original.id)? 
+                                                                <Select selection={ house_keepers } _value={ row.original.cleaner_name }
+                                                                    onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "cleaner_name") } 
+                                                                />:''
+                                                        )
                                                     ,
                                                     width:150
                                                 },
                                                 {
                                                     Header: "Notes",
-                                                    Cell: (row)=> <Input _value={ row.original.notes  } onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "notes") } />
+                                                    Cell: (row)=> (
+                                                        this.isSelected(row.original.id) ?
+                                                            <Input _value={ row.original.notes  } onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "notes") } />:''
+                                                    )
                                                 }
                                             ]
                                         }
                                     />
                                     <br/>
-                                    <button className="btn btn-success">Mark As Clean</button>
+                                    {
+                                        this.state.selectedRooms.length > 0 ? <button className="btn btn-success" onClick={ ()=>this.markRoomsAsClean() } id="clean-button">Mark As Clean</button>:''
+                                    }
                                 </div>: 
                                 <ToolTipAlert content="All rooms are clean."/>
                         }
@@ -176,10 +210,9 @@ class HouseKeeping extends Component {
                             ]}
                             manual // Forces table not to paginate or sort automatically, so we can handle it server-side
                             data={this.state.logs}
-                            pages={5} // Display the total number of pages
-                            loading={this.state.loading} // Display the loading overlay when we need it
-                            onFetchData={ this.getHouseKeepingLogs } // Request new data when things change
-                            filterable
+                            pages={this.state.pages} // Display the total number of pages
+                            loading={ this.state.loading } // Display the loading overlay when we need it
+                            onFetchData={ this.getHouseKeepingLogs.bind(this) } // Request new data when things change
                             defaultPageSize={5}
                             className="-striped -highlight"
                         />

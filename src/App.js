@@ -46,6 +46,7 @@ class App extends Component {
         u.props.updateUser(response.data.user);
         u.props.updateLevels(response.data.levels);
         u.props.updateProperties(response.data.properties);
+        u.props.updateDefaultProperty(response.data.default_property);
       }).catch(function (error) {
         if(!error.response)
           window.toastr.error("Please check internet connectivity", "Network Error");
@@ -110,6 +111,7 @@ const mapDispatchToProps = (dispatch) => {
     updateUser: (user)=>{dispatch({ type: 'UPDATE_USER', payload:user })},
     updateLoaded: (loaded)=>{dispatch({ type: 'UPDATE_LOADED', payload:loaded })},
     updateLevels: (levels)=>{dispatch({ type: 'UPDATE_LEVELS', payload:levels })},
+    updateDefaultProperty: (property)=>{dispatch({ type: 'UPDATE_DEFAULT_PROPERTY', payload:property })},
     updateProperties: (properties)=>{dispatch({ type: 'UPDATE_PROPERTIES', payload:properties })}
   }
 }

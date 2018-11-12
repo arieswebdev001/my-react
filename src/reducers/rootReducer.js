@@ -1,4 +1,5 @@
 const initState = {
+    default_property:null,
     user:null,
     loaded:false,
     pageTitle:'Dashboard',
@@ -15,6 +16,11 @@ const rootReducer = (state = initState, action) =>{
         return {
             ...state,
             user:action.payload
+        };
+    else if(action.type === 'UPDATE_DEFAULT_PROPERTY')
+        return {
+            ...state,
+            default_property:action.payload
         };
     else if(action.type === 'UPDATE_LOADED')
         return {
