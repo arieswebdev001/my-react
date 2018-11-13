@@ -4,7 +4,8 @@ import TabbedPortlet from '../ui/portlets/TabbedPortlet';
 import Axios from '../../wrappers/Axios';
 import Details from './room_type/Details'
 import Rooms from './room_type/Rooms';
-
+import Pricing from './room_type/Pricing';
+import Promos from './room_type/Promos';
 class RoomType extends Component {
     getRoomType(){
         let u = this;
@@ -26,10 +27,10 @@ class RoomType extends Component {
 
     render() {
         const tabs = [
-            {id:"details", label:"Details", component:<Details onUpdate={ this.getRoomType.bind(this) } />},
-            {id:"rooms", label:"Individual Rooms", component:<Rooms onSave={ this.getRoomType.bind(this) } />},
-            {id:"pricing", label:"Pricing", component:null},
-            {id:"promos", label:"Promos", component:null}
+            {id:"details", label:"Details", component: <Details onUpdate={ this.getRoomType.bind(this) } />},
+            {id:"rooms", label:"Individual Rooms", component: <Rooms onSave={ this.getRoomType.bind(this) } />},
+            {id:"pricing", label:"Pricing", component: <Pricing />},
+            {id:"promos", label:"Promos", component: <Promos />}
         ];
 
         return (

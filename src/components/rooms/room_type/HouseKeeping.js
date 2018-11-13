@@ -54,7 +54,8 @@ class HouseKeeping extends Component {
         .then(() => {
             window.toastr.success("Successfully marked as clean.");
             u.props.onSave();
-        }).catch(function (error) {console.log(error)
+        }).catch(function (error) {
+            console.log(error);
             if(!error.response)
                 window.toastr.error("Please check internet connectivity", "Network Error");
             else{

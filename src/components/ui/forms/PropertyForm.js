@@ -28,6 +28,9 @@ class PropertyForm extends Component {
                     property_email: '',
                     currency: '',
                     floors:[],
+                    property_data:{
+                        house_keepers:[]
+                    },
                     map_coordinates:{ lat:14.366575, lng:121.041958}
                 },
                 files:[]
@@ -45,6 +48,39 @@ class PropertyForm extends Component {
                 ]});
             };
             reader.readAsDataURL(file);
+        });
+    }
+
+    addKeeper(){
+        this.setState({
+            property:{
+                ...this.state.property,
+                property_data:{
+                    house_keepers:[
+                        ...this.state.property.property_data.house_keepers,
+                        {
+                            name:"",
+                            address:"",
+                            mobile:""
+                        }
+                    ]
+                }
+            }
+        });
+    }
+
+    removeKeeper(index){
+        const newArray = this.state.property.property_data.house_keepers.filter((item, i)=>{
+            return i===index;
+        });
+
+        this.setState({
+            property:{
+                ...this.state.property,
+                property_data:{
+                    house_keepers:newArray
+                }
+            }
         });
     }
 
@@ -91,6 +127,23 @@ class PropertyForm extends Component {
             else
                 this.setState({ property: nextProps.defaultProperty,  files: this.convertFiles(nextProps.defaultProperty.property_images) }); 
         }
+    }
+
+    handleArrayChange(value, field, index){
+        const newArray = this.state.property.property_data.house_keepers.map((item, i)=>{
+            if(index === i)
+                item[field] = value;
+            return item
+        });
+
+        this.setState({
+            property:{
+                ...this.state.property,
+                property_data:{
+                    house_keepers:newArray
+                }
+            }
+        });
     }
 
     handleChange = () => {
@@ -194,16 +247,41 @@ class PropertyForm extends Component {
                                             />
                                         </div>   
                                     </div>
+                                    <br/>
                                     <div className="row">
                                         <div className="col-md-12">
-                                            <label>House Keepers</label>
-                                            <TagsInput inputProps={{
-                                                        placeholder: 'Add a floor'
-                                                    }} 
-                                                onlyUnique={true}
-                                                value={ this.state.property.floors } 
-                                                onChange={ (e)=> this.setState({ property: { ...this.state.property, floors:e }}) } 
-                                            />
+                                            <label>
+                                                House Keepers &nbsp;
+                                                <button className="btn btn-info btn-sm" type="button" onClick={()=>this.addKeeper() }>+</button>
+                                            </label>
+                                            <table className="table table-hover table-bordered">
+                                                <thead>
+                                                    <th>Name</th>
+                                                    <th>Address</th>
+                                                    <th>Mobile</th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    this.state.property.property_data.house_keepers.map((item, i)=>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" className="form-control" value={item.name} onChange={(e)=>this.handleArrayChange(e.target.value, 'name', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className="form-control" value={item.address} onChange={(e)=>this.handleArrayChange(e.target.value, 'address', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className="form-control" value={item.mobile} onChange={(e)=>this.handleArrayChange(e.target.value, 'mobile', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" className="btn btn-danger btn-sm" onClick={()=>this.removeKeeper(i)}>X</button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
+                                                </tbody>
+                                            </table>
                                         </div>   
                                     </div>
                                 </div>

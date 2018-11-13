@@ -9,6 +9,7 @@ import Axios from '../../../wrappers/Axios';
 import ToolTipAlert from '../../ui/alerts/ToolTipAlert';
 import RoomCard from '../../ui/misc/RoomCard';
 import HouseKeeping from './HouseKeeping';
+import Restrictions from './Restrictions';
 class Rooms extends Component {
     state = {
         addModal:{
@@ -233,7 +234,7 @@ class Rooms extends Component {
                                         <h5 className="modal-title"> House Keeping </h5>
                                     </div>
                                     <div className="modal-body">
-                                        <HouseKeeping rooms={rooms} houseKeepers={ house_keepers } />
+                                        <HouseKeeping rooms={rooms} houseKeepers={ house_keepers } onSave={()=>this.props.onSave()} />
                                     </div>
                                     <div className="modal-footer">
                                         <button className="btn btn-sm" onClick={ ()=> window.$("#house-keeping-modal").modal("hide") }>Close</button>
@@ -249,6 +250,7 @@ class Rooms extends Component {
                                         <h5 className="modal-title"> Booking Restrictions </h5>
                                     </div>
                                     <div className="modal-body">
+                                        <Restrictions roomType={ this.props.room_type } onSave={()=>this.props.onSave()} />
                                     </div>
                                     <div className="modal-footer">
                                         <button className="btn btn-sm" onClick={ ()=> window.$("#restrictions-modal").modal("hide") }>Close</button>
