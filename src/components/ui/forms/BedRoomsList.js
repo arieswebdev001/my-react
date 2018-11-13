@@ -62,7 +62,7 @@ class BedroomsList extends Component {
         const bedTypes = [{ label:"Queen Bed", value:"Queen Bed" },{  label:"King Bed", value:"King Bed" },{  label:"Solo Bed", value:"Solo Bed" }]
         return (
             <div>
-                <h4> Bed Rooms ({ this.state.bed_rooms.length })</h4>
+                <h5> Bed Rooms ({ this.state.bed_rooms.length })</h5>
                 {
                 this.state.bed_rooms.map((bed_room, key)=>{
                     return ( 

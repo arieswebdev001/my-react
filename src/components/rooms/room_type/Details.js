@@ -41,7 +41,11 @@ class Details extends Component {
         return (
             <div className="row">
                 <div className="col-md-5">
-                    <ImageGallery items={images} autoPlay={false} showThumbnails={true} slideInterval={5000} showNav={false}/>
+                    {
+                        images.length > 0 ? <ImageGallery items={images} autoPlay={false} showThumbnails={true} slideInterval={5000} showNav={false}/>:
+                            <img src={ ResourcesPath + "/images/rooms/no-photo.jpg"} alt="Room" className="img img-responsive" style={{ width:"100%", marginBottom:10 }}/>
+                    }
+                    
                     <br/>
                     <button className="btn btn-info btn-block" onClick={ () => this.showModal("Update Room Type") }>Update Room Type</button>
                     <div className="modal fade" id="room-type-modal" tabIndex="-1" role="dialog">

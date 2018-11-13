@@ -190,7 +190,6 @@ class Rooms extends Component {
                                 </div>
                             </div>
                         </div>
-
                         <div className="modal fade" id="room-modal" tabIndex="-1" role="dialog">
                             <div className="modal-dialog modal-lg" role="document">
                                 <div className="modal-content">
@@ -226,7 +225,6 @@ class Rooms extends Component {
                                 </div>
                             </div>
                         </div>
-
                         <div className="modal fade" id="house-keeping-modal" tabIndex="-1" role="dialog">
                             <div className="modal-dialog modal-lg" role="document">
                                 <div className="modal-content">
@@ -242,7 +240,6 @@ class Rooms extends Component {
                                 </div>
                             </div>
                         </div>
-
                         <div className="modal fade" id="restrictions-modal" tabIndex="-1" role="dialog">
                             <div className="modal-dialog modal-lg" role="document">
                                 <div className="modal-content">
@@ -258,7 +255,6 @@ class Rooms extends Component {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div className="col-md-2">
                         <Select selection={[{label:"Grid View",value:"grid"}, {label:"Table View",value:"table"}]} _id="view_selector" _value={ this.props.rooms_list_view }  

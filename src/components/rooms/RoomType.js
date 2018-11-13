@@ -29,8 +29,8 @@ class RoomType extends Component {
         const tabs = [
             {id:"details", label:"Details", component: <Details onUpdate={ this.getRoomType.bind(this) } />},
             {id:"rooms", label:"Individual Rooms", component: <Rooms onSave={ this.getRoomType.bind(this) } />},
-            {id:"pricing", label:"Pricing", component: <Pricing />},
-            {id:"promos", label:"Promos", component: <Promos />}
+            {id:"pricing", label:"Pricing", component: <Pricing openned={false} onSave={ this.getRoomType.bind(this) } />},
+            {id:"promos", label:"Promos", component: <Promos openned={false}/>}
         ];
 
         return (

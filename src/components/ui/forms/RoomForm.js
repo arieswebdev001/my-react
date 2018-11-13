@@ -70,7 +70,6 @@ class RoomForm extends Component {
     }
 
     handleToggle(event){
-        console.log(event.target.checked);
         this.setState({
             room:{
                 ...this.state.room,
@@ -94,7 +93,7 @@ class RoomForm extends Component {
                 room_data:{
                     customized:{
                         ...this.state.room.room_data.customized,
-                        [field]:value
+                        [field]: (field==='max_child'|| field==='max_adult'? Number(value):value)
                     }
                 }
             }

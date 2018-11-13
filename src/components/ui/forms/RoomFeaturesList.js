@@ -99,7 +99,7 @@ class RoomFeaturesList extends Component {
     render() {
         return (
             <div>
-                <h4> Features ({ this.state.features.length }) </h4>
+                <h5> Features ({ this.state.features.length }) </h5>
                 <div style={{maxHeight:240, overflowY:"scroll", padding:15}}>
                 {
                     this.state.features.map((group, key)=>{

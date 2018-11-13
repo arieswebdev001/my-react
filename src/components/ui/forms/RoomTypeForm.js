@@ -25,7 +25,8 @@ class RoomTypeForm extends Component {
                     room_type_name: '',
                     room_type_description: '',
                     max_adult:2,
-                    max_child:2
+                    max_child:2,
+                    pricing_schedule:[0,0,0,0,0,0,0]
                 },
                 files:[],
                 room_type_features:[],
@@ -111,6 +112,24 @@ class RoomTypeForm extends Component {
             files:newList
         });
     }
+
+    
+    handleEditPrice(key, value){
+        const newArray = this.state.room_type.pricing_schedule.map((item,k)=> {
+            if(key === k)
+                item = value;
+
+            return item;
+        });
+
+        this.setState({
+            room_type:{
+                ...this.state.room_type,
+                pricing_schedule:newArray
+            }
+        });
+    }
+
 
     makeAsPrimary(){
         var index = this.refs.child.getCurrentIndex();
@@ -238,6 +257,20 @@ class RoomTypeForm extends Component {
                                     </Dropzone>
                                     { this.state.files.length>0 ? <ImageGallery ref="child" renderCustomControls={ customButtons } showThumbnails={false} showBullets={true} items={files} />:''}
                                 </div>
+                            </div>
+                            {
+                            this.state.room_type.id === 0 ? <h5 style={{marginTop:20}}>Regular Pricing</h5>:''
+                            }
+                            <div className="row">
+                            {
+                                this.state.room_type.id === 0 ?
+                                ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((item, key)=>(
+                                    <div className="col-md-2" key={key}>
+                                        <Input type="number" label={item} _value={ this.state.room_type.pricing_schedule[key] } 
+                                            onChange={ (e)=> this.handleEditPrice(key, e.target.value) } />
+                                    </div>
+                                )):''
+                            }
                             </div>
                         </div>
                     ):''

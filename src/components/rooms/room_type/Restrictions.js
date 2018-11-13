@@ -26,7 +26,6 @@ class Restrictions extends Component {
     }
 
     handleRangeChange(which, payload) {
-        console.log(payload);
         this.setState({
             [which]: {
             ...this.state[which],
