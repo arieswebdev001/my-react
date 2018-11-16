@@ -3,7 +3,7 @@ import {InputOptions} from '../../../config';
 
 const Select = (props) => (
     <div className={ props.label !== undefined? InputOptions.containerClass:""}>
-        { props.label !== undefined? <label>{ props.label }</label>:''}
+        { props.label !== undefined? <label>{ props.label } { props.required === true ? ' *':''} </label>:''}
         <select id={props._id} className={InputOptions.inputClass} value={props._value} onChange={ (e)=> props.onChange(e.target.value) }>
             {
                 props.selection.map((item)=>{

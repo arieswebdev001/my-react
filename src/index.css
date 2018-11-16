@@ -303,15 +303,15 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 }
 
 
-@media (max-width: 370px){
+@media (max-width: 380px){
     .PreviewArea{
-        font-size: 10px;
+        font-size: 10px !important;
     }
 }
 
 @media (max-width: 325px){
     .PreviewArea{
-        font-size: 9px;
+        font-size: 9px !important;
     }
 }
 
@@ -321,14 +321,30 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 
 .modal-full{
     max-width: 98%;
-    margin-left: 37px;
+    margin-left: 10px;
 }
-
-.PreviewAreaBooking{
-    margin-left:20px;
-}    
 
 .kn-multi_select__wrapper___30BEc{
     border: 1px solid #f4f5f8;
     margin-bottom:20px
+}
+
+.mm-footer button{
+    float:right
+}
+
+.m-wizard__head {
+    padding: 0.5rem 2rem !important;
+}
+
+.m-wizard.m-wizard--3 .m-wizard__head .m-wizard__nav .m-wizard__steps .m-wizard__step {
+    margin-bottom: 1rem;
+}
+
+.jss66, .jss64{
+    color:#36a3f7;
+}
+
+label, .bold{
+    font-weight:bold;
 }

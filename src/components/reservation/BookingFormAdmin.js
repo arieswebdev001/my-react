@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { DateRange } from 'react-date-range';
-import Select from 'react-select';
-import Selector from '../ui/controls/Select';
-import Input from '../ui/controls/Input';
 import Axios from '../../wrappers/Axios';
-import MultiSelect from "@kenshooui/react-multi-select";
-import BookingSummary from '../ui/misc/BookingSummary';
-
+import RoomSelection from './RoomSelection';
+import AddOnSelection from './AddOnSelection';
+import GuestDetails from './GuestDetails';
+import PaymentDetails from './PaymentDetails';
+import BookingConfirmation from './BookingConfirmation';
 class BookingFormAdmin extends Component {
     state = {
         room_types:[],
@@ -20,6 +19,7 @@ class BookingFormAdmin extends Component {
         },
         booking:{
             booked_start_datetime:window.moment().format("YYYY-MM-DD 12:00"),
+            checkin_datetime:window.moment().format("YYYY-MM-DD 12:00"),
             booked_end_datetime:window.moment().add(1,"days").format("YYYY-MM-DD 12:00"),
             nights:1,
             booked_rooms:[{
@@ -30,9 +30,53 @@ class BookingFormAdmin extends Component {
                 adults:2,
                 child:0,
                 price:0
-            }]
+            }],
+            booking_source:'Walk-In',
+            booked_extras:[],
+            guest:{
+                title:"",
+                first_name:"",
+                middle_name:"",
+                last_name:"",
+                mobile:"",
+                email:"",
+                company_name:"",
+                position:"",
+                address:"",
+                city:"",
+                state:"",
+                country:"",
+                zip_code:0,
+                birth_date:"2000-01-01",
+                notes:""
+            },
+            is_member:0,
+            guest_id:0,
+            booking_notes:"",
+            booking_status:"pending",
+            booking_data:{
+                discount:
+                {
+                    //     promo_code:"",
+                    //     discount:0,
+                    //     discount_type:"total"
+                },
+                total_discount:0
+            },
+            invoice:{
+                reference_no:"",
+                payment_method:"Cash",
+                amount_due:0,
+                amount_paid:0,
+                invoice_status:"Pending",
+                invoice_notes:"",
+                invoice_data:{
+                    cash_received:0
+                }
+            }
         },
-        currentStep:0
+        currentStep:0,
+        visited:[0]
     }
 
     componentDidMount(){
@@ -51,9 +95,7 @@ class BookingFormAdmin extends Component {
             });
     }
 
-    getNights(start, end){
-        return window.moment(end).diff(window.moment(start),"days");
-    }
+    getNights(start, end){ return window.moment(end).diff(window.moment(start),"days");}
 
     getRoomTypes(start, end){
         let u = this;
@@ -92,11 +134,21 @@ class BookingFormAdmin extends Component {
         this.getRoomTypes(payload.selection.startDate, payload.selection.endDate);
     }
 
-    nextStep(){
-        switch(this.state.currentStep){
+    nextStep(from_key){
+        switch(from_key){
             case 0:
                 if(this.state.booking.nights === 0){
                     window.toastr.error("Must be at least 1 night of stay.");
+                    return false;
+                }
+
+                if(this.state.booking.booked_rooms.length === 0){
+                    window.toastr.error("Must be add at least 1 room to book.");
+                    return false;
+                }
+
+                if(this.state.booking.booked_rooms[0].value === 0){
+                    window.toastr.error("Please select room.");
                     return false;
                 }
             break;
@@ -104,294 +156,115 @@ class BookingFormAdmin extends Component {
                 
         }
 
-        this.setState({ currentStep:this.state.currentStep+1 })
+        if(this.state.visited.indexOf(from_key+1) === -1)
+            this.setState({ visited: [...this.state.visited, from_key+1] });
+
+        this.setState({ currentStep:from_key+1 })
     }
 
     saveBooking(){
 
     }
 
-    deleteRoom(key){
-        const newArray = this.state.booking.booked_rooms.filter((room, index)=>{
-            return key!==index;
-        });
-        this.setState({
-            booking:{
-                ...this.state.booking,
-                booked_rooms:newArray
-            }
-        });
-    }
+    recomputeTotal(){
 
-    addRoom(){
-        this.setState({
-            booking:{
-                ...this.state.booking,
-                booked_rooms:[
-                    ...this.state.booking.booked_rooms,
-                    {
-                        label:'',
-                        room_type:{},
-                        room:{},
-                        value:0,
-                        adults:2,
-                        child:0,
-                        price:0
-                    }
-                ]
-            }
-        });
-    }
-
-    handleSelectRoom(e, key){
-        const newArray = this.state.booking.booked_rooms.map((room, index)=>{
-            if(key===index)
-                room = {
-                    ...room,
-                    label:e.label,
-                    room_type:e.room_type,
-                    room:e.room,
-                    value:e.value,
-                    price:this.evaluatePrice(e)
-                }
-            return room;
-        });
-
-        this.setState({
-            booking:{
-                ...this.state.booking,
-                booked_rooms:newArray
-            }
-        });
-    }
-
-    evaluatePrice(room){
-        let prices = room.room_type.pricing;
-        if(prices.length === 1)
-            var p = prices[0].pricing_schedule;
-        else{
-            //get standard pricing
-            for(var x=0;x<prices.length;x++){
-                if(prices[x].pricing_type === 'SEASONAL' || prices[x].pricing_type === 'REGULAR')
-                    p = prices[x];
-            }
-
-            for(var x=0;x<prices.length;x++){
-                if(prices[x].pricing_type === 'SEASONAL_AD' || prices[x].pricing_type === 'REGULAR_AD')
-                    if(room.child === prices[x].pricing_condition.child && room.adults === prices[x].pricing_condition.adult)
-                        p = prices[x]
-            }
-        }
-
-
-
-        return p[0] * this.state.booking.nights;
-    }
-
-    handleChangeRoomDetail(value, field, key){
-        const newArray = this.state.booking.booked_rooms.map((room, index)=>{
-            if(key===index)
-                room[field] = Number(value);
-
-            if(field !== 'price')
-                room.price = this.evaluatePrice(room);
-
-            return room;
-        });
-
-        this.setState({
-            booking:{
-                ...this.state.booking,
-                booked_rooms:newArray
-            }
-        });
-    }
-
-    availableOccupants(type, room){
-        var array = [];
-        if(room.room.room_data !== undefined){
-            let is_custom = room.room.room_data.customized !== undefined;
-            if(is_custom)
-                var data = room.room.room_data.customized[type==='adults'?'max_adult':'max_child'];
-            else
-                var data = room.room_type[type==='adults'?'max_adult':'max_child'];
-    
-            for(var x=(type==='adults'?1:0);x<=data;x++)
-                array.push(x);
-        }
-
-        return array;
-    }
-
-    alreadyTaken(option, key){
-        for(var x=0;x<this.state.booking.booked_rooms.length;x++){
-            if(key !== x){
-                if(option.value === this.state.booking.booked_rooms[x].value)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    handleChangeExtras(items){
-        this.setState({ booking:{
-            ...this.state.booking,
-            booked_extras:items
-        } });
-    }
-
-    getComputation(extra, what){
-        if(extra.pricing_type==='Per Day')
-            return what==='value'?this.state.booking.nights * extra.selling_price: (" * (" + this.state.booking.nights + ") = " + ( this.state.booking.nights * extra.selling_price ).toFixed(2))
-        else if(extra.pricing_type==='Per Head')
-            return what==='value'? ( this.getOccupantCount() * extra.selling_price ):(" * (" + this.getOccupantCount() + ") = " + ( this.getOccupantCount() * extra.selling_price ).toFixed(2))
-        else if(extra.pricing_type==='Per Head/Day')
-            return what==='value'?(this.state.booking.nights * this.getOccupantCount()) * extra.selling_price :(" * (" + this.getOccupantCount() + ") * (" + this.state.booking.nights + ") = " + ((this.state.booking.nights * this.getOccupantCount()) * extra.selling_price ).toFixed(2))
-        else if(extra.pricing_type==='Per Booking')
-            return what==='value'? extra.selling_price:(" = " +  extra.selling_price.toFixed(2));
-    }
-
-    getOccupantCount(){
-        var x = 0;
-        this.state.booking.booked_rooms.forEach((item)=>{
-            if(item.value !== 0)
-                x+= (item.child + item.adults);
-        });
-        return x;
     }
 
     render() {
-        const groupedOptions = this.state.room_types.map((room_type)=>{
-            return { 
-                    label:room_type.room_type_name,
-                    options:room_type.rooms.filter((room)=>{
-                        return room.is_operational && !room.is_reserved;
-                    }).map((room)=>{
-                        return {
-                            label:room.room_no,
-                            value:room.id,
-                            room:room,
-                            room_type:room_type
-                        }
-                    })
-                }
-        });
-        const extras = this.state.extras.map((extra)=>{
-            return {
-                label:extra.extra_name + " (PHP "+ extra.selling_price +" "+ extra.pricing_type +")  "+ this.getComputation(extra, 'label') +" " ,
-                id: extra.id, 
-                price: extra.selling_price,
-                pricing_type: extra.pricing_type,
-                total:this.getComputation(extra, 'value')
-            }
-        });
+
         const steps = [
             {
                 step_name:"Date and Room",
                 content:
                 <div className="row" key={0}>
-                    <div className="col-lg-4">
-                        <h5>Book for { this.state.booking.nights } Night(s)</h5>
+                    <div className="col-lg-5">
+                        <h3>Booking for { this.state.booking.nights } Night(s)</h3>
                         <DateRange 
                             onChange={this.handleRangeChange.bind(this, 'dateRange')}
                             moveRangeOnFirstSelection={false}
                             ranges={[this.state.dateRange.selection]}
-                            className={'PreviewAreaBooking'}
+                            className={'PreviewArea'}  
                             minDate={ new Date(window.moment().format("YYYY-MM-DD")) }
                         />
                     </div>
-                    <div className="col-md-5">
-                        <h5> 
-                            {this.state.booking.booked_rooms.length} Room(s) &nbsp; 
-                            <button className="btn btn-sm btn-info" onClick={()=>this.addRoom()}>+</button>
-                        </h5>
-                        <table className="table table-hover table-bordered table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Room</th>
-                                    <th style={{width:90}}>Adult</th>
-                                    <th style={{width:90}}>Child</th>
-                                    <th style={{width:120}}>Price</th>
-                                    <th style={{width:20}}></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.state.booking.booked_rooms.map((room, key)=>
-                                    <tr key={key}>
-                                        <td>
-                                            <Select isOptionDisabled={(option) => this.alreadyTaken(option, key)} 
-                                                options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>
-                                        </td>
-                                        <td>
-                                            <Selector _value={room.adults} selection={this.availableOccupants('adults', room)}
-                                                onChange={(e)=>this.handleChangeRoomDetail(e,'adults',key)}/>
-                                        </td>
-                                        <td>
-                                            <Selector _value={room.child} selection={this.availableOccupants('child', room)}
-                                                onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>
-                                        </td>
-                                        <td>
-                                            <Input type="number" _value={room.price} onChange={(e)=>this.handleChangeRoomDetail(e,'price',key)}/>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-danger btn-sm" onClick={()=>this.deleteRoom(key) }>X</button>
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                            </tbody>
-                        </table>
-                        <h5> Add-ons</h5>
-                        <MultiSelect
-                            items={extras}
-                            selectedItems={this.state.booking.booked_extras}
-                            onChange={(e)=>this.handleChangeExtras(e)}
-                            showSelectedItems={false}
-                            height={250}
+                    <div className="col-md-7  table-responsive">
+                        <RoomSelection 
+                            roomTypes={this.state.room_types} 
+                            bookedRooms={this.state.booking.booked_rooms} 
+                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] } }); this.recomputeTotal(); }}
+                            nights={this.state.booking.nights}
                         />
-                    </div>
-                    <div className="col-md-3">
-                        <BookingSummary/>
+                        <br/>
+                        <AddOnSelection
+                            extras={this.state.extras}
+                            bookedExtras={this.state.booking.booked_extras}
+                            nights={this.state.booking.nights}
+                            bookedRooms={this.state.booking.booked_rooms} 
+                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_extras:e } }); this.recomputeTotal(); } }
+                        />
                     </div>
                 </div>
             },
             {
                 step_name:"Guest Details",
-                content:
-                <div className="row" key={2}>
-                            
-                </div>
+                content:<GuestDetails guest={this.state.booking.guest} key={2} checkinTime={this.state.booking.checkin_datetime}
+                            onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } />
+            },
+            {
+                step_name:"Payment",
+                content:<PaymentDetails key={3} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); this.recomputeTotal(); }}/>
             },
             {
                 step_name:"Confirmation",
-                content:
-                <div className="row" key={3}>
-                            
-                </div>
-            }
+                content:<BookingConfirmation key={4} />
+            },
         ]
 
         return (
-            <div>
-                {   steps.map((step, key)=>{
-                        return this.state.currentStep === key ? step.content:'';
-                    })
-                }
-                
-                <div className="modal-footer">
-                    {   this.state.currentStep > 0 ? <button className="btn btn-warning" onClick={ ()=>this.setState({ currentStep:this.state.currentStep-1 })}> Back </button>:
-                            <button className="btn" onClick={ () => { window.$("#booking-modal").modal("hide")} } >
-                                Close
-                            </button>
-                    }
-                    {   this.state.currentStep < (steps.length-1) ? <button className="btn btn-info" onClick={ ()=>this.nextStep() }> Next </button>:
-                            <button className="btn btn-success" id="save-booking-button" onClick={ ()=>this.saveBooking() }> Save </button>
-                    }
+            <div className="m-wizard m-wizard--3 m-wizard--success">
+                <div className="row m-row--no-padding">
+                    <div className="col-md-3">
+                        <div className="m-wizard__head">	 
+                            <div className="m-wizard__nav">
+                                <div className="m-wizard__steps">
+                                    {
+                                        steps.map((step, key)=>
+                                            <div className={"m-wizard__step " + (this.state.currentStep === key? "m-wizard__step--current":"")} key={key}>
+                                                <div className="m-wizard__step-info">
+                                                    <span className="m-wizard__step-number" onClick={()=> this.state.visited.indexOf(key) !== -1 ? this.nextStep(key-1):false }>							 
+                                                        <span style={{color:"white", fontSize:16, cursor:"pointer"}}>{key+1}</span>						 
+                                                    </span>
+                                                    <div className="m-wizard__step-line">
+                                                        <span></span>
+                                                    </div>
+                                                    <div className="m-wizard__step-label">
+                                                        { step.step_name }								
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            </div>	
+                        </div>
+                    </div>
+                    <div className="col-md-9">
+                        {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12 mm-footer">
+                        {   this.state.currentStep < (steps.length-1) ? <button className="btn btn-info" onClick={ ()=>this.nextStep(this.state.currentStep) }> Next </button>:
+                                <button className="btn btn-success" id="save-booking-button" onClick={ ()=>this.saveBooking() }> Save </button>
+                        }
+                        {   this.state.currentStep > 0 ? <button className="btn btn-warning" onClick={ ()=>this.setState({ currentStep:this.state.currentStep-1 })}> Back </button>:
+                                <button className="btn" onClick={ () => { window.$("#booking-modal").modal("hide")} } >
+                                    Close
+                                </button>
+                        }
+                    </div>
                 </div>
             </div>);
     }
 }
-
-
 export default BookingFormAdmin;
