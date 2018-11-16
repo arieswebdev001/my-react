@@ -97,8 +97,8 @@ class PricingTableEditable extends Component {
                     <table className="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                { this.props.showCondition? <th className="colorized">Adult</th>:'' }
-                                { this.props.showCondition? <th className="colorized">Child</th>:'' }
+                                { this.props.showCondition?<th className="colorized">Adult</th>:null }
+                                { this.props.showCondition?<th className="colorized">Child</th>:null }
                                 { this.dayOfWeek().map((item, key)=> <th key={key}>{ item }</th> ) }
                                 <th style={{width:30}}></th>
                             </tr>
@@ -108,8 +108,8 @@ class PricingTableEditable extends Component {
                                 this.props.pricing.map((price,k)=>{
                                     return price.id !== this.state.editing.id ? 
                                         <tr key={k}>
-                                            { this.props.showCondition? <td className="colorized">{ price.pricing_condition.adult }</td>:'' }
-                                            { this.props.showCondition? <td className="colorized">{ price.pricing_condition.child }</td>:'' }
+                                            { this.props.showCondition? <td className="colorized">{ price.pricing_condition.adult }</td>:null }
+                                            { this.props.showCondition? <td className="colorized">{ price.pricing_condition.child }</td>:null }
                                             { this.dayOfWeek().map((item, key)=> <td key={key}>{ price.pricing_schedule[key] }</td> ) }
                                             <td>
                                                 <button className="btn btn-info btn-sm" onClick={ ()=> this.setState({ editing:price }) }><i className="la la-pencil-square"></i></button>
@@ -120,11 +120,11 @@ class PricingTableEditable extends Component {
                                             { this.props.showCondition? <td className="colorized">
                                                 <Input type="number"_value={ this.state.editing.pricing_condition.adult} 
                                                         onChange={ (e)=> this.handleEditCondition(e.target.value, 'adult') } />
-                                            </td>:'' }
+                                            </td>:null }
                                             { this.props.showCondition? <td className="colorized">
                                                 <Input type="number"_value={ this.state.editing.pricing_condition.child } 
                                                         onChange={ (e)=> this.handleEditCondition(e.target.value, 'child') } />
-                                            </td>:'' }
+                                            </td>:null }
                                             { 
                                                 this.dayOfWeek().map((item, key)=> 
                                                 <td key={key}>

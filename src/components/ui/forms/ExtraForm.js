@@ -132,12 +132,7 @@ class ExtraForm extends Component {
         };
 
         const types = [{ label:"Goods", value:"goods" },{  label:"Services", value:"services" }];
-        const pricing_types = [
-            { label:"Per Head", value:"per_head" },
-            { label:"Per Day", value:"per_day" },
-            { label:"Per Head/Day", value:"per_head_per_day" },
-            { label:"Per Booking", value:"per_booking" },
-        ];
+        const pricing_types = ["Per Head","Per Day","Per Head/Day","Per Booking"];
         return ( 
             <form className="m-form">
                 {
@@ -146,7 +141,7 @@ class ExtraForm extends Component {
                         <div className="col-md-8">
                             <div className="row">
                                 <div className="col-md-5">
-                                    <Input label="Extra Name" _id="extra_name" _value={ this.state.extra.extra_name } onChange={ ()=> this.handleChange() } />
+                                    <Input label="Add-on Name" _id="extra_name" _value={ this.state.extra.extra_name } onChange={ ()=> this.handleChange() } />
                                 </div>
                                 <div className="col-md-7">
                                     <TextArea label="Description" _id="extra_description" _value={ this.state.extra.extra_description } onChange={ ()=> this.handleChange() } />

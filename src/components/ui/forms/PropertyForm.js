@@ -29,7 +29,8 @@ class PropertyForm extends Component {
                     currency: '',
                     floors:[],
                     property_data:{
-                        house_keepers:[]
+                        house_keepers:[],
+                        vat_percentage:12
                     },
                     map_coordinates:{ lat:14.366575, lng:121.041958}
                 },
@@ -201,6 +202,19 @@ class PropertyForm extends Component {
             }
         });
     }
+
+    handleChangeVat(value){
+        this.setState({
+            property:{
+                ...this.state.property,
+                property_data:{
+                    ...this.state.property.property_data,
+                    vat_percentage:Number(value)
+                }
+            }
+        });
+    }
+
     render(){
         const deleteButton = ()=>{
             return <button type="button" onClick={this.removeFile.bind(this) } className='btn btn-danger btn-sm' 
@@ -219,9 +233,12 @@ class PropertyForm extends Component {
                                     <Input label="Property Name" _id="property_name" _value={ this.state.property.property_name } onChange={ ()=> this.handleChange() } />
                                     <TextArea label="Property Address" _id="property_address" _value={ this.state.property.property_address } onChange={ ()=> this.handleChange() } />
                                     <div className="row">
-                                        <div className="col-md-6">
+                                        <div className="col-md-3">
                                             <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
                                                 _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <Input label="Vat %" type="number" _value={ this.state.property.property_data.vat_percentage } onChange={ (e)=> this.handleChangeVat(e) } />
                                         </div>
                                         <div className="col-md-6">
                                             <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />

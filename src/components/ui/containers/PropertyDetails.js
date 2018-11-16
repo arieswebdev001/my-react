@@ -34,6 +34,7 @@ class PropertyDetails extends Component {
                                             } 
                                 label="Status" />
                             <ItemRow value={ this.props.property.currency } label="Currency"/>
+                            <ItemRow value={ this.props.property.property_data.vat_percentage } label="Vat %"/>
                             <ItemRow value={ this.props.property.floors.join(", ") } label="Floors"/>
                         </div>
                     </div>

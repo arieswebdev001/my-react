@@ -11,8 +11,7 @@ class Rooms extends Component {
     render() {
         const tabs = [
             {id:"rooms", label:"Rooms", component:<RoomsTab/>},
-            {id:"extras", label:"Extras", component:<ExtrasTab/>},
-            //{id:"roompromos", label:"Promos", component:null}
+            {id:"extras", label:"Add-ons", component:<ExtrasTab/>}
         ];
 
         return (

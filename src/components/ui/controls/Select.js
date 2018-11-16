@@ -2,12 +2,12 @@ import React from 'react';
 import {InputOptions} from '../../../config';
 
 const Select = (props) => (
-    <div className={InputOptions.containerClass}>
+    <div className={ props.label !== undefined? InputOptions.containerClass:""}>
         { props.label !== undefined? <label>{ props.label }</label>:''}
-        <select id={props._id} className={InputOptions.inputClass} value={props._value} onChange={props.onChange}>
+        <select id={props._id} className={InputOptions.inputClass} value={props._value} onChange={ (e)=> props.onChange(e.target.value) }>
             {
                 props.selection.map((item)=>{
-                    return <option key={item.value} value={item.value}>{ item.label }</option>
+                    return <option key={item.value !== undefined?item.value:item} value={item.value !== undefined?item.value:item}>{ item.label !== undefined?item.label:item }</option>
                 })
             }
         </select>

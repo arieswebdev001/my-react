@@ -2,9 +2,9 @@ import React from 'react';
 import {InputOptions} from '../../../config';
 
 const Input = (props) => (
-    <div className={InputOptions.containerClass}>
+    <div className={ props.label !== undefined? InputOptions.containerClass:""}>
         { props.label !== undefined? <label>{ props.label }</label>:''}
-        <input type={props.type} id={props._id} className={InputOptions.inputClass} value={props._value} onChange={props.onChange}/>
+        <input disabled={props.disabled} type={props.type} id={props._id} className={InputOptions.inputClass} value={props._value} onChange={ (e)=> props.onChange(e.target.value) }/>
     </div>
 );
 

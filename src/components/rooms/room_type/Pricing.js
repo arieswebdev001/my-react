@@ -230,13 +230,15 @@ class Pricing extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-lg-5">
-                                        <label>Season Coverage</label>
-                                        <DateRange 
-                                            onChange={this.handleRangeChange.bind(this, 'dateRange')}
-                                            moveRangeOnFirstSelection={false}
-                                            ranges={[this.state.dateRange.selection]}
-                                            className={'PreviewArea'}
-                                        />
+                                        <div className="form-group">
+                                            <label>Season Coverage</label>
+                                            <DateRange 
+                                                onChange={this.handleRangeChange.bind(this, 'dateRange')}
+                                                moveRangeOnFirstSelection={false}
+                                                ranges={[this.state.dateRange.selection]}
+                                                className={'PreviewArea'}
+                                            />
+                                        </div>
                                     </div>
                                     <div className="col-md-7">
                                         <label>Pricing</label>

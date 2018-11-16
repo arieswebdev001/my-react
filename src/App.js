@@ -21,7 +21,7 @@ import 'react-table/react-table.css';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-toggle/style.css";
 import 'react-tagsinput/react-tagsinput.css'
-import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/styles.css'; // main style fil
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
 class App extends Component { 

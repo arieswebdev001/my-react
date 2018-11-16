@@ -31,7 +31,7 @@ class ExtrasTab extends Component {
 
         this.setState({
             extra: data===undefined ? { id:0 }: data,
-            modalMode: title==="Update Extra" || title=== "Add Extra"?"form":"view"
+            modalMode: title==="Update Add-on" || title=== "New Add-on"?"form":"view"
         });
         window.$("#extras-modal").modal("show");
     }
@@ -89,7 +89,7 @@ class ExtrasTab extends Component {
             {
                 Header: "Price",
                 Cell: row =>(
-                    row.original.selling_price + " (" + this.getPricingType(row.original.pricing_type) + ")"
+                    row.original.selling_price + " (" + row.original.pricing_type + ")"
                 )
             },
             {
@@ -97,7 +97,7 @@ class ExtrasTab extends Component {
                 Cell: row =>(
                     <div>
                         <button className="btn btn-sm btn-info" onClick={ ()=> this.showModal(row.original.extra_name, row.original) }>View</button>
-                        <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update Extra", row.original) }>Edit</button>
+                        <button className="btn btn-sm btn-warning" onClick={ ()=> this.showModal("Update Add-on", row.original) }>Edit</button>
                     </div>
                 ),
                 width: 120
@@ -106,7 +106,7 @@ class ExtrasTab extends Component {
 
         return (
             <div className="ExtrasTab">
-                <button className="btn btn-info" onClick={ () => this.showModal("Add Extra") }>Add Extra</button><br/><br/>
+                <button className="btn btn-info" onClick={ () => this.showModal("New Add-on") }>New Add-on</button><br/><br/>
 
                 <div className="modal fade" id="extras-modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
