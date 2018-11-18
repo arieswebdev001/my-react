@@ -55,7 +55,7 @@ class Reservations extends Component {
                                 <h5 className="modal-title">Booking Form</h5>
                             </div>
                             <div className="modal-body">
-                                <BookingFormAdmin onSave={()=>{}}/>
+                                <BookingFormAdmin key={this.state.form_key} />
                             </div>
                         </div>
                     </div>

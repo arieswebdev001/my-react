@@ -5,7 +5,6 @@ import Axios from '../../wrappers/Axios';
 import Details from './room_type/Details'
 import Rooms from './room_type/Rooms';
 import Pricing from './room_type/Pricing';
-import Promos from './room_type/Promos';
 class RoomType extends Component {
     getRoomType(){
         let u = this;
@@ -29,8 +28,7 @@ class RoomType extends Component {
         const tabs = [
             {id:"details", label:"Details", component: <Details onUpdate={ this.getRoomType.bind(this) } />},
             {id:"rooms", label:"Individual Rooms", component: <Rooms onSave={ this.getRoomType.bind(this) } />},
-            {id:"pricing", label:"Pricing", component: <Pricing openned={false} onSave={ this.getRoomType.bind(this) } />},
-            {id:"promos", label:"Promos", component: <Promos openned={false}/>}
+            {id:"pricing", label:"Pricing", component: <Pricing openned={false} onSave={ this.getRoomType.bind(this) } />}
         ];
 
         return (

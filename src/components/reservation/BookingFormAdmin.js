@@ -53,13 +53,13 @@ class BookingFormAdmin extends Component {
             is_member:0,
             guest_id:0,
             booking_notes:"",
-            booking_status:"pending",
+            booking_status:"Pending",
             booking_data:{
                 discount:
                 {
-                    //     promo_code:"",
-                    //     discount:0,
-                    //     discount_type:"total"
+                    promo_code:"",
+                    discount:0,
+                    discount_type:"total"
                 },
                 total_discount:0
             },
@@ -152,8 +152,13 @@ class BookingFormAdmin extends Component {
                     return false;
                 }
             break;
+            case 1:
+                if(this.state.booking.guest.first_name === ""){
+                    window.toastr.error("First Name is required.");
+                    return false;
+                }
+            break;
             default:
-                
         }
 
         if(this.state.visited.indexOf(from_key+1) === -1)
@@ -163,11 +168,7 @@ class BookingFormAdmin extends Component {
     }
 
     saveBooking(){
-
-    }
-
-    recomputeTotal(){
-
+        console.log(this.state.booking);
     }
 
     render() {
@@ -178,7 +179,10 @@ class BookingFormAdmin extends Component {
                 content:
                 <div className="row" key={0}>
                     <div className="col-lg-5">
-                        <h3>Booking for { this.state.booking.nights } Night(s)</h3>
+                        <h3>
+                            { this.state.booking.nights } Night{ this.state.booking.nights>1?'s':null },&nbsp;
+                            { this.state.booking.booked_rooms.length } Room{ this.state.booking.booked_rooms.length > 1?'s':null }
+                        </h3>
                         <DateRange 
                             onChange={this.handleRangeChange.bind(this, 'dateRange')}
                             moveRangeOnFirstSelection={false}
@@ -191,7 +195,7 @@ class BookingFormAdmin extends Component {
                         <RoomSelection 
                             roomTypes={this.state.room_types} 
                             bookedRooms={this.state.booking.booked_rooms} 
-                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] } }); this.recomputeTotal(); }}
+                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] } }) }}
                             nights={this.state.booking.nights}
                         />
                         <br/>
@@ -200,7 +204,7 @@ class BookingFormAdmin extends Component {
                             bookedExtras={this.state.booking.booked_extras}
                             nights={this.state.booking.nights}
                             bookedRooms={this.state.booking.booked_rooms} 
-                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_extras:e } }); this.recomputeTotal(); } }
+                            onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_extras:e } }) } }
                         />
                     </div>
                 </div>
@@ -212,7 +216,7 @@ class BookingFormAdmin extends Component {
             },
             {
                 step_name:"Payment",
-                content:<PaymentDetails key={3} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); this.recomputeTotal(); }}/>
+                content:<PaymentDetails key={3} promos={[]} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}) }}/>
             },
             {
                 step_name:"Confirmation",

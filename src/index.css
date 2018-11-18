@@ -348,3 +348,6 @@ table.resource-table tr td:last-child, /*table.scheduler-bg-table tr td:last-chi
 label, .bold{
     font-weight:bold;
 }
+.rc-time-picker-input{
+    padding:20px
+}

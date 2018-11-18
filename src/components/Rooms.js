@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import TabbedPortlet from './ui/portlets/TabbedPortlet';
 import RoomsTab from './rooms/RoomsTab';
 import ExtrasTab from './rooms/ExtrasTab';
+import PromosTab from './rooms/PromosTab';
 
 class Rooms extends Component {
     componentDidMount(){
@@ -11,7 +12,8 @@ class Rooms extends Component {
     render() {
         const tabs = [
             {id:"rooms", label:"Rooms", component:<RoomsTab/>},
-            {id:"extras", label:"Add-ons", component:<ExtrasTab/>}
+            {id:"extras", label:"Add-ons", component:<ExtrasTab/>},
+            {id:"promos", label:"Promos", component:<PromosTab/>}
         ];
 
         return (

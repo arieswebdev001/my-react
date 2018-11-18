@@ -6,6 +6,7 @@ class TheScheduler extends Component {
     state = {
         viewModel: new SchedulerData(window.moment().format("YYYY-MM-DD"), ViewTypes.Week, false, false, {
             checkConflict: true,
+            resourceName: 'Room No.',
             views:[
                 {viewName:"Day", isEventPerspective:false, viewType:0, showAgenda:false},
                 {viewName:"Week", isEventPerspective:false, viewType:1, showAgenda:false},

@@ -198,8 +198,11 @@ class RoomSelection extends Component {
                                                 <td style={{width:120}}>
                                                     <Input type="number" _value={room.price} onChange={(e)=>this.handleChangeRoomDetail(e,'price',key)}/>
                                                 </td>
-                                                <td style={{width:20}}>
-                                                    <button className="btn btn-danger btn-sm" onClick={()=>this.deleteRoom(key) }>X</button>
+                                                <td style={{width:60}}>
+                                                    {
+                                                        (key > 0 || this.props.bookedRooms.length>1)?
+                                                            <button className="btn btn-danger btn-sm" onClick={()=>this.deleteRoom(key) }>X</button>:null
+                                                    }
                                                 </td>
                                             </tr>
                                             {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Promos extends Component {
+class PromosTab extends Component {
     render() {
         return (
             <div>
@@ -18,4 +18,4 @@ const mapStateToProps = (state)=>{
     }
 };
 
-export default connect(mapStateToProps, null)(Promos);
+export default connect(mapStateToProps, null)(PromosTab);

@@ -17,6 +17,7 @@ import Login from './components/auth/Login';
 import Axios from './wrappers/Axios';
 import { connect } from 'react-redux';
 
+import 'react-datetime/css/react-datetime.css'
 import 'react-table/react-table.css';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-toggle/style.css";
