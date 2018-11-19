@@ -1,2 +1,3 @@
 [1017/003107.136:ERROR:process_info.cc(359)] UncheckedAllocate
 [1017/003107.152:ERROR:process_info.cc(359)] UncheckedAllocate
+[1119/105646.916:ERROR:crash_report_database_win.cc(428)] unexpected header

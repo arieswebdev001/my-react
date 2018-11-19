@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Input from '../ui/controls/Input';
 import Select from 'react-select';
 import Selector from '../ui/controls/Select';
 import RoomInfo from '../ui/containers/RoomInfo';
+import NumberFormat from 'react-number-format';
 
 class RoomSelection extends Component {
     state={
@@ -152,7 +152,7 @@ class RoomSelection extends Component {
 
         return (
             <div>
-                <table style={{ minWidth:"500px" }}>
+                <table style={{ minWidth:  groupedOptions.length >0 ?500:"100%" }}>
                     <tbody>
                     {
                         this.props.bookedRooms.map((room, key)=>
@@ -163,19 +163,21 @@ class RoomSelection extends Component {
                                             key === 0?
                                             <thead>
                                                 <tr>
-                                                    <th>Room  &nbsp; <button className="btn btn-sm btn-info" onClick={()=>this.addRoom()}>+</button></th>
+                                                    <th>Room  &nbsp; { groupedOptions.length >0 ?<button className="btn btn-sm btn-info" onClick={()=>this.addRoom()}>+</button>:null }</th>
                                                     <th>Adult</th>
                                                     <th>Child</th>
                                                     <th>Price</th>
-                                                    <th></th>
+                                                    { groupedOptions.length >0 ?<th></th>:null }
                                                 </tr>
                                             </thead>:null
                                         }
                                         <tbody>
                                             <tr>
                                                 <td>
+                                                    { groupedOptions.length >0 ?
                                                     <Select isOptionDisabled={(option) => this.alreadyTaken(option, key)}
-                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>
+                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>: <h5>{room.label}</h5>
+                                                    }
                                                     {
                                                         room.value !== 0 ? 
                                                         <span>
@@ -187,23 +189,25 @@ class RoomSelection extends Component {
                                                         </span>:null
                                                     }
                                                 </td>
-                                                <td style={{width:90}}>
-                                                    <Selector _value={room.adults} selection={this.availableOccupants('adults', room)}
-                                                        onChange={(e)=>this.handleChangeRoomDetail(e,'adults',key)}/>
+                                                <td style={{width:85}}>
+                                                    { groupedOptions.length >0 ?<Selector _value={room.adults} selection={this.availableOccupants('adults', room)}
+                                                    onChange={(e)=>this.handleChangeRoomDetail(e,'adults',key)}/>: <h6>{room.adults}</h6> }
                                                 </td>
-                                                <td style={{width:90}}>
-                                                    <Selector _value={room.child} selection={this.availableOccupants('child', room)}
-                                                        onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>
+                                                <td style={{width:85}}>
+                                                    { groupedOptions.length >0 ?<Selector _value={room.child} selection={this.availableOccupants('child', room)}
+                                                        onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>: <h6>{room.child}</h6> }
                                                 </td>
-                                                <td style={{width:120}}>
-                                                    <Input type="number" _value={room.price} onChange={(e)=>this.handleChangeRoomDetail(e,'price',key)}/>
+                                                <td style={{width:130}}>
+                                                    { groupedOptions.length >0 ? <NumberFormat allowNegative={false} value={room.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                        onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>: <h6>{room.price}</h6> }
                                                 </td>
+                                                { groupedOptions.length >0 ?
                                                 <td style={{width:60}}>
                                                     {
                                                         (key > 0 || this.props.bookedRooms.length>1)?
                                                             <button className="btn btn-danger btn-sm" onClick={()=>this.deleteRoom(key) }>X</button>:null
                                                     }
-                                                </td>
+                                                </td>:null}
                                             </tr>
                                             {
                                                 this.state.show_info_index === key?

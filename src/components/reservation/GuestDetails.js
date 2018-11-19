@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Input from '../ui/controls/Input';
 import Select from '../ui/controls/Select';
-
+import ReactSelect from 'react-select';
+import {CountryList} from '../../config'
 class GuestDetails extends Component {
     render() {
         return (
@@ -18,7 +19,7 @@ class GuestDetails extends Component {
                         <Input label="Middle Name" _value={ this.props.guest.middle_name } onChange={ (e)=> this.props.onUpdate(e, 'middle_name') } />
                     </div>
                     <div className="col-lg-3">
-                        <Input label="Last Name" _value={ this.props.guest.last_name } onChange={ (e)=> this.props.onUpdate(e, 'last_name') } />
+                        <Input label="Last Name" _value={ this.props.guest.last_name } required={true} onChange={ (e)=> this.props.onUpdate(e, 'last_name') } />
                     </div>
                 </div>
                 <div className="row">
@@ -51,7 +52,11 @@ class GuestDetails extends Component {
                         <Input label="State" _value={ this.props.guest.state } onChange={ (e)=> this.props.onUpdate(e, 'state') } />
                     </div>
                     <div className="col-md-3">
-                        <Input label="Country" _value={ this.props.guest.country } onChange={ (e)=> this.props.onUpdate(e, 'country') } />
+                        <div className="form-group">
+                            <label>Country *</label>
+                            <ReactSelect options={CountryList.map((o)=>({label:o,value:o}))} value={{value:this.props.guest.country, label:this.props.guest.country}} 
+                                onChange={ (e)=> this.props.onUpdate(e.value, 'country')}/>
+                        </div>
                     </div>
                     
                     <div className="col-md-3">

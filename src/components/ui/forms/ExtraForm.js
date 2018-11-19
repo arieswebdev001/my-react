@@ -76,7 +76,6 @@ class ExtraForm extends Component {
             .then((response) => {
                 u.props.savedExtra(response);
             }).catch(function (error) {
-                console.log(error);
                 if(!error.response)
                     window.toastr.error("Please check internet connectivity", "Network Error");
                 else{

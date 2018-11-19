@@ -247,7 +247,7 @@ class Pricing extends Component {
                                                 ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((item, key)=>(
                                                     <div className="col-md-3" key={key}>
                                                         <Input type="number" label={item} _value={ this.state.price.pricing_schedule[key] } 
-                                                            onChange={ (e)=> this.handleEditPrice(key, e.target.value) } />
+                                                            onChange={ (e)=> this.handleEditPrice(key, e) } />
                                                     </div>
                                                 ))
                                             }
@@ -274,11 +274,11 @@ class Pricing extends Component {
                                 <div className="modal-body">
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <Input type="number" label="Adult" onChange={ (e)=> this.handleEditCondition(e.target.value, 'adult') } 
+                                            <Input type="number" label="Adult" onChange={ (e)=> this.handleEditCondition(e, 'adult') } 
                                                 _value={ this.state.price.pricing_condition.adult }  />
                                         </div>
                                         <div className="col-md-6">
-                                            <Input type="number" label="Child" onChange={ (e)=> this.handleEditCondition(e.target.value, 'child') } 
+                                            <Input type="number" label="Child" onChange={ (e)=> this.handleEditCondition(e, 'child') } 
                                                 _value={ this.state.price.pricing_condition.child }  />
                                         </div>
                                     </div>
@@ -289,7 +289,7 @@ class Pricing extends Component {
                                         ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((item, key)=>(
                                             <div className="col-md-3" key={key}>
                                                 <Input type="number" label={item} _value={ this.state.price.pricing_schedule[key] } 
-                                                    onChange={ (e)=> this.handleEditPrice(key, e.target.value) } />
+                                                    onChange={ (e)=> this.handleEditPrice(key, e) } />
                                             </div>
                                         ))
                                     }

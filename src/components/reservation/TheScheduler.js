@@ -7,6 +7,7 @@ class TheScheduler extends Component {
         viewModel: new SchedulerData(window.moment().format("YYYY-MM-DD"), ViewTypes.Week, false, false, {
             checkConflict: true,
             resourceName: 'Room No.',
+            eventItemPopoverEnabled:false,
             views:[
                 {viewName:"Day", isEventPerspective:false, viewType:0, showAgenda:false},
                 {viewName:"Week", isEventPerspective:false, viewType:1, showAgenda:false},
@@ -86,7 +87,7 @@ class TheScheduler extends Component {
     }
 
     eventClicked = (schedulerData, event) => {
-        alert(`You just clicked an event: {id: ${event.id}, title: ${event.title}}`);
+        this.props.onEventClick(event.id);
     };
 }
 

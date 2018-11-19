@@ -3,6 +3,7 @@ import Input from '../ui/controls/Input';
 import TextArea from '../ui/controls/TextArea';
 import Select from '../ui/controls/Select';
 import Datetime from 'react-datetime';
+import NumberFormat from 'react-number-format';
 
 class PaymentDetails extends Component {
     handleChangeRoomDetail(value, field, key){
@@ -141,7 +142,7 @@ class PaymentDetails extends Component {
                     <div className="col-md-9">
                         <div className="row">
                             <div className="col-md-4">
-                                <Select label="Booking Source" onChange={(e)=>this.handleChange(e, 'booking_source')} 
+                                <Select label="Booking Type" onChange={(e)=>this.handleChange(e, 'booking_source')} 
                                     _value={ this.props.booking.booking_source } selection={["Walk-In", "Phone", "Email"]} />
                             </div>
                             <div className="col-md-4">
@@ -178,10 +179,13 @@ class PaymentDetails extends Component {
                                                     <Input type="number" disabled={true} _value={ 1 }/>
                                                 </td> 
                                                 <td>
-                                                    <Input type="number" onChange={(e)=>this.handleChangeRoomDetail(e,'price',key)} _value={ room.price }/>
+                                                    <NumberFormat allowNegative={false} value={room.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                        onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>
                                                 </td>
                                                 <td>
-                                                    <Input type="number" disabled={true} _value={ room.price.toFixed(2) }/>
+                                                    <h5 style={{ textAlign:"right" }}>
+                                                        <NumberFormat allowNegative={false} value={room.price} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
+                                                    </h5>
                                                 </td>
                                             </tr>:null
                                         ))
@@ -196,10 +200,11 @@ class PaymentDetails extends Component {
                                                     <Input type="number" onChange={(e)=>this.handleChangeExtraDetail(e,'quantity',key)} _value={ extra.quantity }/> 
                                                 </td>
                                                 <td>
-                                                    <Input type="number" onChange={(e)=>this.handleChangeExtraDetail(e,'price',key)} _value={ extra.price }/>
+                                                    <NumberFormat allowNegative={false} value={extra.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                        onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>
                                                 </td>
                                                 <td>
-                                                    <Input type="number" disabled={true} _value={ (extra.price * extra.quantity).toFixed(2) }/>
+                                                    <h5 style={{ textAlign:"right" }}><NumberFormat allowNegative={false} value={(extra.price * extra.quantity)} displayType={'text'} thousandSeparator={true} prefix={'PHP '} /></h5>
                                                 </td>
                                             </tr>
                                         ))
@@ -208,15 +213,17 @@ class PaymentDetails extends Component {
                                         <td colSpan={3} style={{border:0}}> 
                                             <h5 style={{ textAlign:"right" }}> Sub Total: </h5>
                                         </td>
-                                        <td colSpan={3}> 
-                                            <h5 style={{ textAlign:"right" }}> { this.getTotal().toFixed(2) } </h5> 
+                                        <td > 
+                                            <h5 style={{ textAlign:"right" }}>
+                                                <NumberFormat allowNegative={false} value={this.getTotal()} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
+                                            </h5> 
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colSpan={3} style={{border:0}}> 
                                             <h5 style={{ textAlign:"right" }}> Promo Code: </h5>
                                         </td>
-                                        <td colSpan={3}> 
+                                        <td> 
                                             <div className="form-group">
                                                 <div className="input-group">
                                                     <input type="text" className="form-control" value={ this.props.booking.booking_data.discount.promo_code } placeholder="Code" 
@@ -248,8 +255,8 @@ class PaymentDetails extends Component {
                                         </td>
                                         <td colSpan={3}>
                                             <h5 style={{ textAlign:"right" }}>
-                                                <Input type="number" onChange={(e)=>this.handleUpdateDiscount(e)} disabled={ this.props.booking.booking_data.discount.discount > 0 }
-                                                    _value={ this.props.booking.booking_data.total_discount }/>
+                                                <NumberFormat allowNegative={false} onValueChange={(e)=>this.handleUpdateDiscount(e.value)} disabled={ this.props.booking.booking_data.discount.discount > 0 }
+                                                    value={ this.props.booking.booking_data.total_discount} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} />
                                             </h5>
                                         </td>
                                     </tr>
@@ -258,7 +265,9 @@ class PaymentDetails extends Component {
                                             <h5 style={{ textAlign:"right" }}> Net Total: </h5>
                                         </td>
                                         <td colSpan={3}> 
-                                            <h5 style={{ textAlign:"right" }}> { (this.getTotal() - this.props.booking.booking_data.total_discount).toFixed(2) } </h5> 
+                                            <h5 style={{ textAlign:"right" }}> 
+                                                <NumberFormat allowNegative={false} value={(this.getTotal() - this.props.booking.booking_data.total_discount)} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
+                                            </h5> 
                                         </td>
                                     </tr>
                                 </tbody>
@@ -266,8 +275,15 @@ class PaymentDetails extends Component {
                         </div>
                     </div>
                     <div className="col-md-3">
-                        <Input type="number" label="Amount Paid" onChange={(e)=>this.handleChangePaymentDetail(e, 'amount_paid', true)} 
-                            _value={ this.props.booking.invoice.amount_paid }/>
+                        {
+                            this.props.booking.invoice.reference_no!==""?
+                                <h5>Invoice No.: { this.props.booking.invoice.reference_no }</h5>:null
+                        }
+                        <div className="form-group">
+                            <label>Amount Paid</label>
+                            <NumberFormat allowNegative={false} value={this.props.booking.invoice.amount_paid } displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                onValueChange={(e)=>this.handleChangePaymentDetail(e.value,'amount_paid', true)}/>
+                        </div>
                         {
                             (this.getTotal() - this.props.booking.booking_data.total_discount) > this.props.booking.invoice.amount_paid?
                                 <small style={{ color:"red" }}> 
@@ -279,8 +295,11 @@ class PaymentDetails extends Component {
                         {
                             this.props.booking.invoice.payment_method==='Cash'?
                             <div>
-                                <Input type="number" label="Cash Received" onChange={(e)=>this.handleChangeCashReceived(e) } 
-                                    _value={ this.props.booking.invoice.invoice_data.cash_received }/>
+                                <div className="form-group">
+                                    <label>Cash Received</label>
+                                    <NumberFormat allowNegative={false} value={ this.props.booking.invoice.invoice_data.cash_received  } displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                        onValueChange={(e)=>this.handleChangeCashReceived(e.value)}/>
+                                </div>
 
                                 {
                                     this.props.booking.invoice.amount_paid > this.props.booking.invoice.invoice_data.cash_received ?
@@ -291,8 +310,12 @@ class PaymentDetails extends Component {
 
                                 {
                                     this.props.booking.invoice.invoice_data.cash_received > this.props.booking.invoice.amount_paid?
-                                    <Input type="number" label="Change" disabled={true} _value={ this.props.booking.invoice.invoice_data.cash_received - this.props.booking.invoice.amount_paid }/>
-                                        :null
+                                    <div className="form-group">
+                                        <label>Change</label>
+                                        <h5 style={{ textAlign:"right" }}> 
+                                            <NumberFormat allowNegative={false} value={(this.props.booking.invoice.invoice_data.cash_received - this.props.booking.invoice.amount_paid)} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
+                                        </h5> 
+                                    </div>:null
                                 }
                             </div>:null
                         }

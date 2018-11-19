@@ -258,7 +258,7 @@ class Rooms extends Component {
                     </div>
                     <div className="col-md-2">
                         <Select selection={[{label:"Grid View",value:"grid"}, {label:"Table View",value:"table"}]} _id="view_selector" _value={ this.props.rooms_list_view }  
-                            onChange={ (event)=> this.props.updateRoomsListView(event.target.value) } />
+                            onChange={ (event)=> this.props.updateRoomsListView(event) } />
                     </div>
                     <div className="col-md-2">
                         <Select selection={floors} _id="floor_filter" _value={ this.state.floor_filter }  onChange={ ()=> this.handleChange() } />

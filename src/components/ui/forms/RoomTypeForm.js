@@ -267,7 +267,7 @@ class RoomTypeForm extends Component {
                                 ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((item, key)=>(
                                     <div className="col-md-2" key={key}>
                                         <Input type="number" label={item} _value={ this.state.room_type.pricing_schedule[key] } 
-                                            onChange={ (e)=> this.handleEditPrice(key, e.target.value) } />
+                                            onChange={ (e)=> this.handleEditPrice(key, e) } />
                                     </div>
                                 )):''
                             }

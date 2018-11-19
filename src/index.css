@@ -351,3 +351,7 @@ label, .bold{
 .rc-time-picker-input{
     padding:20px
 }
+
+.form-control {
+    border-color:#9c9c9a;
+}

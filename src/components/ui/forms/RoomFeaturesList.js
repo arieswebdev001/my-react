@@ -76,7 +76,7 @@ class RoomFeaturesList extends Component {
             if(key === i)
                 f.items = f.items.map((item, j)=>{
                     if(k===j)
-                        item = event.target.value;
+                        item = event;
 
                     return item;
                 });
@@ -89,7 +89,7 @@ class RoomFeaturesList extends Component {
     changeGroupName(event, key){
         const newArray = this.state.features.map((f, i)=>{
             if(key === i)
-                f.group_name = event.target.value;
+                f.group_name = event;
             return f;
         }); 
 
