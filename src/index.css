@@ -158,7 +158,13 @@
     bottom:0;
     z-index: 1;
 }
-
+.m-widget13__desc{
+    width:35% !important;
+}
+.m-widget13__text{
+    width:65% !important;
+    border-bottom:1px solid #ccc;
+}
 table.resource-table, table.scheduler-bg-table, table.scheduler-table {
     width: 100%;
     margin: 0;
@@ -354,4 +360,7 @@ label, .bold{
 
 .form-control {
     border-color:#9c9c9a;
+}
+.Reservations .m-portlet .m-portlet__body{
+    padding:10px;
 }

@@ -8,6 +8,7 @@ const initState = {
     extras:[],
     room_type:null,
     room_types:[],
+    guest:null,
     rooms_list_view: window.localStorage.getItem("UPDATE_ROOMS_LIST_VIEW") === null?'grid':window.localStorage.getItem("UPDATE_ROOMS_LIST_VIEW")
 };
 
@@ -69,6 +70,11 @@ const rootReducer = (state = initState, action) =>{
             rooms_list_view:action.payload
         };
     }
+    else if(action.type === 'UPDATE_GUEST')
+    return {
+        ...state,
+        guest:action.payload
+    };
             
     return state;
 }

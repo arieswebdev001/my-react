@@ -176,30 +176,30 @@ class RoomSelection extends Component {
                                                 <td>
                                                     { groupedOptions.length >0 ?
                                                     <Select isOptionDisabled={(option) => this.alreadyTaken(option, key)}
-                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>: <h5>{room.label}</h5>
+                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>: <strong>{room.label}</strong>
                                                     }
                                                     {
                                                         room.value !== 0 ? 
                                                         <span>
                                                             {
                                                                 this.state.show_info_index !== key?
-                                                                    <small style={{ cursor:"pointer", color:"blue" }} onClick={ ()=>this.setState({show_info_index:key}) }>Room Info</small>:
-                                                                    <small style={{ cursor:"pointer", color:"blue" }} onClick={ ()=>this.setState({show_info_index:false}) }>Hide Room Info</small>
+                                                                    <small style={{ cursor:"pointer", color:"blue" }} onClick={ ()=>this.setState({show_info_index:key}) }> (Show Room Info)</small>:
+                                                                    <small style={{ cursor:"pointer", color:"blue" }} onClick={ ()=>this.setState({show_info_index:false}) }> (Hide Room Info)</small>
                                                             }
                                                         </span>:null
                                                     }
                                                 </td>
                                                 <td style={{width:85}}>
                                                     { groupedOptions.length >0 ?<Selector _value={room.adults} selection={this.availableOccupants('adults', room)}
-                                                    onChange={(e)=>this.handleChangeRoomDetail(e,'adults',key)}/>: <h6>{room.adults}</h6> }
+                                                    onChange={(e)=>this.handleChangeRoomDetail(e,'adults',key)}/>: <strong>{room.adults}</strong> }
                                                 </td>
                                                 <td style={{width:85}}>
                                                     { groupedOptions.length >0 ?<Selector _value={room.child} selection={this.availableOccupants('child', room)}
-                                                        onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>: <h6>{room.child}</h6> }
+                                                        onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>: <strong>{room.child}</strong> }
                                                 </td>
                                                 <td style={{width:130}}>
                                                     { groupedOptions.length >0 ? <NumberFormat allowNegative={false} value={room.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
-                                                        onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>: <h6>{room.price}</h6> }
+                                                        onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>: <strong>{room.price}</strong> }
                                                 </td>
                                                 { groupedOptions.length >0 ?
                                                 <td style={{width:60}}>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TabbedPortlet from './ui/portlets/TabbedPortlet';
+import MembersTab from './guests/MembersTab';
+import NonMembersTab from './guests/NonMembersTab';
 
 class Guests extends Component {
     componentDidMount(){
@@ -8,8 +10,8 @@ class Guests extends Component {
     }
     render() {
         const tabs = [
-            {id:"members", label:"Members", component:null},
-            {id:"nonmembers", label:"Non-Members", component:null},
+            {id:"members", label:"Members", component:<MembersTab/>},
+            {id:"nonmembers", label:"Non-Members", component:<NonMembersTab/>},
         ];
 
         return (

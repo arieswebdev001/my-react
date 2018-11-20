@@ -108,7 +108,7 @@ class Rooms extends Component {
     render() {
         const rooms = this.props.room_type.rooms;
         const floors = [{label:"All Floors", value:""}]; 
-        const statuses = [{label:"All Status", value:""}, {label:"Clean", value:"clean"}, {label:"Dirty", value:"dirty"}, {label:"Unavailable", value:"unavailable"}]; 
+        const statuses = [{label:"All Status", value:""}, {label:"Clean", value:"Clean"}, {label:"Dirty", value:"Dirty"}, {label:"Unavailable", value:"Unavailable"}]; 
         const house_keepers = this.props.room_type.property.property_data.house_keepers;
 
         this.props.room_type.rooms.forEach((room)=>{
@@ -144,7 +144,7 @@ class Rooms extends Component {
                 Header: "Status",
                 Cell: row =>(
                     <div>{ 
-                            row.original.room_status==='clean'?
+                            row.original.room_status==='Clean'?
                                 <span className="badge badge-success">Clean</span>:
                                 <span className="badge badge-danger">{ row.original.room_status }</span>
                         }

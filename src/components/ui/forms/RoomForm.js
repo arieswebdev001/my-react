@@ -17,7 +17,7 @@ class RoomForm extends Component {
             room_notes:'',
             floor_name:'Ground Floor',
             room_type_id:this.props.roomType,
-            room_status:'clean',
+            room_status:'Clean',
             room_data:{}
         }
     }
@@ -62,7 +62,7 @@ class RoomForm extends Component {
                     room_notes:'',
                     floor_name:'Ground Floor',
                     room_type_id:this.props.roomType,
-                    room_status:'clean',
+                    room_status:'Clean',
                     room_data:{}
                 }
             }
@@ -129,9 +129,9 @@ class RoomForm extends Component {
         });
 
         const room_states = [
-            {label:"Clean", value:"clean"},
-            {label:"Dirty", value:"dirty"},
-            {label:"Unavailable", value:"unavailable"}
+            {label:"Clean", value:"Clean"},
+            {label:"Dirty", value:"Dirty"},
+            {label:"Unavailable", value:"Unavailable"}
         ];
 
         const customized = this.state.room.room_data.customized !== undefined;

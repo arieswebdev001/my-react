@@ -184,7 +184,7 @@ class PaymentDetails extends Component {
                                                 </td>
                                                 <td>
                                                     <h5 style={{ textAlign:"right" }}>
-                                                        <NumberFormat allowNegative={false} value={room.price} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
+                                                        <NumberFormat value={room.price} displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
                                                     </h5>
                                                 </td>
                                             </tr>:null

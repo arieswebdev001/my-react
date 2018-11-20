@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@kenshooui/react-multi-select": "^1.0.60",
+    "@kenshooui/react-multi-select": "^1.0.61",
     "axios": "^0.18.0",
     "google-map-react": "^1.1.0",
     "jquery": "^3.3.1",

@@ -4,6 +4,8 @@ import TheScheduler from './reservation/TheScheduler';
 import BookingFormAdmin from './reservation/BookingFormAdmin';
 import RegularPortlet from './ui/portlets/RegularPortlet';
 import Axios from '../wrappers/Axios';
+import HouseKeeping from './rooms/room_type/HouseKeeping';
+
 class Reservations extends Component {
     state = {
         selected_slot:{
@@ -54,6 +56,7 @@ class Reservations extends Component {
 
     savedBooking(){
         this.getBookings();
+        this.getRoomTypes();
     }
 
     showBooking(id){
@@ -83,7 +86,8 @@ class Reservations extends Component {
 
         const buttons = [
             <button className="m-portlet__nav-link btn btn-success m-btn" 
-                onClick={()=>{window.$("#booking-modal").modal("show"); this.setState({ booking_id:0})}}>Add Booking</button>
+                onClick={()=>{window.$("#booking-modal").modal("show"); this.setState({ booking_id:0})}}>Add Booking</button>,
+            <button className="btn btn-warning" onClick={ () => window.$("#house-keeping-modal").modal("show") }>House Keeping</button>
         ];
 
         var bookings = []
@@ -95,12 +99,14 @@ class Reservations extends Component {
                         color = "#33b900";
                     break;
                     case "Cancelled":
-                    case "No-show":
+                    case "No-Show":
                         color = "#ff3d3d";
                     break;
                     case "Checked-In":
-                    case "Checked-Out":
                         color = "#e0b125";
+                    break;
+                    case "Checked-Out":
+                        color = "#9816f4";
                     break;
                     default:
                         color = "#80c5f6";
@@ -132,6 +138,25 @@ class Reservations extends Component {
                         </div>
                     </div>
                 </div>
+                
+                <div className="modal fade" id="house-keeping-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title"> House Keeping </h5>
+                            </div>
+                            <div className="modal-body">
+                                {
+                                    this.props.default_property !== null ?
+                                        <HouseKeeping rooms={rooms} houseKeepers={ this.props.default_property.property_data.house_keepers } onSave={ this.getRoomTypes.bind(this) } />:''
+                                }
+                            </div>
+                            <div className="modal-footer">
+                                <button className="btn btn-sm" onClick={ ()=> window.$("#house-keeping-modal").modal("hide") }>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -148,7 +173,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         room_types:state.room_types,
-        extras:state.extras
+        extras:state.extras,
+        default_property:state.default_property
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Reservations);

@@ -33,7 +33,7 @@ class GuestDetails extends Component {
                         <Input label="Position" _value={ this.props.guest.position } onChange={ (e)=> this.props.onUpdate(e, 'position') } />
                     </div>
                     <div className="col-md-3">
-                        <Input label="Email" _value={ this.props.guest.email } onChange={ (e)=> this.props.onUpdate(e, 'email') } />
+                        <Input label="Email" required={true} _value={ this.props.guest.email } onChange={ (e)=> this.props.onUpdate(e, 'email') } />
                     </div>
                 </div>
                 <div className="row">

@@ -108,7 +108,7 @@ class HouseKeeping extends Component {
 
     render() {
         const dirty_rooms = this.props.rooms.filter((room)=>{
-            return room.room_status === 'dirty';
+            return room.room_status === 'Dirty';
         });
 
         const house_keepers = [{label:"Unspecified", value:""}]; 
@@ -160,7 +160,7 @@ class HouseKeeping extends Component {
                                                         (
                                                             this.isSelected(row.original.id)? 
                                                                 <Select selection={ house_keepers } _value={ row.original.cleaner_name }
-                                                                    onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "cleaner_name") } 
+                                                                    onChange={ (e)=> this.handleChange(row.original.id, e, "cleaner_name") } 
                                                                 />:''
                                                         )
                                                     ,
@@ -170,7 +170,7 @@ class HouseKeeping extends Component {
                                                     Header: "Notes",
                                                     Cell: (row)=> (
                                                         this.isSelected(row.original.id) ?
-                                                            <Input _value={ row.original.notes  } onChange={ (e)=> this.handleChange(row.original.id, e.target.value, "notes") } />:''
+                                                            <Input _value={ row.original.notes  } onChange={ (e)=> this.handleChange(row.original.id, e, "notes") } />:''
                                                     )
                                                 }
                                             ]

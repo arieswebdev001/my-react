@@ -185,6 +185,10 @@ class BookingFormAdmin extends Component {
                     window.toastr.error("Last Name is required.");
                     return false;
                 }
+                if(this.state.booking.guest.email === ""){
+                    window.toastr.error("Email is required.");
+                    return false;
+                }
                 if(this.state.booking.guest.country === ""){
                     window.toastr.error("Country is required.");
                     return false;
@@ -305,7 +309,7 @@ class BookingFormAdmin extends Component {
                 <div className="row" key={0}>
                     <div className="col-lg-5">
                         {
-                            this.state.booking.reference_no!==""?
+                            this.state.booking.id!==0?
                                 <h3>Booking ID: { this.state.booking.reference_no }</h3>:null
                         }
                         <h3>

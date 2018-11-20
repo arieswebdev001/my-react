@@ -28,7 +28,17 @@ class TheScheduler extends Component {
         let schedulerData = this.state.viewModel;
 
         schedulerData.localeMoment.locale('en');
-        schedulerData.setResources(props.resources.map(item=>({id:item.id,name:item.room_no})));
+        schedulerData.setResources(props.resources.map(item=>{
+            var color = 'blue';
+            if(item.room_status === 'Clean')
+                color="green";
+            else
+                color="red";
+            return {
+                id:item.id,
+                name:<span style={{color:color}}>{item.room_no}</span>
+            }
+        }));
         schedulerData.setEvents(props.events);
         this.setState({
             viewModel:schedulerData
