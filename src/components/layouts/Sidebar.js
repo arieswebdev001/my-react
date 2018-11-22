@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import LoginForm from '../auth/LoginForm';
 
 class Sidebar extends Component {
     logout = ()=>{
@@ -35,9 +36,15 @@ class Sidebar extends Component {
     guestMenu = () => (
         <ul className="m-menu__nav ">
             <li className="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
-                <span onClick={this.goToLogin} className="m-menu__link">
+                <span onClick={()=>window.$("#login-modal").modal("show")} className="m-menu__link">
                     <span className="m-menu__item-here"></span><i className="m-menu__link-icon fa fa-lock"></i>
                     <span className="m-menu__link-text">Login</span>
+                </span>
+            </li>
+            <li className="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
+                <span onClick={()=>window.$("#register-modal").modal("show")} className="m-menu__link">
+                    <span className="m-menu__item-here"></span><i className="m-menu__link-icon fa fa-user"></i>
+                    <span className="m-menu__link-text">Register</span>
                 </span>
             </li>
             <li className="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
@@ -70,6 +77,29 @@ class Sidebar extends Component {
                     {
                         this.props.user !== null? this.authenticatedMenu():this.guestMenu()
                     }
+                </div>
+
+                <div className="modal fade" id="login-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-body">
+                                <LoginForm titleColor="black"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="modal fade" id="register-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Registration Form</h5>
+                            </div>
+                            <div className="modal-body">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

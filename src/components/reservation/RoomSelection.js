@@ -198,7 +198,8 @@ class RoomSelection extends Component {
                                                         onChange={(e)=>this.handleChangeRoomDetail(e,'child',key)}/>: <strong>{room.child}</strong> }
                                                 </td>
                                                 <td style={{width:130}}>
-                                                    { groupedOptions.length >0 ? <NumberFormat allowNegative={false} value={room.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                    { groupedOptions.length >0 ? <NumberFormat allowNegative={false} value={room.price} displayType={this.props.userType==='guest'?'text':'input'} 
+                                                        className="form-control" thousandSeparator={true} prefix={'PHP '} 
                                                         onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>: <strong>{room.price}</strong> }
                                                 </td>
                                                 { groupedOptions.length >0 ?

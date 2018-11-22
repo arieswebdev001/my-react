@@ -208,7 +208,7 @@ class BookingFormAdmin extends Component {
         window.spinButton(document.getElementById('save-booking-button'));
         Axios[this.state.booking.id===0?'post':'put']('../../api/booking', this.state.booking)
             .then((response) => {
-                u.props.savedBooking(response.data.booking);
+                u.props.savedBooking(response.data);
                 window.$("#booking-modal").modal("hide");
                 window.toastr.success("Booking Success!");
                 setTimeout(()=>{
@@ -254,7 +254,7 @@ class BookingFormAdmin extends Component {
                     child:0,
                     price:0
                 }],
-                booking_source:'Walk-In',
+                booking_source:this.props.bookingSource,
                 booked_extras:[],
                 guest:{
                     title:"",
@@ -288,10 +288,11 @@ class BookingFormAdmin extends Component {
                 },
                 invoice:{
                     reference_no:"",
-                    payment_method:"Cash",
+                    payment_method:this.props.userType==='admin'?'Cash':'Pay At Hotel',
                     amount_due:0,
                     amount_paid:0,
                     invoice_notes:"",
+                    invoice_status:'Pending',
                     invoice_data:{
                         cash_received:0
                     }
@@ -330,6 +331,7 @@ class BookingFormAdmin extends Component {
                             bookedRooms={this.state.booking.booked_rooms} 
                             onUpdate={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] }}) }
                             nights={this.state.booking.nights}
+                            userType={this.props.userType}
                         />
                         <br/>
                         <AddOnSelection
@@ -345,15 +347,16 @@ class BookingFormAdmin extends Component {
             {
                 step_name:"Guest Details",
                 content:<GuestDetails guest={this.state.booking.guest} key={2} checkinTime={this.state.booking.checkin_datetime}
+                            userType={this.props.userType}
                             onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } />
             },
             {
                 step_name:"Payment",
-                content:<PaymentDetails key={3} promos={[]} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); }}/>
+                content:<PaymentDetails key={3} userType={this.props.userType} promos={[]} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); }}/>
             },
             {
                 step_name:"Summary",
-                content:<BookingSummary key={4} booking={this.state.booking}/>
+                content:<BookingSummary userType={this.props.userType} key={4} booking={this.state.booking}/>
             },
         ]
 

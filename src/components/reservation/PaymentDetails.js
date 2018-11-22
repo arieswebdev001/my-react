@@ -137,16 +137,18 @@ class PaymentDetails extends Component {
     }
 
     render() {
+        const payment_methods = this.props.userType==='admin'?["Cash", "Card"]:['Pay At Hotel', 'PayPal'];
+
         return (
                 <div className="row">
                     <div className="col-md-9">
                         <div className="row">
                             <div className="col-md-4">
-                                <Select label="Booking Type" onChange={(e)=>this.handleChange(e, 'booking_source')} 
-                                    _value={ this.props.booking.booking_source } selection={["Walk-In", "Phone", "Email"]} />
+                                <Select label="Booking Type" onChange={(e)=>this.handleChange(e, 'booking_source')} disabled={this.props.userType==='guest'}
+                                    _value={ this.props.booking.booking_source } selection={["Walk-In", "Phone", "Email","Website","Online"]} />
                             </div>
                             <div className="col-md-4">
-                                <Select label="Booking Status" onChange={(e)=>this.handleChange(e, 'booking_status')} 
+                                <Select label="Booking Status" onChange={(e)=>this.handleChange(e, 'booking_status')} disabled={this.props.userType==='guest'}
                                     _value={ this.props.booking.booking_status } selection={["Pending", "Confirmed", "Checked-In", "Checked-Out", "Cancelled", "No-Show"]} />
                             </div>
                             <div className="col-md-4">
@@ -179,7 +181,7 @@ class PaymentDetails extends Component {
                                                     <Input type="number" disabled={true} _value={ 1 }/>
                                                 </td> 
                                                 <td>
-                                                    <NumberFormat allowNegative={false} value={room.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                    <NumberFormat  allowNegative={false} value={room.price} displayType={this.props.userType==='guest'?'text':'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
                                                         onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>
                                                 </td>
                                                 <td>
@@ -200,7 +202,7 @@ class PaymentDetails extends Component {
                                                     <Input type="number" onChange={(e)=>this.handleChangeExtraDetail(e,'quantity',key)} _value={ extra.quantity }/> 
                                                 </td>
                                                 <td>
-                                                    <NumberFormat allowNegative={false} value={extra.price} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                                    <NumberFormat allowNegative={false} value={extra.price} displayType={this.props.userType==='guest'?'text':'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
                                                         onValueChange={(e)=>this.handleChangeRoomDetail(e.value,'price',key)}/>
                                                 </td>
                                                 <td>
@@ -256,7 +258,7 @@ class PaymentDetails extends Component {
                                         <td colSpan={3}>
                                             <h5 style={{ textAlign:"right" }}>
                                                 <NumberFormat allowNegative={false} onValueChange={(e)=>this.handleUpdateDiscount(e.value)} disabled={ this.props.booking.booking_data.discount.discount > 0 }
-                                                    value={ this.props.booking.booking_data.total_discount} displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} />
+                                                    value={ this.props.booking.booking_data.total_discount} displayType={this.props.userType==='guest'?'text':'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} />
                                             </h5>
                                         </td>
                                     </tr>
@@ -279,11 +281,15 @@ class PaymentDetails extends Component {
                             this.props.booking.invoice.reference_no!==""?
                                 <h5>Invoice No.: { this.props.booking.invoice.reference_no }</h5>:null
                         }
-                        <div className="form-group">
-                            <label>Amount Paid</label>
-                            <NumberFormat allowNegative={false} value={this.props.booking.invoice.amount_paid } displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
-                                onValueChange={(e)=>this.handleChangePaymentDetail(e.value,'amount_paid', true)}/>
-                        </div>
+                        {
+                            this.props.userType==='admin'?
+                                <div className="form-group">
+                                    <label>Amount Paid</label>
+                                    <NumberFormat allowNegative={false} value={this.props.booking.invoice.amount_paid } displayType={'input'} className="form-control" thousandSeparator={true} prefix={'PHP '} 
+                                        onValueChange={(e)=>this.handleChangePaymentDetail(e.value,'amount_paid', true)}/>
+                                </div>:null
+                        }
+                        
                         {
                             (this.getTotal() - this.props.booking.booking_data.total_discount) > this.props.booking.invoice.amount_paid?
                                 <small style={{ color:"red" }}> 
@@ -291,7 +297,7 @@ class PaymentDetails extends Component {
                                 </small>:null
                         }
                         <Select label="Payment Method" onChange={(e)=>this.handleChangePaymentDetail(e, 'payment_method')} 
-                            _value={ this.props.booking.invoice.payment_method } selection={["Cash", "Card"]} />
+                            _value={ this.props.booking.invoice.payment_method } selection={payment_methods} />
                         {
                             this.props.booking.invoice.payment_method==='Cash'?
                             <div>

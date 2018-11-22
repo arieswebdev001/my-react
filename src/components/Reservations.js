@@ -133,7 +133,13 @@ class Reservations extends Component {
                                 <h5 className="modal-title">Booking Form</h5>
                             </div>
                             <div className="modal-body">
-                                <BookingFormAdmin savedBooking={((e)=>this.savedBooking(e))} extras={this.props.extras} defaultID={this.state.booking_id}/>
+                                <BookingFormAdmin 
+                                    savedBooking={((e)=>this.savedBooking(e))} 
+                                    extras={this.props.extras} 
+                                    defaultID={this.state.booking_id}
+                                    bookingSource="Walk-In"
+                                    userType="admin"
+                                />
                             </div>
                         </div>
                     </div>

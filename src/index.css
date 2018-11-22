@@ -364,3 +364,8 @@ label, .bold{
 .Reservations .m-portlet .m-portlet__body{
     padding:10px;
 }
+
+span.form-control{
+    background-color: #f4f5f8;
+    border:0px;
+}
