@@ -68,13 +68,19 @@
 .clickable{
     cursor:pointer;
 }
-
+.click-change{
+    color:#ecbc34;
+    cursor:pointer;
+}
 .room-card{
     padding:15px;
     cursor:pointer;
     text-align:center
 }
 
+.momodal .PreviewArea{
+    font-size:16px
+}
 
 .room-card h4, .room-card h6{
     color:white;
@@ -368,4 +374,18 @@ label, .bold{
 span.form-control{
     background-color: #f4f5f8;
     border:0px;
+}
+.m-wizard.m-wizard--1 .m-wizard__head {
+    margin: 0rem 0 1rem 0;
+}
+.m-wizard.m-wizard--1 .m-wizard__head .m-wizard__nav .m-wizard__steps{
+    margin-top:1em;
+}
+
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info .m-wizard__step-number>span{
+    background-color: #ecbc34;
+}
+
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info .m-wizard__step-number:hover>span{
+    background-color: #ecbc34;
 }

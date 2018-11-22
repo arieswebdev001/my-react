@@ -32,6 +32,19 @@ class App extends Component {
       window.initTheme();
     },1000);
     this.getUser();
+
+    if(window.sessionStorage.getItem("booking_token") === null)
+      window.sessionStorage.setItem("booking_token", this.makeid())
+  }
+
+  makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  
+    for (var i = 0; i < 12; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
   }
 
   logout = ()=>{

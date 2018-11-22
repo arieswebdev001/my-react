@@ -5,7 +5,8 @@ export default axios.create({
     baseURL: ApiUrl,
     headers:{
         common:{
-            Authorization:'Bearer ' + window.localStorage.access_token
+            Authorization:'Bearer ' + window.localStorage.access_token,
+            BookingToken:window.sessionStorage.getItem("booking_token")
         }
     }
 });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ResourcesPath } from '../../../config';
 import ImageGallery from 'react-image-gallery';
+import Parser from 'html-react-parser';
 
 class PropertyDetails extends Component {
     render(){
@@ -12,9 +13,7 @@ class PropertyDetails extends Component {
             <div>
                 <div className="row">
                     <div className="col-md-12">
-                        <div className="m-widget13">
-                            <p>{ this.props.facility.facility_description }</p>
-                        </div>
+                        {Parser(this.props.facility.facility_description)}
                     </div>
                 </div>
                 <div className="row">

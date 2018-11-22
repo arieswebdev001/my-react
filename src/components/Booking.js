@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import BookingFormAdmin from './reservation/BookingFormAdmin';
+import BookingFormClient from './reservation/BookingFormClient';
 import Axios from '../wrappers/Axios';
+import RegularPortlet from './ui/portlets/RegularPortlet';
+import * as qs from 'query-string';
 class Booking extends Component {
 
     state = {
@@ -50,24 +52,15 @@ class Booking extends Component {
     render() {
         return (
             <div className="Booking">
-                <div className="modal fade" id="booking-modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-full" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Booking Form</h5>
-                            </div>
-                            <div className="modal-body">
-                                <BookingFormAdmin 
-                                    savedBooking={((e)=>this.savedBooking(e))} 
-                                    extras={this.props.extras} 
-                                    defaultID={this.state.booking_id}
-                                    bookingSource="Website"
-                                    userType="guest"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <RegularPortlet>
+                    <BookingFormClient 
+                        savedBooking={((e)=>this.savedBooking(e))} 
+                        extras={this.props.extras} 
+                        defaultID={this.state.booking_id}
+                        bookingSource="Website"
+                        defaultParams={qs.parse(window.location.search)}
+                    />
+                </RegularPortlet>
             </div>
         );
     }

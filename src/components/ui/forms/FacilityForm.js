@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
 import Input from '../../ui/controls/Input';
-import TextArea from '../controls/TextArea';
 import Axios from '../../../wrappers/Axios';
 import { ResourcesPath, DropZoneStyle } from '../../../config';
 import Dropzone from 'react-dropzone';
 import ImageGallery from 'react-image-gallery';
 
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
 class FacilityForm extends Component {
     state = {
         facility:null,
-        files:[]
+        files:[],
     }
+    
+    onEditorStateChange = (editorState) => {
+        this.setState({
+            facility:{
+                ...this.state.facility,
+                editorState,
+                facility_description:draftToHtml(convertToRaw(editorState.getCurrentContent()))
+            }
+        });
+    };
 
     initState(){
         this.setState(
@@ -19,6 +34,7 @@ class FacilityForm extends Component {
                     id:0,
                     facility_name: '',
                     facility_description: '',
+                    editorState: EditorState.createEmpty(),
                 },
                 files:[]
             }
@@ -55,22 +71,34 @@ class FacilityForm extends Component {
     }
 
     componentDidMount(){ 
+        console.log(this.props.defaultFacility);
         this.props.onRef(this)
+        const html = ContentState.createFromBlockArray(htmlToDraft(this.props.defaultFacility.facility_description === undefined? "":this.props.defaultFacility.facility_description).contentBlocks);
+        const f = {
+            ...this.props.defaultFacility,
+            editorState:EditorState.createWithContent(html)
+        };
 
         if(this.props.defaultFacility !== null)
             if(this.props.defaultFacility.id===0)
                 this.initState()
             else{
-                this.setState({ facility: this.props.defaultFacility, files: this.convertFile(this.props.defaultFacility.facility_image) });
+                this.setState({ facility: f, files: this.convertFile(this.props.defaultFacility.facility_image) });
             }
     }
 
     componentWillReceiveProps = (nextProps) =>{
+        const html = ContentState.createFromBlockArray(htmlToDraft(nextProps.defaultFacility.facility_description === undefined?"":nextProps.defaultFacility.facility_description).contentBlocks);
+        const f = {
+            ...nextProps.defaultFacility,
+            editorState:EditorState.createWithContent(html)
+        };
+
         if(nextProps.defaultFacility !== null){
             if(nextProps.defaultFacility.id===0)
                 this.initState();
             else
-                this.setState({ facility: nextProps.defaultFacility,  files: this.convertFile(nextProps.defaultFacility.facility_image) }); 
+                this.setState({ facility: f,  files: this.convertFile(nextProps.defaultFacility.facility_image) }); 
         }
     }
 
@@ -79,7 +107,6 @@ class FacilityForm extends Component {
             facility:{
                 ...this.state.facility,
                 facility_name: window.$("#facility_name").val(),
-                facility_description: window.$("#facility_description").val(),
             }
         });
     }
@@ -126,7 +153,13 @@ class FacilityForm extends Component {
                             <div className="row">
                                 <div className="col-md-7">
                                     <Input label="Facility Name" _id="facility_name" _value={ this.state.facility.facility_name } onChange={ ()=> this.handleChange() } />
-                                    <TextArea label="Description" _id="facility_description" _value={ this.state.facility.facility_description } onChange={ ()=> this.handleChange() } />
+                                    <Editor
+                                        editorState={this.state.facility.editorState}
+                                        toolbarClassName="toolbarClassName"
+                                        wrapperClassName="wrapperClassName"
+                                        editorClassName="form-control"
+                                        onEditorStateChange={this.onEditorStateChange}
+                                        />
                                 </div>
                                 <div className="col-md-5">
                                     <Dropzone onDrop={this.onDrop.bind(this)} accept={["image/jpeg", "image/png"]} multiple={false} style={ DropZoneStyle }>
