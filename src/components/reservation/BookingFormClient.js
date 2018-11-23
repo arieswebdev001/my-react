@@ -4,6 +4,8 @@ import Axios from '../../wrappers/Axios';
 import GuestDetails from './GuestDetails';
 import RoomSelectionClient from './RoomSelectionClient';
 import BookingSummaryClient from './BookingSummaryClient';
+import AddOnSelectionClient from './AddOnSelectionClient';
+import PaymentClient from './PaymentClient';
 
 class BookingFormClient extends Component {
 
@@ -160,7 +162,7 @@ class BookingFormClient extends Component {
                     return false;
                 }
             break;
-            case 1:
+            case 2:
                 if(this.state.booking.guest.first_name === ""){
                     window.toastr.error("First Name is required.");
                     return false;
@@ -209,6 +211,18 @@ class BookingFormClient extends Component {
             }).then(function(){
                 window.stopButton(document.getElementById('save-booking-button'));
             });
+    }
+
+    updatePaymentMethod(e){
+        this.setState({
+            booking:{
+                ...this.state.booking,
+                invoice:{
+                    ...this.state.booking.invoice,
+                    payment_method:e
+                }
+            }
+        });
     }
 
     resetForm(){
@@ -281,53 +295,43 @@ class BookingFormClient extends Component {
                 step_name:"Rooms",
                 content:
                 <div key={0}>
-                    <div className="row">
-                        <div className="col-md-4">
-                            <BookingSummaryClient onClickDate={()=>window.$("#calendar-modal").modal("show")} booking={this.state.booking}/>
-                            <div className="modal fade" id="calendar-modal" tabIndex="-1" role="dialog">
-                                <div className="modal-dialog" role="document">
-                                    <div className="modal-content">
-                                        <div className="modal-body momodal">
-                                            <DateRange 
-                                                onChange={this.handleRangeChange.bind(this, 'dateRange')}
-                                                moveRangeOnFirstSelection={false}
-                                                ranges={[this.state.dateRange.selection]}
-                                                className={'PreviewArea'}  
-                                                minDate={ new Date(window.moment().format("YYYY-MM-DD")) }
-                                            />
-                                        </div>
-                                        <button className="btn btn-block btn-info" onClick={()=>window.$("#calendar-modal").modal("hide")}>Okay</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-md-8">
-                            <RoomSelectionClient 
-                                roomTypes={this.state.room_types} 
-                                bookedRooms={this.state.booking.booked_rooms} 
-                                onUpdate={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] }}) }
-                                nights={this.state.booking.nights}
-                                booking={this.state.booking}
-                                refreshRooms={()=>this.getRoomTypes()}
-                            />
-                        </div>
-                    </div>
+                    <h3>Room Types</h3>
+                    <RoomSelectionClient 
+                        roomTypes={this.state.room_types} 
+                        bookedRooms={this.state.booking.booked_rooms} 
+                        onUpdate={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e, booked_extras:[] }}) }
+                        nights={this.state.booking.nights}
+                        booking={this.state.booking}
+                        refreshRooms={()=>this.getRoomTypes()}
+                    />
                 </div>
             },
             {
                 step_name:"Add-Ons",
-                content: <div></div>
+                content: <div key="1">
+                            <h3>Add-Ons</h3>
+                            <AddOnSelectionClient
+                                key={1}
+                                extras={this.props.extras}
+                                bookedExtras={this.state.booking.booked_extras}
+                                nights={this.state.booking.nights}
+                                bookedRooms={this.state.booking.booked_rooms} 
+                                onUpdate={(e)=> {this.setState({ booking: { ...this.state.booking, booked_extras:e } }); } }
+                            />
+                        </div>
             },
             {
                 step_name:"Guest Details",
-                content:<GuestDetails guest={this.state.booking.guest} key={2} checkinTime={this.state.booking.checkin_datetime}
-                            userType="guest" 
-                            onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } />
+                content:<GuestDetails 
+                            key="2"
+                            guest={this.state.booking.guest} key={2} 
+                            checkinTime={this.state.booking.checkin_datetime}
+                            userType="guest" onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } 
+                        />
             },
             {
                 step_name:"Confirmation",
-                content: <div></div>
+                content: <PaymentClient key="3" booking={this.state.booking} onUpdate={ (e) => this.updatePaymentMethod(e)}/>
             },
         ]
 
@@ -359,10 +363,52 @@ class BookingFormClient extends Component {
                             </div>	
                         </div>
                     </div>
-                    <div className="col-md-12">
-                        {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                </div>
+                {
+                    this.state.currentStep === 2?
+                        <div className="row">
+                            <div className="col-md-12">
+                                {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                            </div>
+                        </div>:
+                        <div className="row">
+                            <div className="col-md-4">
+                                <BookingSummaryClient  
+                                    onUpdateRoom={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e }}) } 
+                                    onUpdateExtra={(e)=> this.setState({ booking: { ...this.state.booking, booked_extras:e }}) } 
+                                    onChangeCode={(e)=> this.setState({ booking: { ...this.state.booking, booking_data:e }}) } 
+                                    onUpdate={(e)=> this.setState({ booking: e }) } 
+                                    booking={this.state.booking}
+                                    showChange={this.state.currentStep===0}
+                                    onClickDate={()=>window.$("#calendar-modal").modal("show")} 
+                                    promos={[]}
+                                />
+                            </div>
+                            <div className="col-md-8">
+                                {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                            </div>
+                        </div>
+                }
+                
+                <hr/>
+
+                <div className="modal fade" id="calendar-modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-body momodal">
+                                <DateRange 
+                                    onChange={this.handleRangeChange.bind(this, 'dateRange')}
+                                    moveRangeOnFirstSelection={false}
+                                    ranges={[this.state.dateRange.selection]}
+                                    className={'PreviewArea'}  
+                                    minDate={ new Date(window.moment().format("YYYY-MM-DD")) }
+                                />
+                            </div>
+                            <button className="btn btn-block btn-info" onClick={()=>window.$("#calendar-modal").modal("hide")}>Okay</button>
+                        </div>
                     </div>
                 </div>
+
                 <div className="row">
                 {
                     this.state.mode === 'view'?

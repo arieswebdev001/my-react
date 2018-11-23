@@ -14,6 +14,16 @@ class RoomSelection extends Component {
             child:0
         }
     }
+
+    componentWillReceiveProps(nextProps){
+        let u = this;
+        if(nextProps.bookedRooms !== this.props.bookedRooms)
+            Axios.put('../../api/holdRooms', {rooms:nextProps.bookedRooms})
+            .then((response) => {
+                u.props.refreshRooms();
+            });
+    }
+
     availableOccupants(type, room){
         var array = [];
         var data = room[type==='adults'?'max_adult':'max_child'];
@@ -24,41 +34,41 @@ class RoomSelection extends Component {
         return array;
     }
 
-    deleteRoom(key){
-        const newArray = this.props.bookedRooms.filter((room, index)=>{
-            return key!==index;
-        });
-        this.props.onUpdate(newArray);
-    }
 
-    startHoldingRooms(token){
+    startHoldingRooms(){
+        let u = this;
         setInterval(()=>{
-            console.log(token);
-            //continuously hold the room, experimental
-        },6000);
+            if(u.props.bookedRooms.length > 0)
+                Axios.put('../../api/holdRooms', {rooms:u.props.bookedRooms})
+                .then((response) => {
+                    u.props.refreshRooms();
+                });
+        },50000);
     }
 
     addRoom(room){
-        console.log(this.props.bookedRooms)
-        if(this.props.bookedRooms.length ===0)
-            this.startHoldingRooms(window.sessionStorage.getItem("booking_token"));
+        room.roomsset = room.rooms.filter((e)=>(
+            !e.is_reserved && e.is_operational
+        )).map((e)=>e.id);
 
         let u = this;
-        Axios.put('../../api/holdRoom', room.rooms[0])
+        Axios.put('../../api/holdRoom', room)
         .then((response) => {
+            if(u.props.bookedRooms.length === 0)
+                u.startHoldingRooms();
+
             u.props.onUpdate([
                 ...u.props.bookedRooms,
                 {
-                    label:room.room_type_name,
+                    label:response.data.room.room_no,
                     room_type:room,
-                    room:room.rooms[0],
-                    value:room.id,
+                    room:response.data.room,
+                    value:response.data.room.id,
                     adults:u.state.selected.adults,
                     child:u.state.selected.child,
                     price:u.evaluatePrice(room)
                 }
             ]);
-            u.props.refreshRooms();
         }).catch(function (error) {
             if(!error.response)
                 window.toastr.error("Please check internet connectivity", "Network Error");
@@ -110,18 +120,19 @@ class RoomSelection extends Component {
                     thumbnail: ResourcesPath + '/images/rooms/' + file
                 }
             });
-
+            if(roomType !== undefined)
+console.log(roomType.rooms);
         return (
             <div>
                 <div className="row">
                     {
-                        this.props.roomTypes.filter((i)=> i.rooms.length>0 ).map((room, key)=>{
-                                return <div className="col-md-3" key={room.id}>
-                                            <button onClick={()=>this.setState({ show_info_index:key })} className={"btn btn-block " + (this.state.show_info_index === key?'btn-warning':'btn-info')}>
-                                                {room.room_type_name}
-                                            </button>
-                                        </div>
-                        })
+                        this.props.roomTypes.map((room, key)=>
+                            <div className="col-md-3" key={room.id}>
+                                <button onClick={()=>this.setState({ show_info_index:key })} className={"btn btn-block " + (this.state.show_info_index === key?'btn-warning':'btn-info')}>
+                                    {room.room_type_name}
+                                </button>
+                            </div>
+                        )
                     }
                 </div>
                 {
@@ -143,20 +154,25 @@ class RoomSelection extends Component {
                                 <h5>
                                     Price for { this.props.booking.nights } night{ this.props.booking.nights>1?'s':null } :  <NumberFormat value={ this.evaluatePrice(roomType) } displayType={'text'} thousandSeparator={true} prefix={'PHP '} />
                                 </h5>
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <Selector label="Adults" _value={this.state.selected.adults} selection={this.availableOccupants('adults', roomType)}
-                                            onChange={(e)=>this.handleChangeRoomDetail(e,'adults')}/>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <Selector label="Child" _value={this.state.selected.child} selection={this.availableOccupants('child', roomType)}
-                                            onChange={(e)=>this.handleChangeRoomDetail(e,'child')}/>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label>&nbsp;</label>
-                                        <button onClick={()=>this.addRoom(roomType)} className="btn btn-block btn-warning">Book Room</button>
-                                    </div>
-                                </div>
+                                {
+                                    roomType.rooms.filter((x)=>x.is_operational&&!x.is_reserved).length > 0? 
+                                        <div className="row" >
+                                            <div className="col-md-3">
+                                                <Selector label="Adults" _value={this.state.selected.adults} selection={this.availableOccupants('adults', roomType)}
+                                                    onChange={(e)=>this.handleChangeRoomDetail(e,'adults')}/>
+                                            </div>
+                                            <div className="col-md-3">
+                                                <Selector label="Child" _value={this.state.selected.child} selection={this.availableOccupants('child', roomType)}
+                                                    onChange={(e)=>this.handleChangeRoomDetail(e,'child')}/>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label>&nbsp;</label>
+                                                <button onClick={()=>this.addRoom(roomType)} className="btn btn-block btn-warning">Book Room</button>
+                                            </div>
+                                        </div>:
+                                        <div className="alert alert-info">No Rooms Available</div>
+                                }
+                                
                                 <div className="modal fade" id="info-modal" tabIndex="-1" role="dialog">
                                     <div className="modal-dialog" role="document">
                                         <div className="modal-content">
@@ -176,7 +192,6 @@ class RoomSelection extends Component {
                         </div>:null
                 }
             </div>
-            
         );
     }
 }

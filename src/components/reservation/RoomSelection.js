@@ -176,7 +176,7 @@ class RoomSelection extends Component {
                                                 <td>
                                                     { groupedOptions.length >0 ?
                                                     <Select isOptionDisabled={(option) => this.alreadyTaken(option, key)}
-                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>: <strong>{room.label}</strong>
+                                                            options={groupedOptions} value={room} onChange={(e)=> this.handleSelectRoom(e, key) }/>: <strong>{room.label} ({room.room_type.room_type_name}) </strong>
                                                     }
                                                     {
                                                         room.value !== 0 ? 
