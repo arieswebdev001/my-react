@@ -13,8 +13,10 @@ import RoomType from './components/rooms/RoomType';
 import EventsPlace from './components/EventsPlace';
 import Reports from './components/Reports';
 import Settings from './components/Settings';
+import Summary from './components/Summary';
 import GuestProfile from './components/guests/GuestProfile';
 import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import Axios from './wrappers/Axios';
 import { connect } from 'react-redux';
 
@@ -85,7 +87,7 @@ class App extends Component {
         <BrowserRouter>
           { 
             (this.props.user === null && window.location.href.search("booking") === -1) ? (
-                this.props.loaded ? (<Login/>):(<div>Please wait...</div>)
+                this.props.loaded ? (window.location.href.search("register") !== -1 ? <Register/> : <Login/>):(<div>Please wait...</div>)
             ):(
               <div className="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
                 <Header logout={this.logout}/>
@@ -107,6 +109,7 @@ class App extends Component {
                     <Route path="/booking" component={Booking}/>
                     <Route path="/member/:id" component={GuestProfile}/>
                     <Route path="/non-member/:id" component={GuestProfile}/>
+                    <Route path="/ebooking/:id" component={Summary}/>
                   </div>
                 </div>
               </div>

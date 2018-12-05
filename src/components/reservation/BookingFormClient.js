@@ -10,6 +10,7 @@ import PaymentClient from './PaymentClient';
 class BookingFormClient extends Component {
 
     state = {
+        booking_completed:false,
         mode:'form',
         room_types:[],
         extras:[],
@@ -57,7 +58,8 @@ class BookingFormClient extends Component {
                     discount:0,
                     discount_type:"total"
                 },
-                total_discount:0
+                total_discount:0,
+                booking_token:window.sessionStorage.getItem("booking_token")
             },
             invoice:{
                 reference_no:"",
@@ -74,14 +76,9 @@ class BookingFormClient extends Component {
         visited:[0]
     }
 
-    componentDidMount(){
-        this.getRoomTypes(this.state.booking.booked_start_datetime, this.state.booking.booked_end_datetime);
-    }
-
-    componentWillReceiveProps(props){
-        if(props.defaultID !== 0){
-            let u = this;
-            Axios.get('api/booking/' + props.defaultID)
+    getBooking(defaultID){
+        let u = this;
+            Axios.get('api/booking/' + defaultID + '/' + this.props.token)
                 .then(function (response) {
                     u.setState({ 
                         currentStep: 3, 
@@ -108,6 +105,18 @@ class BookingFormClient extends Component {
                     if(!error.response)
                         window.toastr.error("Please check internet connectivity", "Network Error");
                 });
+    }
+
+    componentDidMount(){
+        if(this.props.defaultID !== 0){
+            this.getBooking(this.props.defaultID);
+        }
+        this.getRoomTypes(this.state.booking.booked_start_datetime, this.state.booking.booked_end_datetime);
+    }
+
+    componentWillReceiveProps(props){
+        if(props.defaultID !== 0){
+            this.getBooking(props.defaultID);
         }
         else
             this.resetForm();
@@ -195,7 +204,7 @@ class BookingFormClient extends Component {
         Axios[this.state.booking.id===0?'post':'put']('../../api/booking', this.state.booking)
             .then((response) => {
                 u.props.savedBooking(response.data);
-                window.$("#booking-modal").modal("hide");
+                u.setState({booking_completed:true});
                 window.toastr.success("Booking Success!");
                 setTimeout(()=>{
                     u.resetForm();
@@ -271,7 +280,8 @@ class BookingFormClient extends Component {
                         discount:0,
                         discount_type:"total"
                     },
-                    total_discount:0
+                    total_discount:0,
+                    booking_token:window.sessionStorage.getItem("booking_token")
                 },
                 invoice:{
                     reference_no:"",
@@ -336,107 +346,103 @@ class BookingFormClient extends Component {
         ]
 
         return (
-            <div className="m-wizard m-wizard--1 m-wizard--success">
-                <div className="row m-row--no-padding">
-                    <div className="col-md-12">
-                        <div className="m-wizard__head">	 
-                            <div className="m-wizard__nav">
-                                <div className="m-wizard__steps">
-                                    {
-                                        steps.map((step, key)=>
-                                            <div className={"m-wizard__step " + (this.state.currentStep === key? "m-wizard__step--current":"")} key={key}>
-                                                <div className="m-wizard__step-info">
-                                                    <span className="m-wizard__step-number" onClick={()=> this.state.visited.indexOf(key) !== -1 ? this.nextStep(key-1):false }>							 
-                                                        <span style={{color:"white", fontSize:16, cursor:"pointer"}}>{key+1}</span>						 
-                                                    </span>
-                                                    <div className="m-wizard__step-line">
-                                                        <span></span>
-                                                    </div>
-                                                    <div className="m-wizard__step-label">
-                                                        { step.step_name }								
-                                                    </div>
-                                                </div>
+            <div>
+                {
+                    this.state.booking_completed? <h4>Please wait...</h4>:
+                        <div className="m-wizard m-wizard--1 m-wizard--success">
+                            <div className="row m-row--no-padding">
+                                <div className="col-md-12">
+                                    <div className="m-wizard__head">	 
+                                        <div className="m-wizard__nav">
+                                            <div className="m-wizard__steps">
+                                                {
+                                                    steps.map((step, key)=>
+                                                        <div className={"m-wizard__step " + (this.state.currentStep === key? "m-wizard__step--current":"")} key={key}>
+                                                            <div className="m-wizard__step-info">
+                                                                <span className="m-wizard__step-number" onClick={()=> this.state.visited.indexOf(key) !== -1 ? this.nextStep(key-1):false }>							 
+                                                                    <span style={{color:"white", fontSize:16, cursor:"pointer"}}>{key+1}</span>						 
+                                                                </span>
+                                                                <div className="m-wizard__step-line">
+                                                                    <span></span>
+                                                                </div>
+                                                                <div className="m-wizard__step-label">
+                                                                    { step.step_name }								
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
-                                        )
+                                        </div>	
+                                    </div>
+                                </div>
+                            </div>
+                            {
+                                this.state.currentStep === 2?
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                                        </div>
+                                    </div>:
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            <BookingSummaryClient  
+                                                onUpdateRoom={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e }}) } 
+                                                onUpdateExtra={(e)=> this.setState({ booking: { ...this.state.booking, booked_extras:e }}) } 
+                                                onChangeCode={(e)=> this.setState({ booking: { ...this.state.booking, booking_data:e }}) } 
+                                                onUpdate={(e)=> this.setState({ booking: e }) } 
+                                                booking={this.state.booking}
+                                                showChange={this.state.currentStep===0}
+                                                onClickDate={()=>window.$("#calendar-modal").modal("show")} 
+                                                promos={[]}
+                                            />
+                                        </div>
+                                        <div className="col-md-8">
+                                            {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
+                                        </div>
+                                    </div>
+                            }
+                            <hr/>
+
+                            <div className="modal fade" id="calendar-modal" tabIndex="-1" role="dialog">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-body momodal">
+                                            <DateRange 
+                                                onChange={this.handleRangeChange.bind(this, 'dateRange')}
+                                                moveRangeOnFirstSelection={false}
+                                                ranges={[this.state.dateRange.selection]}
+                                                className={'PreviewArea'}  
+                                                minDate={ new Date(window.moment().format("YYYY-MM-DD")) }
+                                            />
+                                        </div>
+                                        <button className="btn btn-block btn-info" onClick={()=>window.$("#calendar-modal").modal("hide")}>Okay</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-12 mm-footer">
+                                    {   this.state.currentStep < (steps.length-1) ? <button className="btn btn-info" onClick={ ()=>this.nextStep(this.state.currentStep) }> Next </button>:
+                                            <button className="btn btn-success" id="save-booking-button" onClick={ ()=>this.saveBooking() }> 
+                                                { this.state.booking.id === 0? 'Save Booking':'Update Booking' }
+                                            </button>
+                                    }
+                                    {   this.state.currentStep > 0 ? <button className="btn btn-warning" onClick={ ()=>this.setState({ currentStep:this.state.currentStep-1 })}> Back </button>:
+                                        null
+                                    }
+                                    {
+                                        this.state.booking.id !== 0 ?
+                                        <button className="btn" onClick={ () => this.setState({mode:'view', currentStep: 3})  } >
+                                            Cancel
+                                        </button>:null
                                     }
                                 </div>
-                            </div>	
-                        </div>
-                    </div>
-                </div>
-                {
-                    this.state.currentStep === 2?
-                        <div className="row">
-                            <div className="col-md-12">
-                                {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
-                            </div>
-                        </div>:
-                        <div className="row">
-                            <div className="col-md-4">
-                                <BookingSummaryClient  
-                                    onUpdateRoom={(e)=> this.setState({ booking: { ...this.state.booking, booked_rooms:e }}) } 
-                                    onUpdateExtra={(e)=> this.setState({ booking: { ...this.state.booking, booked_extras:e }}) } 
-                                    onChangeCode={(e)=> this.setState({ booking: { ...this.state.booking, booking_data:e }}) } 
-                                    onUpdate={(e)=> this.setState({ booking: e }) } 
-                                    booking={this.state.booking}
-                                    showChange={this.state.currentStep===0}
-                                    onClickDate={()=>window.$("#calendar-modal").modal("show")} 
-                                    promos={[]}
-                                />
-                            </div>
-                            <div className="col-md-8">
-                                {  steps.map((step, key)=>(this.state.currentStep === key ? step.content:'')) }
                             </div>
                         </div>
                 }
-                
-                <hr/>
-
-                <div className="modal fade" id="calendar-modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-body momodal">
-                                <DateRange 
-                                    onChange={this.handleRangeChange.bind(this, 'dateRange')}
-                                    moveRangeOnFirstSelection={false}
-                                    ranges={[this.state.dateRange.selection]}
-                                    className={'PreviewArea'}  
-                                    minDate={ new Date(window.moment().format("YYYY-MM-DD")) }
-                                />
-                            </div>
-                            <button className="btn btn-block btn-info" onClick={()=>window.$("#calendar-modal").modal("hide")}>Okay</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row">
-                {
-                    this.state.mode === 'view'?
-                        <div className="col-md-12 mm-footer">
-                            <button className="btn" onClick={ () => { window.$("#booking-modal").modal("hide")} } >
-                                Close
-                            </button>
-                            <button className="btn btn-warning" onClick={ ()=> this.setState({mode:'form', currentStep: 0}) }> Modify </button>
-                        </div>:
-                        <div className="col-md-12 mm-footer">
-                            {   this.state.currentStep < (steps.length-1) ? <button className="btn btn-info" onClick={ ()=>this.nextStep(this.state.currentStep) }> Next </button>:
-                                    <button className="btn btn-success" id="save-booking-button" onClick={ ()=>this.saveBooking() }> 
-                                        { this.state.booking.id === 0? 'Save Booking':'Update Booking' }
-                                    </button>
-                            }
-                            {   this.state.currentStep > 0 ? <button className="btn btn-warning" onClick={ ()=>this.setState({ currentStep:this.state.currentStep-1 })}> Back </button>:
-                                null
-                            }
-                            {
-                                this.state.booking.id !== 0 ?
-                                <button className="btn" onClick={ () => this.setState({mode:'view', currentStep: 3})  } >
-                                    Cancel
-                                </button>:null
-                            }
-                        </div>
-                }
-                </div>
-            </div>);
+            </div>
+            );
     }
 }
 export default BookingFormClient;

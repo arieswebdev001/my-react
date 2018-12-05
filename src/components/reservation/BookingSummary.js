@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ItemRow from '../ui/misc/ItemRow';
 import RoomSelection from './RoomSelection';
-class BookingConfirmation extends Component {
+class BookingSummary extends Component {
 
     
     getTotalExtras(){
@@ -128,4 +128,4 @@ class BookingConfirmation extends Component {
         );
     }
 }
-export default BookingConfirmation;
+export default BookingSummary;

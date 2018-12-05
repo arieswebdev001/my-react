@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Axios from '../../wrappers/Axios';
 import FormAlert from '../ui/alerts/FormAlert';
 import { Link } from 'react-router-dom';
-class LoginForm extends Component {
+
+class RegisterForm extends Component {
     state = {
         user:{
             email:'',
@@ -73,4 +74,4 @@ class LoginForm extends Component {
     }
 }
 
-export default LoginForm;
+export default RegisterForm;
