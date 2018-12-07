@@ -28,6 +28,10 @@ class GuestDetails extends Component {
         return (
             <div>
                 {
+                    this.props.userType === 'guest' && this.props.is_member?
+                        <div className="alert alert-info">You must Login to edit your profile.</div>:null
+                }
+                {
                     this.props.userType === 'admin'?
                         <div className="row">
                             <div className="col-lg-3">
@@ -81,6 +85,40 @@ class GuestDetails extends Component {
                         <Input label="Email" required={true} _value={ this.props.guest.email } disabled={this.props.is_member} onChange={ (e)=> this.props.onUpdate(e, 'email') } />
                     </div>
                 </div>
+                {
+                    this.props.userType === 'guest' && this.props.booking.id===0?
+                        <div className="row">
+                            <div className="col-lg-3">
+                                <label> Sign up as Member?</label>
+                                <br/>
+                                <Toggle
+                                    checked={ this.props.signup }
+                                    onChange={ (e)=> {this.props.onToggle(e.target.checked);}} 
+                                />
+                            </div>
+                            {
+                                this.props.signup?
+                                    <div className="col-lg-3">
+                                        <Input label="Password" type="password" _value={ this.props.guest.password } onChange={ (e)=> this.props.onUpdate(e, 'password') } />
+                                        {
+                                            this.props.guest.password !== ''?
+                                                    (
+                                                        this.props.guest.password === this.props.guest.confirm_password?
+                                                            <div className="badge badge-success">Password Matched</div>:
+                                                            <div className="badge badge-danger">Password Not Matched</div>
+                                                    ):null
+                                        }
+                                        <br/>
+                                    </div>:null
+                            }
+                            {
+                                this.props.signup?
+                                    <div className="col-lg-3">
+                                        <Input label="Confirm Password" type="password" _value={ this.props.guest.confirm_password } onChange={ (e)=> this.props.onUpdate(e, 'confirm_password') } />
+                                    </div>:null
+                            }
+                        </div>:null
+                }
                 <div className="row">
                     <div className="col-md-3">
                         <Input label="Mobile" _value={ this.props.guest.mobile } disabled={this.props.is_member} onChange={ (e)=> this.props.onUpdate(e, 'mobile') } />

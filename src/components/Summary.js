@@ -71,6 +71,14 @@ class Summary extends Component {
         })
     }
 
+    
+    savedBooking(response){
+        if(response.paypal !== null)
+            window.location.href = response.paypal.original.approval_url;
+        else
+            window.location.href = '../../ebooking/' + response.booking.id + '?booking_token=' + response.booking_token;
+    }
+
     render() {
         const buttons = [
             <button className="m-portlet__nav-link btn btn-success m-btn" 
@@ -105,7 +113,7 @@ class Summary extends Component {
                                 {
                                     this.state.booking.id !== undefined && this.state.editing?
                                         <BookingFormClient 
-                                            savedBooking={((e)=>window.location.reload())} 
+                                            savedBooking={((e)=>this.savedBooking(e))} 
                                             extras={this.props.extras} 
                                             defaultID={this.state.booking.id}
                                             bookingSource="Website"

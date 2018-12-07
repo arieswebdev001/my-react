@@ -401,6 +401,7 @@ class BookingFormAdmin extends Component {
             {
                 step_name:"Guest Details",
                 content:<GuestDetails 
+                            booking={this.state.booking}
                             onToggle={(e)=>this.selectMember(e)}
                             onMemberSelect={(e)=>this.selectMember(e)}
                             is_member={this.state.booking.is_member}

@@ -22,6 +22,7 @@ class BookingFormClient extends Component {
             },
         },
         booking:{
+            signup:false,
             id:0,
             booked_start_datetime:window.moment().format("YYYY-MM-DD 12:00"),
             checkin_datetime:window.moment().format("YYYY-MM-DD 12:00"),
@@ -32,6 +33,8 @@ class BookingFormClient extends Component {
             booked_extras:[],
             guest:{
                 title:"",
+                password:'',
+                confirm_password:'',
                 first_name:"",
                 middle_name:"",
                 last_name:"",
@@ -185,8 +188,17 @@ class BookingFormClient extends Component {
                     return false;
                 }
                 if(this.state.booking.guest.country === ""){
-                    window.toastr.error("Country is required.");
-                    return false;
+                }
+                if(this.state.booking.signup){
+                    if(this.state.booking.guest.password ===''){
+                        window.toastr.error("Password is required.");
+                        return false;
+                    }
+
+                    if(this.state.booking.guest.password !==this.state.booking.guest.confirm_password){
+                        window.toastr.error("Passwords not matched.");
+                        return false;
+                    }
                 }
             break;
             default:
@@ -240,6 +252,7 @@ class BookingFormClient extends Component {
             visited:[0],
             currentStep:0,
             booking:{
+                signup:false,
                 id:0,
                 booked_start_datetime: this.props.defaultParams.start_date !== undefined ? window.moment(this.props.defaultParams.start_date).format("YYYY-MM-DD 12:00"):
                         window.moment().format("YYYY-MM-DD 12:00"),
@@ -253,6 +266,8 @@ class BookingFormClient extends Component {
                 booking_source:this.props.bookingSource,
                 booked_extras:[],
                 guest:{
+                    password:'',
+                    confirm_password:'',
                     title:"",
                     first_name:"",
                     middle_name:"",
@@ -335,6 +350,10 @@ class BookingFormClient extends Component {
                 step_name:"Guest Details",
                 content:<GuestDetails 
                             key="2"
+                            booking={this.state.booking}
+                            is_member={this.state.booking.is_member}
+                            onToggle={(e)=> this.setState({booking:{ ...this.state.booking, signup: e }}) }
+                            signup={this.state.booking.signup}
                             guest={this.state.booking.guest}
                             checkinTime={this.state.booking.checkin_datetime}
                             userType="guest" onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } 
