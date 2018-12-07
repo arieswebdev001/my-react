@@ -22,6 +22,14 @@ class RoomSelection extends Component {
             .then((response) => {
                 u.props.refreshRooms();
             });
+
+        if(nextProps.params.adults !== undefined)
+            this.setState({
+                selected:{
+                    adults:nextProps.params.adults,
+                    child:nextProps.params.child
+                }
+            });
     }
 
     availableOccupants(type, room){
@@ -120,8 +128,7 @@ class RoomSelection extends Component {
                     thumbnail: ResourcesPath + '/images/rooms/' + file
                 }
             });
-            if(roomType !== undefined)
-console.log(roomType.rooms);
+
         return (
             <div>
                 <div className="row">

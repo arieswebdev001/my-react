@@ -78,7 +78,7 @@ class BookingFormClient extends Component {
 
     getBooking(defaultID){
         let u = this;
-            Axios.get('api/booking/' + defaultID + '/' + this.props.token)
+            Axios.get('api/booking/' + defaultID + '/' + this.props.booking_token)
                 .then(function (response) {
                     u.setState({ 
                         currentStep: 3, 
@@ -203,6 +203,7 @@ class BookingFormClient extends Component {
         window.spinButton(document.getElementById('save-booking-button'));
         Axios[this.state.booking.id===0?'post':'put']('../../api/booking', this.state.booking)
             .then((response) => {
+                window.stopButton(document.getElementById('save-booking-button'));
                 u.props.savedBooking(response.data);
                 u.setState({booking_completed:true});
                 window.toastr.success("Booking Success!");
@@ -217,7 +218,6 @@ class BookingFormClient extends Component {
                         if(error.response.data.message !== undefined)
                             window.toastr.error(error.response.data.message);
                 }
-            }).then(function(){
                 window.stopButton(document.getElementById('save-booking-button'));
             });
     }
@@ -313,6 +313,7 @@ class BookingFormClient extends Component {
                         nights={this.state.booking.nights}
                         booking={this.state.booking}
                         refreshRooms={()=>this.getRoomTypes()}
+                        params={this.props.defaultParams}
                     />
                 </div>
             },
@@ -334,7 +335,7 @@ class BookingFormClient extends Component {
                 step_name:"Guest Details",
                 content:<GuestDetails 
                             key="2"
-                            guest={this.state.booking.guest} key={2} 
+                            guest={this.state.booking.guest}
                             checkinTime={this.state.booking.checkin_datetime}
                             userType="guest" onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } 
                         />
@@ -423,7 +424,7 @@ class BookingFormClient extends Component {
 
                             <div className="row">
                                 <div className="col-md-12 mm-footer">
-                                    {   this.state.currentStep < (steps.length-1) ? <button className="btn btn-info" onClick={ ()=>this.nextStep(this.state.currentStep) }> Next </button>:
+                                    {   this.state.currentStep < (steps.length-1) ? (this.state.booking.booked_rooms.length > 0 ?<button className="btn btn-info" onClick={ ()=>this.nextStep(this.state.currentStep) }> Next </button>:null ):
                                             <button className="btn btn-success" id="save-booking-button" onClick={ ()=>this.saveBooking() }> 
                                                 { this.state.booking.id === 0? 'Save Booking':'Update Booking' }
                                             </button>
@@ -433,7 +434,7 @@ class BookingFormClient extends Component {
                                     }
                                     {
                                         this.state.booking.id !== 0 ?
-                                        <button className="btn" onClick={ () => this.setState({mode:'view', currentStep: 3})  } >
+                                        <button className="btn" onClick={ () => {this.setState({mode:'view', currentStep: 3}); this.props.onChangeView(false)} } >
                                             Cancel
                                         </button>:null
                                     }

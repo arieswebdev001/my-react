@@ -52,7 +52,7 @@ class BookingFormAdmin extends Component {
                 birth_date:"2000-01-01",
                 notes:""
             },
-            is_member:0,
+            is_member:false,
             guest_id:0,
             booking_notes:"",
             booking_status:"Pending",
@@ -80,6 +80,60 @@ class BookingFormAdmin extends Component {
         visited:[0]
     }
 
+    selectMember(e){
+        if(typeof(e) === "boolean"){
+            if(e)
+                this.setState({booking:{...this.state.booking, 
+                    is_member:e,
+                    guest:{
+                        title:"",
+                        first_name:"",
+                        middle_name:"",
+                        last_name:"",
+                        mobile:"",
+                        email:"",
+                        company_name:"",
+                        position:"",
+                        address:"",
+                        city:"",
+                        state:"",
+                        country:"Philippines",
+                        zip_code:"",
+                        birth_date:"2000-01-01",
+                        notes:""
+                    }
+                }})
+            else
+                this.setState({booking:{...this.state.booking, 
+                    is_member:e
+                }})
+        }
+        else
+            this.setState({
+                    booking:{
+                        ...this.state.booking, 
+                        guest_id:e===null?0:e.value,
+                        guest:{
+                            title:e===null?"":e.title,
+                            first_name:e===null?"":e.first_name,
+                            middle_name:e===null?"":e.middle_name,
+                            last_name:e===null?"":e.last_name,
+                            mobile:e===null?"":e.mobile,
+                            email:e===null?"":e.email,
+                            company_name:e===null?"":e.company_name,
+                            position:e===null?"":e.position,
+                            address:e===null?"":e.address,
+                            city:e===null?"":e.city,
+                            state:e===null?"":e.state,
+                            country:e===null?"Philippines":e.country,
+                            zip_code:e===null?"":e.zip_code,
+                            birth_date:e===null?"2000-01-01":e.birth_date,
+                            notes:e===null?"":e.notes
+                        }
+                    }
+                });
+    }
+    
     componentDidMount(){
         this.getRoomTypes(this.state.booking.booked_start_datetime, this.state.booking.booked_end_datetime);
     }
@@ -273,7 +327,7 @@ class BookingFormAdmin extends Component {
                     birth_date:"2000-01-01",
                     notes:""
                 },
-                is_member:0,
+                is_member:false,
                 guest_id:0,
                 booking_notes:"",
                 booking_status:"Pending",
@@ -346,7 +400,11 @@ class BookingFormAdmin extends Component {
             },
             {
                 step_name:"Guest Details",
-                content:<GuestDetails guest={this.state.booking.guest} key={2} checkinTime={this.state.booking.checkin_datetime}
+                content:<GuestDetails 
+                            onToggle={(e)=>this.selectMember(e)}
+                            onMemberSelect={(e)=>this.selectMember(e)}
+                            is_member={this.state.booking.is_member}
+                            guest={this.state.booking.guest} key={2} checkinTime={this.state.booking.checkin_datetime}
                             userType="admin"
                             onUpdate={ (e, field ) => this.setState({booking:{ ...this.state.booking, guest: { ...this.state.booking.guest, [field]:e } }}) } />
             },

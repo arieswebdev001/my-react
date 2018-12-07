@@ -9,12 +9,15 @@ import { connect } from 'react-redux';
 class Summary extends Component {
     state = {
         editing:false,
-        booking:{}
+        booking:{},
+        payment_note:undefined
     }
 
     componentDidMount(){
         this.getBooking();
         this.getExtras();
+        if(qs.parse(window.location.search).result !== undefined)
+            this.setState({payment_note:qs.parse(window.location.search).result});
     }
 
     
@@ -32,7 +35,7 @@ class Summary extends Component {
 
     getBooking(){
         let u = this;
-        Axios.get('api/booking/' + this.props.match.params.id + '/' + qs.parse(window.location.search).token)
+        Axios.get('api/booking/' + this.props.match.params.id + '/' + qs.parse(window.location.search).booking_token)
             .then(function (response) {
                 u.setState({booking:response.data});
             }).catch(function (error) {
@@ -54,7 +57,8 @@ class Summary extends Component {
 
             Axios.put('../../api/booking', u.state.booking)
             .then((response) => {
-                window.location.reload();
+                u.getBooking();
+                window.toastr.success("Booking has been cancelled");
             }).catch(function (error) {
                 if(!error.response)
                     window.toastr.error("Please check internet connectivity", "Network Error");
@@ -78,6 +82,14 @@ class Summary extends Component {
                 <div className="row m-row--no-padding">
                     <div className="col-md-12">
                     {
+                        this.state.payment_note !== undefined? 
+                            (this.state.payment_note==='success'? 
+                                <div className="alert alert-success"><strong>Payment Success!</strong> Receipt has been sent to your email address.</div>:
+                                <div className="alert alert-danger"><strong>Payment Failed!</strong> Please select other payment method or pay at the hotel.</div>
+                            ):null
+                    }
+
+                    {
                         this.state.booking.id !== undefined && !this.state.editing ? 
                             <div>
                                 <BookingSummary userType="guest" key={4} booking={this.state.booking}/>
@@ -98,7 +110,8 @@ class Summary extends Component {
                                             defaultID={this.state.booking.id}
                                             bookingSource="Website"
                                             defaultParams={qs.parse(window.location.search)}
-                                            token={ qs.parse(window.location.search).token }
+                                            booking_token={ qs.parse(window.location.search).booking_token }
+                                            onChangeView={(e)=>this.setState({editing:e})}
                                         />:null
                                 }
                             </div> 

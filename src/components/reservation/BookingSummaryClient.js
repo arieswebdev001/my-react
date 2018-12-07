@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import NumberFormat from 'react-number-format';
-import Axios from '../../wrappers/Axios'
 class BookingSummaryClient extends Component {
     getTotalExtras(){
         var total = 0;

@@ -48,7 +48,7 @@ class Booking extends Component {
         if(response.paypal !== null)
             window.location.href = response.paypal.original.approval_url;
         else
-            window.location.href = '../../ebooking/' + response.booking.id + '?token=' + response.token;
+            window.location.href = '../../ebooking/' + response.booking.id + '?booking_token=' + response.booking_token;
     }
 
     render() {
