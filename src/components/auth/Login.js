@@ -13,10 +13,7 @@ class Login extends Component {
                     <LoginForm titleColor="white"/>
                     <div className="text-left">
                         <br/>
-                        <Link onClick={this.refresh} to="../../booking">Go to Booking Form</Link>
-                    </div>
-                    <div className="text-left">
-                        <Link onClick={this.refresh} to="../../register">Register as Member</Link>
+                        <Link onClick={this.refresh} to="../../booking">Go to Booking Form</Link> | <Link onClick={this.refresh} to="../../register">Register as Member</Link>
                     </div>
                 </div>
             </form>

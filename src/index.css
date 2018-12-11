@@ -389,3 +389,16 @@ span.form-control{
 .m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info .m-wizard__step-number:hover>span{
     background-color: #ecbc34;
 }
+
+.btn.btn-warning, .btn.btn-warning:hover  {
+    color: #eeeeee !important;
+}
+
+.btn.btn-warning{
+    background-color:  #c59718;
+    border-color: #c59718;
+}
+
+.btn{
+    font-weight: bold;
+}

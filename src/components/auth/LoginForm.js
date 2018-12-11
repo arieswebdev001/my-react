@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Axios from '../../wrappers/Axios';
 import FormAlert from '../ui/alerts/FormAlert';
 import { Link } from 'react-router-dom';
+import * as qs from 'query-string';
+import Input from '../ui/controls/Input';
 class LoginForm extends Component {
     state = {
         user:{
@@ -11,17 +13,13 @@ class LoginForm extends Component {
         errors:null
     };
 
-    handleChange = () => {
-        this.setState({
-            user:{
-                email:window.$("#email").val(),
-                password:window.$("#password").val()
-            }
-        });
-    }
-
     refresh = () =>{
         window.location.reload();
+    }
+
+    componentDidMount(){
+        if(qs.parse(window.location.search).registration === "success")
+            window.toastr.success("Registration successful, please login.");
     }
 
     login = () =>{
@@ -54,10 +52,10 @@ class LoginForm extends Component {
 
                 { this.state.errors !== null ? (<FormAlert errors={this.state.errors} />):"" }
                 <div className="form-group">
-                    <input className="form-control" type="email" placeholder="Email" id="email" onChange={this.handleChange} autoComplete="off"/>
+                    <Input type="email" _value={this.state.user.email} placeholder="Email" onChange={(e)=> this.setState({ user :{ ...this.state.user, email:e }}) } autoComplete="off"/>
                 </div>
                 <div className="form-group">
-                    <input className="form-control" type="password" autoComplete="off" placeholder="Password" onChange={this.handleChange} id="password"/>
+                    <Input type="password" autoComplete="off" _value={this.state.user.password} placeholder="Password" onChange={(e)=> this.setState({ user :{ ...this.state.user, password:e }}) }/>
                 </div>
                 <div>
                     <div className="text-right">
@@ -66,7 +64,7 @@ class LoginForm extends Component {
                     </div>
                 </div>
                 <div>
-                    <button className="btn btn-warning btn-block" type="button" onClick={()=>this.login()} id="login-button">Login</button>
+                    <button className="btn btn-warning btn-lg" type="button" onClick={()=>this.login()} id="login-button">Login</button>
                 </div>
             </div>
         );

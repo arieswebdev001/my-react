@@ -10,13 +10,15 @@ class Register extends Component {
 
     render() {
         return (
-            <form className="container">
+            <form className="container login-page">
+                <div className="login" style={{maxWidth:920}}>
                 <RegisterForm titleColor="white"/>
-                <div className="text-left">
-                    <br/>
-                </div>
-                <div className="text-left">
-                    <Link onClick={this.refresh} to="../../login">Already have an account?</Link>
+                    <div className="text-left">
+                        <br/>
+                    </div>
+                    <div className="text-left">
+                        <Link onClick={this.refresh} to="../../login">Already have an account?</Link>
+                    </div>
                 </div>
             </form>
         );

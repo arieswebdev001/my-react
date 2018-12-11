@@ -71,7 +71,7 @@ class App extends Component {
           window.toastr.error("Please check internet connectivity", "Network Error");
         else{
           window.localStorage.setItem("access_token", undefined);
-          window.location.href = '/login';
+          //window.location.href = '/login';
         }
       }).then(function(){
         u.props.updateLoaded(true);
