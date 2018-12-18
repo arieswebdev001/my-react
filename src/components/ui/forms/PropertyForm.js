@@ -30,7 +30,7 @@ class PropertyForm extends Component {
                     floors:[],
                     property_data:{
                         house_keepers:[],
-                        vat_percentage:12
+                        charges:[]
                     },
                     map_coordinates:{ lat:14.366575, lng:121.041958}
                 },
@@ -57,6 +57,7 @@ class PropertyForm extends Component {
             property:{
                 ...this.state.property,
                 property_data:{
+                    ...this.state.property.property_data,
                     house_keepers:[
                         ...this.state.property.property_data.house_keepers,
                         {
@@ -70,8 +71,27 @@ class PropertyForm extends Component {
         });
     }
 
-    removeKeeper(index){
-        const newArray = this.state.property.property_data.house_keepers.filter((item, i)=>{
+    addCharge(){
+        this.setState({
+            property:{
+                ...this.state.property,
+                property_data:{
+                    ...this.state.property.property_data,
+                    charges:[
+                        ...this.state.property.property_data.charges,
+                        {
+                            name:"",
+                            type:"Percentage",
+                            value:10
+                        }
+                    ]
+                }
+            }
+        });
+    }
+
+    removeFromArray(p, index){
+        const newArray = this.state.property.property_data[p].filter((item, i)=>{
             return i===index;
         });
 
@@ -79,7 +99,8 @@ class PropertyForm extends Component {
             property:{
                 ...this.state.property,
                 property_data:{
-                    house_keepers:newArray
+                    ...this.state.property.property_data,
+                    [p]:newArray
                 }
             }
         });
@@ -130,8 +151,9 @@ class PropertyForm extends Component {
         }
     }
 
-    handleArrayChange(value, field, index){
-        const newArray = this.state.property.property_data.house_keepers.map((item, i)=>{
+    handleArrayChange(value, p, field, index){
+        console.log(this);
+        const newArray = this.state.property.property_data[p].map((item, i)=>{
             if(index === i)
                 item[field] = value;
             return item
@@ -141,7 +163,8 @@ class PropertyForm extends Component {
             property:{
                 ...this.state.property,
                 property_data:{
-                    house_keepers:newArray
+                    ...this.state.property.property_data,
+                    [p]:newArray
                 }
             }
         });
@@ -203,18 +226,6 @@ class PropertyForm extends Component {
         });
     }
 
-    handleChangeVat(value){
-        this.setState({
-            property:{
-                ...this.state.property,
-                property_data:{
-                    ...this.state.property.property_data,
-                    vat_percentage:Number(value)
-                }
-            }
-        });
-    }
-
     render(){
         const deleteButton = ()=>{
             return <button type="button" onClick={this.removeFile.bind(this) } className='btn btn-danger btn-sm' 
@@ -233,12 +244,9 @@ class PropertyForm extends Component {
                                     <Input label="Property Name" _id="property_name" _value={ this.state.property.property_name } onChange={ ()=> this.handleChange() } />
                                     <TextArea label="Property Address" _id="property_address" _value={ this.state.property.property_address } onChange={ ()=> this.handleChange() } />
                                     <div className="row">
-                                        <div className="col-md-3">
+                                        <div className="col-md-6">
                                             <Select label="Currency" _id="currency" selection={[{ label:"PHP", value:"PHP" },{  label:"USD", value:"USD" }]} 
                                                 _value={ this.state.property.currency } onChange={ ()=> this.handleChange() } />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <Input label="Vat %" type="number" _value={ this.state.property.property_data.vat_percentage } onChange={ (e)=> this.handleChangeVat(e) } />
                                         </div>
                                         <div className="col-md-6">
                                             <Input label="Email" _id="property_email" _value={ this.state.property.property_email } onChange={ ()=> this.handleChange() } />
@@ -264,7 +272,7 @@ class PropertyForm extends Component {
                                             />
                                         </div>   
                                     </div>
-                                    <br/>
+                                    <hr/>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label>
@@ -283,16 +291,53 @@ class PropertyForm extends Component {
                                                     this.state.property.property_data.house_keepers.map((item, i)=>
                                                         <tr>
                                                             <td>
-                                                                <input type="text" className="form-control" value={item.name} onChange={(e)=>this.handleArrayChange(e.target.value, 'name', i) } />
+                                                                <input type="text" className="form-control" value={item.name} onChange={(e)=>this.handleArrayChange(e.target.value, 'house_keepers','name', i) } />
                                                             </td>
                                                             <td>
-                                                                <input type="text" className="form-control" value={item.address} onChange={(e)=>this.handleArrayChange(e.target.value, 'address', i) } />
+                                                                <input type="text" className="form-control" value={item.address} onChange={(e)=>this.handleArrayChange(e.target.value, 'house_keepers','address', i) } />
                                                             </td>
                                                             <td>
-                                                                <input type="text" className="form-control" value={item.mobile} onChange={(e)=>this.handleArrayChange(e.target.value, 'mobile', i) } />
+                                                                <input type="text" className="form-control" value={item.mobile} onChange={(e)=>this.handleArrayChange(e.target.value, 'house_keepers','mobile', i) } />
                                                             </td>
                                                             <td>
-                                                                <button type="button" className="btn btn-danger btn-sm" onClick={()=>this.removeKeeper(i)}>X</button>
+                                                                <button type="button" className="btn btn-danger btn-sm" onClick={()=>this.removeFromArray('house_keepers', i)}>X</button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>   
+                                    </div>
+                                    <hr/>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label>
+                                                Charges &nbsp;
+                                                <button className="btn btn-info btn-sm" type="button" onClick={()=>this.addCharge() }>+</button>
+                                            </label>
+                                            <table className="table table-hover table-bordered">
+                                                <thead>
+                                                    <th>Name</th>
+                                                    <th>Type</th>
+                                                    <th>Value</th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    this.state.property.property_data.charges.map((item, i)=>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" className="form-control" value={item.name} onChange={(e)=>this.handleArrayChange(e.target.value, 'charges', 'name', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <Select selection={['Percentage','Amount']} _value={ item.type } onChange={(e)=>this.handleArrayChange(e, 'charges','type', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className="form-control" value={item.value} onChange={(e)=>this.handleArrayChange(e.target.value, 'charges', 'value', i) } />
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" className="btn btn-danger btn-sm" onClick={()=>this.removeFromArray('charges', i)}>X</button>
                                                             </td>
                                                         </tr>
                                                     )

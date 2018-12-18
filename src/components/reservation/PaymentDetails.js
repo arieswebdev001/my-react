@@ -101,31 +101,34 @@ class PaymentDetails extends Component {
 
     resolvePromoCode(){
         var resolved = this.props.promos.find((promo)=>
-            promo.promo_code === this.props.booking.booking_data.discount.promo_code
+            (promo.promo_code === this.props.booking.booking_data.discount.promo_code)
         );
+
         var discount = 0;
         var discount_type = "total";
         if(resolved !== undefined){
             discount_type = resolved.discount_type;
             if(discount_type === "total")
                 discount = resolved.promo_data.discount;
-            else if(discount_type === "percentage")
+            else
                 discount = this.getTotal() * (resolved.promo_data.discount/100);
         }
 
         if(discount > 0){
-            this.props.onUpdate({
-                ...this.props.booking,
-                booking_data:{
-                    ...this.props.booking.booking_data,
-                    discount:{
-                        ...this.props.booking.booking_data.discount,
-                        discount:discount,
-                        discount_type:discount_type,
-                    },
-                    total_discount:discount
-                }
-            });
+            setTimeout(()=>{
+                this.props.onUpdate({
+                    ...this.props.booking,
+                    booking_data:{
+                        ...this.props.booking.booking_data,
+                        discount:{
+                            ...this.props.booking.booking_data.discount,
+                            discount:discount,
+                            discount_type:discount_type
+                        },
+                        total_discount:discount
+                    }
+                });
+            },1000)
             window.toastr.success("Promo Code OK");
         }
         else

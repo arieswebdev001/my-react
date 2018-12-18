@@ -67,9 +67,8 @@ class Sidebar extends Component {
             { name:"Settings", url:"/settings", icon:"la la-cog", submenus:null }
         ],
         clientMenus:[
-            { name:"Dashboard",  url:"/dashboard", icon:"flaticon-dashboard", submenus:null },
             { name:"New Booking",  url:"/booking", icon:"flaticon-list-2", submenus:null  },
-            { name:"My Bookings",  url:"/bookings", icon:"flaticon-list-2", submenus:null  },
+            { name:"My Bookings",  url:"/dashboard", icon:"flaticon-calendar", submenus:null  },
         ]
     }
 

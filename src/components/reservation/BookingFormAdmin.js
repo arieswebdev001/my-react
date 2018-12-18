@@ -10,6 +10,7 @@ class BookingFormAdmin extends Component {
     state = {
         mode:'form',
         room_types:[],
+        promos:[],
         extras:[],
         dateRange: {
             selection: {
@@ -134,8 +135,20 @@ class BookingFormAdmin extends Component {
                 });
     }
     
+    getPromos(){
+        let u = this;
+        Axios.get('api/promos')
+            .then(function (response) {
+                u.setState({ promos:response.data });
+            }).catch(function (error) {
+                if(!error.response)
+                    window.toastr.error("Please check internet connectivity", "Network Error");
+            });
+    }
+    
     componentDidMount(){
         this.getRoomTypes(this.state.booking.booked_start_datetime, this.state.booking.booked_end_datetime);
+        this.getPromos();
     }
 
     componentWillReceiveProps(props){
@@ -411,7 +424,7 @@ class BookingFormAdmin extends Component {
             },
             {
                 step_name:"Payment",
-                content:<PaymentDetails key={3} userType="admin" promos={[]} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); }}/>
+                content:<PaymentDetails key={3} userType="admin" promos={this.state.promos} booking={this.state.booking} onUpdate={ (e) => { this.setState({booking:e}); }}/>
             },
             {
                 step_name:"Summary",

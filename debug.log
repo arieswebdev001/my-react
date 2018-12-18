@@ -2,3 +2,7 @@
 [1017/003107.152:ERROR:process_info.cc(359)] UncheckedAllocate
 [1119/105646.916:ERROR:crash_report_database_win.cc(428)] unexpected header
 [1122/133220.891:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1212/153410.348:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1212/171512.030:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1218/114303.286:ERROR:crash_report_database_win.cc(428)] unexpected header
+[1218/152244.371:ERROR:crash_report_database_win.cc(428)] unexpected header

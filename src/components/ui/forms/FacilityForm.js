@@ -71,7 +71,6 @@ class FacilityForm extends Component {
     }
 
     componentDidMount(){ 
-        console.log(this.props.defaultFacility);
         this.props.onRef(this)
         const html = ContentState.createFromBlockArray(htmlToDraft(this.props.defaultFacility.facility_description === undefined? "":this.props.defaultFacility.facility_description).contentBlocks);
         const f = {
